@@ -5,15 +5,9 @@ on:
     branches:
       - production
       - test
-  pull_request:
-    branches:
-      - production
-      - test
 jobs:
   build:
-
     runs-on: windows-latest
-
     steps:
     - uses: actions/checkout@v3
 
