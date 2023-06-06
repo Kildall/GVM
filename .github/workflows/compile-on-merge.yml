@@ -1,0 +1,23 @@
+name: Build .NET MAUI App
+
+on:
+  push:
+    branches:
+      - production
+      - test
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '7.0'
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration Release --no-restore /p:PublishReadyToRun=false
