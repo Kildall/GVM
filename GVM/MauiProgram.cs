@@ -1,5 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 using GVM.Data;
+using Blazorise;
+using Blazorise.Bootstrap5;
+using Blazorise.Icons.FontAwesome;
 
 namespace GVM;
 
@@ -14,8 +17,14 @@ public static class MauiProgram
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 			});
-
-		builder.Services.AddMauiBlazorWebView();
+        builder.Services
+			.AddBlazorise(options =>
+			{
+				options.Immediate = true;
+			})
+			.AddBootstrap5Providers()
+			.AddFontAwesomeIcons();
+        builder.Services.AddMauiBlazorWebView();
 
 #if DEBUG
 		builder.Services.AddBlazorWebViewDeveloperTools();
