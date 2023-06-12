@@ -5,6 +5,12 @@ using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
 
 namespace GVM;
+using Blazorise;
+using Blazorise.Bootstrap;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using System.Reflection;
+using System.Resources;
 
 public static class MauiProgram
 {
@@ -17,6 +23,19 @@ public static class MauiProgram
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 			});
+
+
+        // Get the assembly resource manager for the current assembly
+        ResourceManager rm = new ResourceManager("GVM.Properties.Resources",
+            Assembly.GetExecutingAssembly());
+		// Get the value of the key
+		string value = rm.GetString("GVMConnectionString");
+
+        builder.Services.AddDbContext<GVMContext>(options => options.UseSqlServer(value));
+
+
+        builder.Services.AddBlazorise(options => { options.Immediate = true; }).AddBootstrapProviders();
+		builder.Services.AddMauiBlazorWebView();
         builder.Services
 			.AddBlazorise(options =>
 			{
@@ -30,8 +49,6 @@ public static class MauiProgram
 		builder.Services.AddBlazorWebViewDeveloperTools();
 		builder.Logging.AddDebug();
 #endif
-
-		builder.Services.AddSingleton<WeatherForecastService>();
 
 		return builder.Build();
 	}
