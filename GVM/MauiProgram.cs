@@ -6,7 +6,7 @@ using Blazorise.Icons.FontAwesome;
 
 namespace GVM;
 using Blazorise;
-using Blazorise.Bootstrap;
+using Blazorise.Bootstrap5;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Reflection;
@@ -17,32 +17,21 @@ public static class MauiProgram
 	public static MauiApp CreateMauiApp()
 	{
 		var builder = MauiApp.CreateBuilder();
-		builder
-			.UseMauiApp<App>()
-			.ConfigureFonts(fonts =>
+		builder.UseMauiApp<App>().ConfigureFonts(fonts =>
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 			});
 
 
-        // Get the assembly resource manager for the current assembly
-        ResourceManager rm = new ResourceManager("GVM.Properties.Resources",
-            Assembly.GetExecutingAssembly());
-		// Get the value of the key
-		string value = rm.GetString("GVMConnectionString");
+        ResourceManager rm = new ResourceManager("GVM.Properties.Resources", Assembly.GetExecutingAssembly());
+		string connectionString = rm.GetString("GVMConnectionString");
 
-        builder.Services.AddDbContext<GVMContext>(options => options.UseSqlServer(value));
+        builder.Services.AddDbContext<GVMContext>(options => options.UseSqlServer(connectionString));
 
+        builder.Services.AddBlazorise(options => { options.Immediate = true;})
+				.AddBootstrap5Providers()
+				.AddFontAwesomeIcons();
 
-        builder.Services.AddBlazorise(options => { options.Immediate = true; }).AddBootstrapProviders();
-		builder.Services.AddMauiBlazorWebView();
-        builder.Services
-			.AddBlazorise(options =>
-			{
-				options.Immediate = true;
-			})
-			.AddBootstrap5Providers()
-			.AddFontAwesomeIcons();
         builder.Services.AddMauiBlazorWebView();
 
 #if DEBUG
