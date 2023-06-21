@@ -5,13 +5,12 @@
 
 @code {
     [CascadingParameter]
-    public Action<bool> SetIsLoading { get; set; }
+    LoadingIndicator loadingIndicator { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        SetIsLoading.Invoke(true);
-        // Simulate a delay for loading data
-        await Task.Delay(2000);
-        SetIsLoading.Invoke(false);
+        await loadingIndicator.Show();
+        await Task.Delay(10000);
+        await loadingIndicator.Hide();
     }
 }

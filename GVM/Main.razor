@@ -4,10 +4,7 @@
         <ChildContent>
             <Router AppAssembly="@typeof(Main).Assembly">
                 <Found Context="routeData">
-                    <CascadingValue Value="SetIsLoading">
-                        <RouteView RouteData="@routeData" DefaultLayout="@typeof(_Layout)" />
-                        <Loading IsLoading="@isLoading" />
-                    </CascadingValue>
+                    <RouteView RouteData="@routeData" DefaultLayout="@typeof(_Layout)" />
                 </Found>
                 <NotFound>
                     <LayoutView Layout="@typeof(_Layout)">
@@ -35,12 +32,4 @@
                 Light = "#FFFFFF"
             }
         };
-
-    bool isLoading;
-
-    void SetIsLoading(bool value)
-    {
-        isLoading = value;
-        InvokeAsync(StateHasChanged);
-    }
 }
