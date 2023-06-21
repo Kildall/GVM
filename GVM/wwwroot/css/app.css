@@ -83,35 +83,57 @@ a, .btn-link {
     }
 }
 
-.loading-progress {
-    position: relative;
-    display: block;
-    width: 8rem;
-    height: 8rem;
-    margin: 20vh auto 1rem auto;
+.loading-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-    .loading-progress circle {
-        fill: none;
-        stroke: #e0e0e0;
-        stroke-width: 0.6rem;
-        transform-origin: 50% 50%;
-        transform: rotate(-90deg);
-    }
-
-        .loading-progress circle:last-child {
-            stroke: #1b6ec2;
-            stroke-dasharray: calc(3.141 * var(--blazor-load-percentage, 0%) * 0.8), 500%;
-            transition: stroke-dasharray 0.05s ease-in-out;
-        }
-
-.loading-progress-text {
-    position: absolute;
-    text-align: center;
-    font-weight: bold;
-    inset: calc(20vh + 3.25rem) 0 auto 0.2rem;
+.loading-spinner {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top-color: var(--bs-primary);
+    animation: spin 1s linear infinite;
 }
 
-    .loading-progress-text:after {
-        content: var(--blazor-load-percentage-text, "Cargando");
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
     }
+}
+
+@media (min-width: 576px) {
+    .loading-spinner {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+@media (min-width: 768px) {
+    .loading-spinner {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+
+.loading-overlay {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-message {
+    padding: 20px;
+    border-radius: 8px;
+}

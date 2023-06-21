@@ -1,0 +1,14 @@
+﻿@if (IsLoading)
+{
+    <div class="loading-overlay">
+        <div class="loading-message">
+            <p>Cargando... Por favor espere</p>
+            <!-- Add your spinner or any other loading indicator here -->
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public bool IsLoading { get; set; }
+}

@@ -1,3 +1,17 @@
 ﻿@page "/"
+@inherits ComponentBase
 
 <h1>Hello, world!</h1>
+
+@code {
+    [CascadingParameter]
+    public Action<bool> SetIsLoading { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        SetIsLoading.Invoke(true);
+        // Simulate a delay for loading data
+        await Task.Delay(2000);
+        SetIsLoading.Invoke(false);
+    }
+}
