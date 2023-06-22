@@ -1,7 +1,16 @@
 ﻿@page "/"
+@inherits ComponentBase
 
 <h1>Hello, world!</h1>
 
-Welcome to your new app.
+@code {
+    [CascadingParameter]
+    LoadingIndicator loadingIndicator { get; set; }
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+    protected override async Task OnInitializedAsync()
+    {
+        await loadingIndicator.Show();
+        await Task.Delay(10000);
+        await loadingIndicator.Hide();
+    }
+}

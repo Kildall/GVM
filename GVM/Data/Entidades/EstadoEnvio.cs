@@ -4,13 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GVM.Data.Entidades
 {
+    [Table("EstadoEnvio")]
     public class EstadoEnvio
     {
         [Key]
-        public int IdEstado { get; set; }
+        public int EstadoId { get; set; }
         public string DescEstado { get; set; }
     }
 }

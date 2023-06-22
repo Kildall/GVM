@@ -118,6 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="GVMConnectionString" xml:space="preserve">
-    <value>Server=DESKTOP-2I6K646\SQLEXPRESS;Database=GVM;Trusted_Connection=True;TrustServerCertificate=True;</value>
+    <value>Server=PEDRO-PC\SQLEXPRESS;Database=GVM;Trusted_Connection=True;TrustServerCertificate=True;</value>
   </data>
 </root>
