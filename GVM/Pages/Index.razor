@@ -10,7 +10,7 @@
     protected override async Task OnInitializedAsync()
     {
         await loadingIndicator.Show();
-        await Task.Delay(10000);
+        await Task.Delay(1);
         await loadingIndicator.Hide();
     }
 }

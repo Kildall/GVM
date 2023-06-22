@@ -1,94 +1,84 @@
 ﻿@page "/historialcompras"
 @using GVM.Data;
+@using GVM.Data.DTOs;
 @using GVM.Data.Entidades;
-@inject GVMContext dbGVMContext;
+@using Blazorise;
+@using Microsoft.EntityFrameworkCore;
+@inject NavigationManager _Navigation
+@inject GVMContext _GVMContext;
+@inherits ComponentBase;
 
-
-<h3>Historial Compras</h3>
-
-<nav class="navbar navbar-light bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand">Busqueda de Compras</a>
-        <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
+<nav class="navbar bg-body-tertiary container-fluid">
+  <form class="container-fluid">
+    <div class="input-group">
+            <span class="input-group-text" id="basic-addon1"><i class="fas fa-search"></i></span>
+      <input type="text" class="form-control" placeholder="Buscar..." aria-label="Buscar" aria-describedby="basic-addon1" @oninput="RealizarBusqueda">
     </div>
+  </form>
 </nav>
 
-@*Mostrar una lista de todas las compras:
-    Se hara una consulta a la base de datos sobre todas las compras.
-    Luego, utilizando un foreach se mostrara una lista de items mostrando solo los atributos "Fecha" y "Distribuidor". Cada item mostrado tendra un boton que desplegara un modal.
-    Al presionar una compra de lista de items, se adquirira el objeto Compra al que este esta ligado y se seteara una variable global de tipo <Compra>.
-    Una vez que tenemos esa variable Compra, dentro del Modal mostraremos campos modificables con los atributos de la Compra. Aqui dentro podremos modificar, Eliminar o Ir hacia atras.
-    En el caso de que se elimine o modifique se debe realizar la logica correspondiente para Modificar el inventario.
-*@
-<ul class="list-group">
-    @foreach (var compra in compras)
-    {
-        modCompra = "Compra";
-        <li class="list-group-item">@compra</li>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" bind="@MostrarVar" commandParameter ="@modCompra">
-            Ir a la Compra
-        </button>
-    }
-    
-</ul>
+<h4>Compras realizadas:</h4>
 
-<h3>Mod compra: @modCompra</h3>
 
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Aqui debe verse la informacion de la venta seleccionada...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
+@foreach (var compra in compras)
+{
+    <div class="bubble">
+        <p><strong>Fecha:</strong> @compra.fecha</p>
+        <p><strong>Descripcion:</strong> @compra.descripcion</p>
+        <p><strong>Distribuidor:</strong> @compra.distribuidor.Nombre</p>
+        <p><strong>Empleado:</strong> @compra.empleado.Nombre</p>
+        <p><strong>Monto:</strong> $@compra.monto</p>
+        <div class="button-container">
+            <Button Class="bubble-button" Color="Color.Primary" Clicked="() => EditarCompra(compra.compraId)">
+                <span class="oi oi-pencil"></span> Editar
+            </Button>
         </div>
     </div>
-</div>
-
-
+}
 
 @code {
-    List<string> compras = new List<string>();
+    [Parameter]
+    public List<CompraViewModel> compras { get; set; } = new List<CompraViewModel>();
 
-    class CompraTest
+    public string txtBusqueda = string.Empty;
+    List<CompraViewModel> resultadosBusqueda;
+
+    [CascadingParameter]
+    LoadingIndicator loadingIndicator { get; set; }
+
+    /* Muestra el indicador de carga,
+    realiza una consulta a la base de datos para obtener una lista de compras, incluyendo las entidades relacionadas Distribuidor y Empleado,
+    Mapea los resultados de la consulta a una lista de objetos CompraViewModel y
+    Oculta el indicador de carga una vez que se han cargado los datos*/
+
+    protected override async Task OnInitializedAsync()
     {
+        await loadingIndicator.Show();
+
+        List<Compra> listaCompras = await _GVMContext.Compras.Include(c => c.Distribuidor).Include(c => c.Empleado).ToListAsync();
+
+        compras = listaCompras.Select(compra => new CompraViewModel
+            {
+                compraId = compra.CompraId,
+                empleado = compra.Empleado,
+                distribuidor = compra.Distribuidor,
+                fecha = compra.Fecha,
+                monto = compra.Monto,
+                descripcion = compra.Descripcion
+            }).ToList();
+
+        await loadingIndicator.Hide();
+        }
+
+    public void EditarCompra(int CompraId)
+    {
+        _Navigation.NavigateTo($"editarcompra/{CompraId}");
     }
 
-    string modCompra;
+    //Realizar Busqueda - Pendiente
 
-    protected override void OnInitialized()
-    {
-        compras.Add("Fecha: 10/06/2023 - Distribuidor: Micropack");
-        compras.Add("Fecha: 12/06/2023 - Distribuidor: Carefour");
-    }
-
-    //Realizar Busqueda
-
-    private void BuscarCompra(ChangeEventArgs e)
+    public void RealizarBusqueda(ChangeEventArgs e)
     {
 
     }
-
-    private void MostrarVar()
-    {
-        Console.WriteLine(modCompra);
-    }
-
-
-
-
-
-
-
-
 }
