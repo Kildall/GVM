@@ -1,0 +1,94 @@
+﻿@page "/historialcompras"
+@using GVM.Data;
+@using GVM.Data.Entidades;
+@inject GVMContext dbGVMContext;
+
+
+<h3>Historial Compras</h3>
+
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand">Busqueda de Compras</a>
+        <form class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+
+@*Mostrar una lista de todas las compras:
+    Se hara una consulta a la base de datos sobre todas las compras.
+    Luego, utilizando un foreach se mostrara una lista de items mostrando solo los atributos "Fecha" y "Distribuidor". Cada item mostrado tendra un boton que desplegara un modal.
+    Al presionar una compra de lista de items, se adquirira el objeto Compra al que este esta ligado y se seteara una variable global de tipo <Compra>.
+    Una vez que tenemos esa variable Compra, dentro del Modal mostraremos campos modificables con los atributos de la Compra. Aqui dentro podremos modificar, Eliminar o Ir hacia atras.
+    En el caso de que se elimine o modifique se debe realizar la logica correspondiente para Modificar el inventario.
+*@
+<ul class="list-group">
+    @foreach (var compra in compras)
+    {
+        modCompra = "Compra";
+        <li class="list-group-item">@compra</li>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" bind="@MostrarVar" commandParameter ="@modCompra">
+            Ir a la Compra
+        </button>
+    }
+    
+</ul>
+
+<h3>Mod compra: @modCompra</h3>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Aqui debe verse la informacion de la venta seleccionada...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@code {
+    List<string> compras = new List<string>();
+
+    class CompraTest
+    {
+    }
+
+    string modCompra;
+
+    protected override void OnInitialized()
+    {
+        compras.Add("Fecha: 10/06/2023 - Distribuidor: Micropack");
+        compras.Add("Fecha: 12/06/2023 - Distribuidor: Carefour");
+    }
+
+    //Realizar Busqueda
+
+    private void BuscarCompra(ChangeEventArgs e)
+    {
+
+    }
+
+    private void MostrarVar()
+    {
+        Console.WriteLine(modCompra);
+    }
+
+
+
+
+
+
+
+
+}
