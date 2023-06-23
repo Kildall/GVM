@@ -1,0 +1,67 @@
+﻿@page "/historialcompras"
+@using GVM.Components
+@using GVM.Data;
+@using GVM.Data.ViewModels;
+@using GVM.Data.Entidades;
+@using Blazorise;
+@using Microsoft.EntityFrameworkCore;
+@inject NavigationManager _Navigation
+@inject GVMContext _GVMContext;
+@inherits ComponentBase;
+
+<nav class="navbar bg-body-tertiary container-fluid">
+  <form class="container-fluid">
+    <div class="input-group">
+            <span class="input-group-text" id="basic-addon1"><i class="fas fa-search"></i></span>
+      <input type="text" class="form-control" placeholder="Buscar..." aria-label="Buscar" aria-describedby="basic-addon1" @oninput="RealizarBusqueda">
+    </div>
+  </form>
+</nav>
+
+<h4>Compras realizadas:</h4>
+
+
+@foreach (var compra in compras)
+{
+    <ItemCompra Compra = "compra" />
+}
+
+@code {
+    public List<CompraViewModel> compras { get; set; } = new List<CompraViewModel>();
+
+    public string txtBusqueda = string.Empty;
+    List<CompraViewModel> resultadosBusqueda;
+
+    [CascadingParameter]
+    LoadingIndicator loadingIndicator { get; set; }
+
+    /* Muestra el indicador de carga,
+    realiza una consulta a la base de datos para obtener una lista de compras, incluyendo las entidades relacionadas Distribuidor y Empleado,
+    Mapea los resultados de la consulta a una lista de objetos CompraViewModel y
+    Oculta el indicador de carga una vez que se han cargado los datos*/
+
+    protected override async Task OnInitializedAsync()
+    {
+        await loadingIndicator.Show();
+
+        List<Compra> listaCompras = await _GVMContext.Compras.Include(c => c.Distribuidor).Include(c => c.Empleado).ToListAsync();
+
+        compras = listaCompras.Select(compra => new CompraViewModel
+            {
+                CompraId = compra.CompraId,
+                Empleado = compra.Empleado,
+                Distribuidor = compra.Distribuidor,
+                Fecha = compra.Fecha,
+                Monto = compra.Monto,
+                Descripcion = compra.Descripcion
+            }).ToList();
+
+        await loadingIndicator.Hide();
+        }
+
+    //Realizar Busqueda - Pendiente
+    public void RealizarBusqueda(ChangeEventArgs e)
+    {
+
+    }
+}
