@@ -5,15 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GVM.Data.DTOs
+namespace GVM.Data.ViewModels
 {
     public class CompraViewModel
     {
-        public int compraId { get; set; }
-        public Empleado empleado { get; set; }
-        public Distribuidor distribuidor { get; set; }
-        public DateTime fecha { get; set; }
-        public double monto { get; set; }
-        public string descripcion { get; set; }
+        public int CompraId { get; set; }
+        public Empleado Empleado { get; set; }
+        public Distribuidor Distribuidor { get; set; }
+        public DateTime Fecha { get; set; }
+        public double Monto { get; set; }
+        public string Descripcion { get; set; }
     }
 }

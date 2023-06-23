@@ -1,6 +1,7 @@
 ﻿@page "/historialcompras"
+@using GVM.Components
 @using GVM.Data;
-@using GVM.Data.DTOs;
+@using GVM.Data.ViewModels;
 @using GVM.Data.Entidades;
 @using Blazorise;
 @using Microsoft.EntityFrameworkCore;
@@ -22,22 +23,10 @@
 
 @foreach (var compra in compras)
 {
-    <div class="bubble">
-        <p><strong>Fecha:</strong> @compra.fecha</p>
-        <p><strong>Descripcion:</strong> @compra.descripcion</p>
-        <p><strong>Distribuidor:</strong> @compra.distribuidor.Nombre</p>
-        <p><strong>Empleado:</strong> @compra.empleado.Nombre</p>
-        <p><strong>Monto:</strong> $@compra.monto</p>
-        <div class="button-container">
-            <Button Class="bubble-button" Color="Color.Primary" Clicked="() => EditarCompra(compra.compraId)">
-                <span class="oi oi-pencil"></span> Editar
-            </Button>
-        </div>
-    </div>
+    <ItemCompra Compra = "compra" />
 }
 
 @code {
-    [Parameter]
     public List<CompraViewModel> compras { get; set; } = new List<CompraViewModel>();
 
     public string txtBusqueda = string.Empty;
@@ -59,24 +48,18 @@
 
         compras = listaCompras.Select(compra => new CompraViewModel
             {
-                compraId = compra.CompraId,
-                empleado = compra.Empleado,
-                distribuidor = compra.Distribuidor,
-                fecha = compra.Fecha,
-                monto = compra.Monto,
-                descripcion = compra.Descripcion
+                CompraId = compra.CompraId,
+                Empleado = compra.Empleado,
+                Distribuidor = compra.Distribuidor,
+                Fecha = compra.Fecha,
+                Monto = compra.Monto,
+                Descripcion = compra.Descripcion
             }).ToList();
 
         await loadingIndicator.Hide();
         }
 
-    public void EditarCompra(int CompraId)
-    {
-        _Navigation.NavigateTo($"editarcompra/{CompraId}");
-    }
-
     //Realizar Busqueda - Pendiente
-
     public void RealizarBusqueda(ChangeEventArgs e)
     {
 
