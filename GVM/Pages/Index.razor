@@ -1,4 +1,7 @@
 ﻿@page "/"
+@using GVM.Data
+@using Microsoft.EntityFrameworkCore
+@inject GVMContext _context
 @inherits ComponentBase
 
 <h1>Hello, world!</h1>
@@ -10,7 +13,7 @@
     protected override async Task OnInitializedAsync()
     {
         await loadingIndicator.Show();
-        await Task.Delay(10000);
+        await _context.Clientes.ToListAsync();
         await loadingIndicator.Hide();
     }
 }
