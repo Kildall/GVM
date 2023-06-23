@@ -1,12 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
-using System.Resources;
 using Blazorise;
 using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
 using GVM.Data;
-using Microsoft.Extensions.Configuration;
+using System.Reflection;
+using System.Resources;
 
 namespace GVM
 {
@@ -19,8 +18,8 @@ namespace GVM
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
             });
-            SecureStorageHelper.SaveConnectionStringAsync().Wait();
-            string connectionString = SecureStorageHelper.GetConnectionStringAsync().Result;
+            ResourceManager rm = new ResourceManager("GVM.Properties.Resources", Assembly.GetExecutingAssembly());
+            string connectionString = rm.GetString("GVMConnectionString");
             builder.Services.AddDbContext<GVMContext>(options => options.UseSqlServer(connectionString));
 
             builder.Services.AddBlazorise(options => { options.Immediate = true; })
