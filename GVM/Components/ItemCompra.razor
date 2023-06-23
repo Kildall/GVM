@@ -1,0 +1,25 @@
+﻿@using GVM.Data.ViewModels;
+@inject NavigationManager _Navigation
+
+<div class="bubble">
+    <p><strong>Fecha:</strong> @Compra.Fecha</p>
+    <p><strong>Descripcion:</strong> @Compra.Descripcion</p>
+    <p><strong>Distribuidor:</strong> @Compra.Distribuidor.Nombre</p>
+    <p><strong>Empleado:</strong> @Compra.Empleado.Nombre</p>
+    <p><strong>Monto:</strong> $@Compra.Monto</p>
+    <div class="button-container">
+        <Button Class="bubble-button" Color="Color.Primary" Clicked="() => EditarCompraHandler(Compra.CompraId)">
+            <span class="oi oi-pencil"></span> Editar
+        </Button>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public CompraViewModel Compra { get; set; }
+
+    private void EditarCompraHandler(int CompraId)
+    {
+        _Navigation.NavigateTo($"editarcompra/{Compra.CompraId}");
+    }
+}
