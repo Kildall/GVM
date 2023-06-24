@@ -118,6 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="GVMConnectionString" xml:space="preserve">
-    <value>Server=gvm.database.windows.net;Initial Catalog=GVM;Persist Security Info=False;User ID=gvm_program;Password=i6Fu&amp;#5QDEThgM;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;</value>
+    <value>Server=34.176.216.213;Initial Catalog=GVM;User ID=sqlserver;Password=Z0D"jPG?PB/3[C`*;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;</value>
   </data>
 </root>
