@@ -61,7 +61,7 @@ namespace GVM.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Server=34.176.216.213;Initial Catalog=GVM;User ID=sqlserver;Password=Z0D&quot;jPG?PB/3[C`*;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;.
+        ///   Looks up a localized string similar to Data Source=34.176.216.213;Initial Catalog=GVM;User ID=sqlserver;Password=LFVV&amp;X^5e@p7qM29Nr%NCg;Encrypt=True;Persist Security Info=True;multisubnetfailover=True;TrustServerCertificate=True;Connection Timeout=30;.
         /// </summary>
         internal static string GVMConnectionString {
             get {
