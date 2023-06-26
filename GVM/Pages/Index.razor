@@ -1,7 +1,12 @@
 ﻿@page "/"
 @using GVM.Data
+@using GVM.Security
+@using GVM.Security.Entidades
+@using GVM.Services
 @using Microsoft.EntityFrameworkCore
 @inject GVMContext _context
+@inject SeguridadContext _seguridadContext
+@inject SeguridadService _usuarioService
 @inherits ComponentBase
 
 <h1>Hello, world!</h1>
@@ -12,8 +17,19 @@
 
     protected override async Task OnInitializedAsync()
     {
+
         await loadingIndicator.Show();
-        await _context.Clientes.ToListAsync();
+        try
+        {
+            
+            await _context.Clientes.ToListAsync();
+            await _seguridadContext.Usuarios.ToListAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
         await loadingIndicator.Hide();
     }
 }

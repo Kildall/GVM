@@ -1,0 +1,65 @@
+﻿@page "/register"
+@using GVM.Services
+@inject SeguridadService seguridad
+@inject NavigationManager navigation
+
+<EditForm Model="@registerModel" OnValidSubmit="HandleValidSubmit">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-5">
+                <div class="card shadow-lg border-0 rounded-lg mt-5">
+                    <div class="card-header">
+                        <h3 class="text-center font-weight-light my-4">Register</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-floating mb-3">
+                            <InputText class="form-control" id="name" placeholder="Name" @bind-Value="registerModel.Name" />
+                            <label for="name">Name</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <InputText class="form-control" id="email" placeholder="name@example.com" @bind-Value="registerModel.Email" />
+                            <label for="email">Email address</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <InputText class="form-control" id="password" placeholder="Password" type="password" @bind-Value="registerModel.Password" />
+                            <label for="password">Password</label>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+                            <button type="submit" class="btn btn-primary">Register</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    private RegisterModel registerModel = new RegisterModel();
+
+    private class RegisterModel
+    {
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            var user = await seguridad.RegisterAsync(registerModel.Name, registerModel.Email, registerModel.Password);
+            if (user != null)
+            {
+    // User registered successfully.
+    // You might want to navigate the user to another page or save the user info into the session.
+                navigation.NavigateTo("/login");
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+}
