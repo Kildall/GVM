@@ -70,7 +70,7 @@ namespace GVM.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Server=34.176.216.213;Initial Catalog=GVM_Seguridad;User ID=seguridad;Password=MBZXLn7J25z6VZhp44xYdG;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;.
+        ///   Looks up a localized string similar to Server=34.176.216.213;Initial Catalog=GVM_Seguridad;User ID=seguridad;Password=MBZXLn7J25z6VZhp44xYdG;Encrypt=True;Persist Security Info=True;TrustServerCertificate=True;Connection Timeout=30;.
         /// </summary>
         internal static string GVMSeguridadConnectionString {
             get {

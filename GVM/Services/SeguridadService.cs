@@ -17,9 +17,6 @@ namespace GVM.Services {
 
         public SeguridadService(SeguridadContext context) {
             _seguridadContext = context;
-            if (!_seguridadContext.Database.CanConnect()) {
-                throw new Exception("Servicio de autenticacion no disponible.");
-            }
         }
 
         public async Task<Usuario> RegisterAsync(string nombre, string email, string clave) {

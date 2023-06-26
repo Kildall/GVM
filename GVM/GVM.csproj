@@ -26,6 +26,7 @@
         <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
         <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
         <UserSecretsId>0f810682-adc7-4753-99b6-7a95acbc7197</UserSecretsId>
+        <DefaultLanguage>es-ar</DefaultLanguage>
     </PropertyGroup>
 
     <ItemGroup>

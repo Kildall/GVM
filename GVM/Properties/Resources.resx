@@ -121,6 +121,6 @@
     <value>Data Source=34.176.216.213;Initial Catalog=GVM;User ID=gvm;Password=GyaXN2gAngN5C72RrF274k;Encrypt=True;Persist Security Info=True;multisubnetfailover=True;TrustServerCertificate=True;Connection Timeout=30;</value>
   </data>
   <data name="GVMSeguridadConnectionString" xml:space="preserve">
-    <value>Server=34.176.216.213;Initial Catalog=GVM_Seguridad;User ID=seguridad;Password=MBZXLn7J25z6VZhp44xYdG;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;</value>
+    <value>Server=34.176.216.213;Initial Catalog=GVM_Seguridad;User ID=seguridad;Password=MBZXLn7J25z6VZhp44xYdG;Encrypt=True;Persist Security Info=True;TrustServerCertificate=True;Connection Timeout=30;</value>
   </data>
 </root>
