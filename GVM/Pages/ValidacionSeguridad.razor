@@ -1,0 +1,48 @@
+﻿@page "/validar_seguridad"
+@using GVM.Components
+@inherits AuthorizedComponentPage
+
+<h1>Validacion de Seguridad</h1>
+<h3>Validacion de permiso "Delete": @TienePermiso</h3>
+<h3>Datos del usuario logueado: </h3>
+<ul class="list-group">
+    <li class="list-group-item">Nombre: @SeguridadService.Usuario.Nombre</li>
+    <li class="list-group-item">Email: @SeguridadService.Usuario.Email</li>
+    <li class="list-group-item text-break">Contraseña: @SeguridadService.Usuario.Clave</li>
+</ul>
+<h2>Roles y sus permisos del usuario logueado: </h2>
+<ul class="list-group">
+    @foreach (var rol in @SeguridadService.Usuario.Roles)
+    {
+        <li class="list-group-item active">Nombre: @rol.Rol.Nombre</li>
+        <ul class="list-group">
+            @foreach (var permiso in rol.Rol.Permisos)
+            {
+                <l1 class="list-group-item">Permiso: @permiso.Permiso.Nombre</l1>
+            }
+        </ul>
+    }
+</ul>
+
+@code {
+    [CascadingParameter]
+    LoadingIndicator LoadingIndicator { get; set; }
+
+    bool TienePermiso { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadingIndicator.Show();
+        try
+        {
+            TienePermiso = SeguridadService.ValidarPermiso("Delete");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+        await LoadingIndicator.Hide();
+    }
+
+
+}

@@ -14,10 +14,10 @@ namespace GVM.Security.Entidades {
         public int RolId { get; set; }
 
         [ForeignKey("UsuarioId")]
-        public Usuario Usuario { get; set; }
+        public virtual Usuario Usuario { get; set; }
 
         [ForeignKey("RolId")]
-        public Rol Rol { get; set; }
+        public virtual Rol Rol { get; set; }
 
     }
 }

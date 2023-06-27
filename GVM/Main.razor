@@ -6,7 +6,9 @@
         <ChildContent>
             @if (!seguridad.EstaLogeado)
             {
-                <Login />
+                <LoadingIndicator FullScreen FadeIn>
+                    <Login />
+                </LoadingIndicator>
             }
             else
             {

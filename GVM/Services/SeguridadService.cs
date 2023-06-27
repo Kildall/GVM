@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GVM.Security.Entidades;
 using GVM.Security;
+using GVM.Utils.Errors;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -13,6 +14,7 @@ namespace GVM.Services {
         private readonly SeguridadContext _seguridadContext;
         public bool EstaLogeado { get; private set; }
         public Usuario Usuario { get; private set; }
+
         public event Action OnChange;
 
         public SeguridadService(SeguridadContext context) {
@@ -22,52 +24,49 @@ namespace GVM.Services {
             }
         }
 
-        public async Task<Usuario> RegisterAsync(string nombre, string email, string clave) {
-            var user = new Usuario(nombre) { Email = email, Clave = HashPassword(clave) };
-            _seguridadContext.Usuarios.Add(user);
-            await _seguridadContext.SaveChangesAsync();
-            return user;
+        public async Task<bool> RegistrarAsync(string nombre, string email, string clave) {
+            try {
+                var user = new Usuario(nombre) { Email = email, Clave = HashClave(clave), Habilitado = false };
+                _seguridadContext.Usuarios.Add(user);
+                await _seguridadContext.SaveChangesAsync();
+                return true;
+            } catch (Exception e) {
+                return false;
+            }
         }
 
-        public async Task<Usuario> ValidateLoginAsync(string email, string password) {
-            try {
+        public async Task<Usuario> ValidarLoginAsync(string email, string clave) {
+                Usuario user = await _seguridadContext.Usuarios
+                    .SingleOrDefaultAsync(u => u.Email == email);
 
-                Usuario user = await _seguridadContext.Usuarios.SingleOrDefaultAsync(u => u.Email == email);
                 if (user == null) {
-                    return null;
+                    throw new EmailNotFoundException(email);
                 }
 
-                if (!ValidatePasword(user.Clave, password)) {
-                    return null;
+                if (!ValidarClave(user.Clave, clave)) {
+                    throw new IncorrectPasswordException("Contraseña incorrecta");
                 }
 
                 if (!EstaLogeado) {
-                    EstaLogeado = false;
+                    EstaLogeado = true;
                     Usuario = user;
                     NotifyStateChanged();
                 }
-
                 return user;
-            } catch (Exception e) {
-                Console.WriteLine(e);
-                throw;
-            }
+
 
         }
 
-        public async Task<bool> ValidatePermissionAsync(int userId, string permission) {
-            return await _seguridadContext.UsuarioRoles
-                .Where(ur => ur.UsuarioId == userId)
-                .SelectMany(ur => _seguridadContext.RolPermisos.Where(rp => rp.RolId == ur.RolId))
-                .AnyAsync(rp => _seguridadContext.Permisos.Any(p => p.PermisoId == rp.PermisoId && p.Nombre == permission));
+        public bool ValidarPermiso(string permiso) {
+            return Usuario.CheckeaPermiso(permiso);
         }
 
-        private string HashPassword(string password) {
+        private string HashClave(string clave) {
             string salt = BCrypt.Net.BCrypt.GenerateSalt();
-            return BCrypt.Net.BCrypt.HashPassword(password, salt);
+            return BCrypt.Net.BCrypt.HashPassword(clave, salt);
         }
 
-        private bool ValidatePasword(string hash, string plain) {
+        private bool ValidarClave(string hash, string plain) {
             return BCrypt.Net.BCrypt.Verify(plain, hash);
         }
 

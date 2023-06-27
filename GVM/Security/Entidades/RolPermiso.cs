@@ -12,7 +12,7 @@ namespace GVM.Security.Entidades {
     public class RolPermiso {
         public int RolId { get; set; }
         public int PermisoId { get; set; }
-        public Rol Rol { get; set; }
-        public Permiso Permiso { get; set; }
+        public virtual Rol Rol { get; set; }
+        public virtual Permiso Permiso { get; set; }
     }
 }

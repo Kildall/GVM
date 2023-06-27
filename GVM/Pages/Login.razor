@@ -1,54 +1,140 @@
 ﻿@page "/login"
 @using GVM.Services
-@inject SeguridadService UsuarioService
+@using System.ComponentModel.DataAnnotations
+@using System.Text
+@using GVM.Utils.Errors
+@inject SeguridadService SeguridadService
+@inject IJSRuntime JsRuntime
 
-<EditForm Model="@loginModel" OnValidSubmit="HandleValidSubmit">
-    <div class="container py-5">
-        <div class="row justify-content-center">
-            <div class="col-lg-5">
-                <div class="card shadow-lg border-0 rounded-lg mt-5">
-                    <div class="card-header">
-                        <h3 class="text-center font-weight-light my-4">Login</h3>
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="row">
+        <div class="col">
+            <div class="shadow-lg p-3 mb-5 bg-body rounded">
+                <ul class="nav nav-pills mb-3 gap-2 justify-content-center" id="pills-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="pills-login-tab" data-bs-toggle="pill" data-bs-target="#pills-login" type="button" role="tab" aria-controls="pills-login" aria-selected="true">Login</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-register-tab" data-bs-toggle="pill" data-bs-target="#pills-register" type="button" role="tab" aria-controls="pills-register" aria-selected="false">Register</button>
+                    </li>
+                </ul>
+                <div class="tab-content p-3 bg-white rounded" id="pills-tabContent">
+                    <div class="tab-pane fade show active p-3" id="pills-login" role="tabpanel" aria-labelledby="pills-login-tab">
+                        <EditForm Model="Ingreso" OnValidSubmit="HandleLogin">
+                            <div class="mb-3">
+                                <label for="loginEmail" class="form-label">Email</label>
+                                <InputText id="loginEmail" @bind-Value="Ingreso.Email" class="form-control"/>
+                            </div>
+                            <div class="mb-3">
+                                <label for="loginPassword" class="form-label">Contraseña</label>
+                                <InputText id="loginPassword" type="password" @bind-Value="Ingreso.Clave" class="form-control"/>
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <button type="submit" class="btn btn-primary">Ingresar</button>
+                            </div>
+                            <ul>
+                                @foreach (string error in Errors)
+                                {
+                                    <li>@error</li>
+                                }
+                            </ul>
+                            
+                        </EditForm>
                     </div>
-                    <div class="card-body">
-                        <div class="form-floating mb-3">
-                            <InputText class="form-control" id="email" placeholder="name@example.com" @bind-Value="loginModel.Email" />
-                            <label for="email">Email address</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <InputText class="form-control" id="password" placeholder="Password" type="password" @bind-Value="loginModel.Password" />
-                            <label for="password">Password</label>
-                        </div>
-                        <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                            <button type="submit" class="btn btn-primary">Login</button>
-                        </div>
+                    <div class="tab-pane fade p-3" id="pills-register" role="tabpanel" aria-labelledby="pills-register-tab">
+                        <EditForm Model="Registro" OnValidSubmit="HandleRegister">
+                            <div class="mb-3">
+                                <label for="registerEmail" class="form-label">Email address</label>
+                                <InputText id="registerEmail" @bind-Value="Registro.Email" class="form-control"/>
+                            </div>
+                            <div class="mb-3">
+                                <label for="registerName" class="form-label">Nombre</label>
+                                <InputText id="registerName" @bind-Value="Registro.Nombre" class="form-control"/>
+                            </div>
+                            <div class="mb-3">
+                                <label for="registerPassword" class="form-label">Password</label>
+                                <InputText id="registerPassword" type="password" @bind-Value="Registro.Clave" class="form-control"/>
+                            </div>
+                            <div class="mb-3">
+                                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                                <InputText id="confirmPassword" type="password" @bind-Value="Registro.ConfirmarClave" class="form-control"/>
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                            <ul>
+                                @foreach (string error in Errors)
+                                {
+                                    <li>@error</li>
+                                }
+                            </ul>
+                        </EditForm>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</EditForm>
+</div>
 
 @code {
-    private LoginModel loginModel = new LoginModel();
+    [CascadingParameter]
+    public LoadingIndicator LoadingIndicator { get; set; }
 
-    private class LoginModel
-    {
-        public string Email { get; set; }
-        public string Password { get; set; }
-    }
+    public LoginData Ingreso { get; set; } = new LoginData();
+    public RegisterData Registro { get; set; } = new RegisterData();
+    public List<string> Errors { get; set; } = new List<string>();
 
-    private async Task HandleValidSubmit()
+    private async void HandleLogin()
     {
+        await LoadingIndicator.Show();
         try
         {
-            var user = await UsuarioService.ValidateLoginAsync(loginModel.Email, loginModel.Password);
-
+            ValidationContext context = new ValidationContext(Ingreso);
+            List<ValidationResult> results = new List<ValidationResult>();
+            bool isValid = Validator.TryValidateObject(Ingreso, context, results, validateAllProperties: true);
+            if (isValid)
+                await SeguridadService.ValidarLoginAsync(Ingreso.Email, Ingreso.Clave);
+            else
+                Errors.AddRange(results.Select(r => r.ErrorMessage));
+        }
+        catch (AuthenticationException e)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", e.Message);
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            throw;
+            await JsRuntime.InvokeVoidAsync("alert", e.Message);
         }
+        await LoadingIndicator.Hide();
+    }
+
+    private async void HandleRegister()
+    {
+    }
+
+    public class LoginData
+    {
+        [Required(ErrorMessage = "El email es requerido")]
+        public string Email { get; set; }
+
+        [Required(ErrorMessage = "La contraseña es requerida")]
+        public string Clave { get; set; }
+    }
+
+    public class RegisterData
+    {
+        [Required(ErrorMessage = "El nombre es requerido")]
+        [StringLength(50, MinimumLength = 3, ErrorMessage = "El nombre tiene que tener entre 3 y 50 caracteres")]
+        public string Nombre { get; set; }
+
+        [Required(ErrorMessage = "El email es requerido")]
+        [EmailAddress(ErrorMessage = "El email no es valido.")]
+        public string Email { get; set; }
+
+        [Required(ErrorMessage = "La contraseña es requerida")]
+        [StringLength(64, MinimumLength = 8, ErrorMessage = "La contraseña tiene que tener entre 8 y 64 caracteres")]
+        public string Clave { get; set; }
+
+        public string ConfirmarClave { get; set; }
     }
 }

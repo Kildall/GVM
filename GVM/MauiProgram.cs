@@ -8,20 +8,25 @@ using System.Reflection;
 using System.Resources;
 using GVM.Security;
 using GVM.Services;
+using CommunityToolkit.Maui;
 
 namespace GVM {
     public static class MauiProgram {
         public static MauiApp CreateMauiApp() {
             var builder = MauiApp.CreateBuilder();
-            builder.UseMauiApp<App>().ConfigureFonts(fonts => {
+            builder.UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
+                .ConfigureFonts(fonts => {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
             });
             ResourceManager rm = new ResourceManager("GVM.Properties.Resources", Assembly.GetExecutingAssembly());
 
             string seguridadCs = rm.GetString("GVMSeguridadConnectionString");
             string gvmCs = rm.GetString("GVMConnectionString");
-            builder.Services.AddDbContext<GVMContext>(options => options.UseSqlServer(gvmCs));
-            builder.Services.AddDbContext<SeguridadContext>(options => options.UseSqlServer(seguridadCs));
+            builder.Services.AddDbContext<GVMContext>(options => options.UseSqlServer(gvmCs, options => options.EnableRetryOnFailure()));
+            builder.Services.AddDbContext<SeguridadContext>(options => options.UseLazyLoadingProxies()
+                    .UseSqlServer(seguridadCs, sqlServerOptions => sqlServerOptions.EnableRetryOnFailure())
+            );
 
             builder.Services.AddSingleton<SeguridadService>();
             builder.Services.AddBlazorise(options => { options.Immediate = true; })

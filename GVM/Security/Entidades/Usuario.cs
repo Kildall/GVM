@@ -11,7 +11,8 @@ namespace GVM.Security.Entidades {
         public int UsuarioId { get; set; }
         public string Email { get; set; }
         public string Clave { get; set; }
-        public ICollection<UsuarioRol> Roles { get; set; }
+        public bool Habilitado { get; set; }
+        public virtual ICollection<UsuarioRol> Roles { get; set; }
 
 
         public Usuario(string nombre) : base(nombre) { }
