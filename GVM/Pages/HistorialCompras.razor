@@ -44,7 +44,9 @@
     {
         await loadingIndicator.Show();
 
-        List<Compra> listaCompras = await _GVMContext.Compras.Include(c => c.Distribuidor).Include(c => c.Empleado).ToListAsync();
+        List<Compra> listaCompras = await _GVMContext.Compras
+        .Include(c => c.Distribuidor)
+        .Include(c => c.Empleado).ToListAsync();
 
         compras = listaCompras.Select(compra => new CompraViewModel
             {

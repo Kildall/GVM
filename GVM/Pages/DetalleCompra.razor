@@ -1,0 +1,54 @@
+﻿@page "/detallecompra/{CompraId:int}"
+@using GVM.Data.ViewModels;
+@using GVM.Data.Entidades;
+@using GVM.Data;
+@inject GVMContext _GVMContext;
+@using Microsoft.EntityFrameworkCore;
+@using GVM.Components;
+
+<CompraForm Compra="Compra" />
+
+@code {
+    [Parameter]
+    public int CompraId { get; set; }
+
+    public CompraViewModel Compra;
+
+    [CascadingParameter]
+    LoadingIndicator loadingIndicator { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await loadingIndicator.Show();
+
+        Compra compra = await _GVMContext.Compras.
+        Include(c => c.Productos)
+        .ThenInclude(p => p.Producto)
+        .Include(c => c.Distribuidor)
+        .Include(c => c.Empleado)
+        .FirstOrDefaultAsync(c => c.CompraId == CompraId);
+
+        Compra = new CompraViewModel
+            {
+                CompraId = compra.CompraId,
+                Empleado = compra.Empleado,
+                Distribuidor = compra.Distribuidor,
+                Fecha = compra.Fecha,
+                Monto = compra.Monto,
+                Descripcion = compra.Descripcion,
+                Productos = compra.Productos.Select(p => new ProductoViewModel()
+                {
+                    ProductoId = p.Producto.ProductoId,
+                    Nombre = p.Producto.Nombre,
+                    Cantidad = p.Producto.Cantidad,
+                    Medida = p.Producto.Medida,
+                    Marca = p.Producto.Marca,
+                    Precio = p.Producto.Precio
+                }).ToList()
+            };
+
+        await loadingIndicator.Hide();
+    }
+
+
+}
