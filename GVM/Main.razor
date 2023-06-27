@@ -1,17 +1,28 @@
-﻿@inject NavigationManager navigation
+﻿@using GVM.Services
+@using GVM.Pages;
+@inject SeguridadService seguridad
 <ThemeProvider Theme="theme">
     <ErrorBoundary>
         <ChildContent>
-            <Router AppAssembly="@typeof(Main).Assembly">
-                <Found Context="routeData">
-                    <RouteView RouteData="@routeData" DefaultLayout="@typeof(_Layout)" />
-                </Found>
-                <NotFound>
-                    <LayoutView Layout="@typeof(_Layout)">
-                        <NotFound />
-                    </LayoutView>
-                </NotFound>
-            </Router>
+            @if (!seguridad.EstaLogeado)
+            {
+                <LoadingIndicator FullScreen FadeIn>
+                    <Login />
+                </LoadingIndicator>
+            }
+            else
+            {
+                <Router AppAssembly="@typeof(Main).Assembly">
+                    <Found Context="routeData">
+                        <RouteView RouteData="@routeData" DefaultLayout="@typeof(_Layout)"/>
+                    </Found>
+                    <NotFound>
+                        <LayoutView Layout="@typeof(_Layout)">
+                            <NotFound/>
+                        </LayoutView>
+                    </NotFound>
+                </Router>
+            }
         </ChildContent>
         <ErrorContent>
             <Error />
@@ -32,4 +43,10 @@
                 Light = "#FFFFFF"
             }
         };
+
+    protected override void OnInitialized()
+    {
+        seguridad.OnChange += StateHasChanged;
+        base.OnInitialized();
+    }
 }
