@@ -43,9 +43,18 @@ namespace GVM.Components {
         }
 
         private string GetFirstRouteSegment(string url) {
-            Uri uri = new Uri(url);
-            string[] segments = uri.AbsolutePath.Split('/');
-            return segments.Length > 1 ? "/" + segments[1] : null;
+            string[] segments;
+
+            if (Uri.IsWellFormedUriString(url, UriKind.Absolute)) {
+                Uri uri = new Uri(url);
+                segments = uri.AbsolutePath.Split('/');
+            } else if (Uri.IsWellFormedUriString(url, UriKind.Relative)) {
+                segments = url.Split('/');
+            } else {
+                throw new UriFormatException("The provided URL is not a valid absolute or relative URL.");
+            }
+
+            return segments.Length > 1 ? segments[1] : null;
         }
 
         public void Dispose() => registration?.Dispose();
