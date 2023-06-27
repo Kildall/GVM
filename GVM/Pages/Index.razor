@@ -1,19 +1,7 @@
 ﻿@page "/"
-@using GVM.Data
-@using Microsoft.EntityFrameworkCore
-@inject GVMContext _context
-@inherits ComponentBase
+@using GVM.Components
+@inherits AuthorizedComponentPage
 
-<h1>Hello, world!</h1>
-
-@code {
-    [CascadingParameter]
-    LoadingIndicator loadingIndicator { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        await loadingIndicator.Show();
-        await _context.Clientes.ToListAsync();
-        await loadingIndicator.Hide();
-    }
-}
+<p class="fw-bold">Modulo de seguridad: Terminado (Preguntar composite)</p>
+<p class="fw-bold">BBDD de GVM: Casi terminada</p>
+<p class="fw-bold">BBDD de Seguridad: Casi terminada</p>
