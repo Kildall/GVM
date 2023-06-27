@@ -54,7 +54,7 @@ namespace GVM.Components {
                 throw new UriFormatException("The provided URL is not a valid absolute or relative URL.");
             }
 
-            return segments.Length > 1 ? segments[1] : null;
+            return segments.Length > 1 ? "/" + segments[1] : null;
         }
 
         public void Dispose() => registration?.Dispose();
