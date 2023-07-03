@@ -5,8 +5,6 @@
 @using GVM.Data.Entidades;
 @using Blazorise;
 @using Microsoft.EntityFrameworkCore;
-@inject NavigationManager _Navigation
-@inject GVMContext _GVMContext;
 @inherits AuthorizedComponentPage
 
 <nav class="navbar bg-body-tertiary container-fluid">
@@ -21,42 +19,42 @@
 <h4>Compras realizadas:</h4>
 
 
-@foreach (var compra in compras)
+@foreach (var compra in Compras)
 {
     <ItemCompra Compra = "compra" />
 }
 
 @code {
-    public List<CompraViewModel> compras { get; set; } = new List<CompraViewModel>();
+    public List<CompraViewModel> Compras { get; set; } = new List<CompraViewModel>();
 
     public string txtBusqueda = string.Empty;
     List<CompraViewModel> resultadosBusqueda;
 
     [CascadingParameter]
-    LoadingIndicator loadingIndicator { get; set; }
+    LoadingIndicator LoadingIndicator { get; set; }
 
     /* Muestra el indicador de carga,
     realiza una consulta a la base de datos para obtener una lista de compras, incluyendo las entidades relacionadas Distribuidor y Empleado,
     Mapea los resultados de la consulta a una lista de objetos CompraViewModel y
-    Oculta el indicador de carga una vez que se han cargado los datos*/
+    Oculta el indicador de carga una vez que se han cargado los datos */
 
     protected override async Task OnInitializedAsync()
     {
-        await loadingIndicator.Show();
+        await LoadingIndicator.Show();
 
-        List<Compra> listaCompras = await _GVMContext.Compras.Include(c => c.Distribuidor).Include(c => c.Empleado).ToListAsync();
+        List<Compra> listaCompras = await GVMContext.Compras.ToListAsync();
 
-        compras = listaCompras.Select(compra => new CompraViewModel
-            {
-                CompraId = compra.CompraId,
-                Empleado = compra.Empleado,
-                Distribuidor = compra.Distribuidor,
-                Fecha = compra.Fecha,
-                Monto = compra.Monto,
-                Descripcion = compra.Descripcion
-            }).ToList();
+        Compras = listaCompras.Select(compra => new CompraViewModel
+        {
+            CompraId = compra.CompraId,
+            Empleado = compra.Empleado,
+            Distribuidor = compra.Distribuidor,
+            Fecha = compra.Fecha,
+            Monto = compra.Monto,
+            Descripcion = compra.Descripcion
+        }).ToList();
 
-        await loadingIndicator.Hide();
+        await LoadingIndicator.Hide();
         }
 
     //Realizar Busqueda - Pendiente

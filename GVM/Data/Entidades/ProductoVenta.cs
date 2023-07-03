@@ -17,9 +17,9 @@ namespace GVM.Data.Entidades
         public int Cantidad { get; set; }
 
         [ForeignKey("VentaId")]
-        public Venta Venta { get; set; }
+        public virtual Venta Venta { get; set; }
 
         [ForeignKey("ProductoId")]
-        public Producto Producto { get; set; }
+        public virtual Producto Producto { get; set; }
     }
 }
