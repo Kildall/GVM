@@ -1,0 +1,89 @@
+﻿@using GVM.Data.ViewModels;
+@using GVM.Data;
+@using GVM.Data.Entidades;
+
+@if (Compra != null)
+{
+    <div class="container text-center">
+        <div class="row">
+            <div class="col col-lg-2">
+                <Field>
+                    <div class="text-start">
+                        <FieldLabel class="text-start">ID Compra</FieldLabel>
+                        <TextEdit class="text-center" Placeholder="@Compra.CompraId.ToString()" ReadOnly="true" Style="width: 100%" />
+                    </div>
+                </Field>
+            </div>
+            <div class="col-sm">
+                <Field>
+                    <div Class="text-start">
+                        <FieldLabel>Empleado</FieldLabel>
+                        <TextEdit Placeholder=@Compra.Empleado.Nombre />
+                    </div>
+                </Field>
+            </div>
+            <div class="col-sm">
+                <div class="text-start">
+                    <Field>
+                        <FieldLabel>Distribuidor</FieldLabel>
+                        <TextEdit Placeholder=@Compra.Distribuidor.Nombre />
+                    </Field>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div Class="col">
+                <div Class="text-start">
+                    <Field>
+                        <FieldLabel>Fecha</FieldLabel>
+                        <TextEdit Placeholder=@Compra.Fecha.ToString() />
+                    </Field>
+                </div>
+            </div>
+            <div class="col">
+                <div Class="text-start">
+                    <Field>
+                        <FieldLabel>Monto</FieldLabel>
+                        <TextEdit Placeholder=@Compra.Monto.ToString() />
+                    </Field>
+                </div>
+            </div>
+
+            <Field>
+                <FieldLabel>Descripcion</FieldLabel>
+                <TextEdit Placeholder=@Compra.Descripcion />
+            </Field>
+        </div>
+        <div class="row">
+            <p>
+                <button class="btn btn-primary float-start" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                    Agregar productos
+                </button>
+            </p>
+            <div class="collapse" id="collapseExample">
+                <div class="card card-body">
+                    <ListGroup>
+                        @foreach (var producto in Compra.Productos)
+                        {
+                            <ListGroupItem>@producto.Nombre</ListGroupItem>
+                        }
+                    </ListGroup>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <Div>
+    </Div>
+}
+
+
+
+@code {
+    [Parameter]
+    public CompraViewModel Compra { get; set; }
+
+    [Parameter]
+    public List<EmpleadoViewModel> Empleados { get; set; }
+
+}

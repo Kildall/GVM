@@ -15,5 +15,6 @@ namespace GVM.Data.ViewModels
         public DateTime Fecha { get; set; }
         public double Monto { get; set; }
         public string Descripcion { get; set; }
+        public List<ProductoViewModel> Productos { get; set; }
     }
 }
