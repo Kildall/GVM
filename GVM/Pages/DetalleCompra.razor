@@ -1,0 +1,59 @@
+﻿@page "/detallecompra/{CompraId:int}"
+@using GVM.Data.ViewModels;
+@using GVM.Data.Entidades;
+@using GVM.Data;
+@using Microsoft.EntityFrameworkCore;
+@using GVM.Components;
+@inherits AuthorizedComponentPage;
+
+<CompraForm Compra="Compra" Empleados="Empleados" />
+
+@code {
+    [Parameter]
+    public int CompraId { get; set; }
+
+    public List<EmpleadoViewModel> Empleados;
+    public CompraViewModel Compra;
+
+
+    [CascadingParameter]
+    LoadingIndicator loadingIndicator { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await loadingIndicator.Show();
+
+        Compra compra = await GVMContext.Compras.FirstOrDefaultAsync(c => c.CompraId == CompraId);
+        List<Empleado> empleados = await GVMContext.Empleados.ToListAsync();
+
+        Compra = new CompraViewModel
+            {
+                CompraId = compra.CompraId,
+                Empleado = compra.Empleado,
+                Distribuidor = compra.Distribuidor,
+                Fecha = compra.Fecha,
+                Monto = compra.Monto,
+                Descripcion = compra.Descripcion,
+                Productos = compra.Productos.Select(p => new ProductoViewModel()
+                {
+                    ProductoId = p.Producto.ProductoId,
+                    Nombre = p.Producto.Nombre,
+                    Cantidad = p.Producto.Cantidad,
+                    Medida = p.Producto.Medida,
+                    Marca = p.Producto.Marca,
+                    Precio = p.Producto.Precio
+                }).ToList()
+            };
+
+        Empleados = empleados.Select(empleado => new EmpleadoViewModel
+            {
+                EmpleadoId = empleado.EmpleadoId,
+                Nombre = empleado.Nombre,
+                Cargo = empleado.Cargo
+            }).ToList();
+
+        await loadingIndicator.Hide();
+    }
+
+
+}
