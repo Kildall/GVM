@@ -18,8 +18,8 @@ namespace GVM.Data.Entidades
         public double Monto { get; set; }
         public string Descripcion { get; set; }
 
-        public Empleado Empleado { get; set; }
-        public Distribuidor Distribuidor { get; set; }
-        public ICollection<CompraProducto> Productos { get; set; }
+        public virtual Empleado Empleado { get; set; }
+        public virtual Distribuidor Distribuidor { get; set; }
+        public virtual ICollection<CompraProducto> Productos { get; set; }
     }
 }

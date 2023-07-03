@@ -20,6 +20,6 @@ namespace GVM.Data.Entidades
         public string Localidad { get; set; }
         public string Detalle { get; set; }
 
-        public Cliente Cliente { get; set; }
+        public virtual Cliente Cliente { get; set; }
     }
 }
