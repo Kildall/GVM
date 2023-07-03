@@ -19,11 +19,11 @@ namespace GVM.Data.Entidades
         public DateTime FechaInicio { get; set; }
         public DateTime FechaUltimaActualizacion { get; set; }
 
-        public Venta Venta { get; set; }
-        public Repartidor Repartidor { get; set; }
-        public Direccion Direccion { get; set; }
+        public virtual Venta Venta { get; set; }
+        public virtual Repartidor Repartidor { get; set; }
+        public virtual Direccion Direccion { get; set; }
 
         [ForeignKey("Estado")]
-        public EstadoEnvio EstadoEnvio { get; set; }
+        public virtual EstadoEnvio EstadoEnvio { get; set; }
     }
 }

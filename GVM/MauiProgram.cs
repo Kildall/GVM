@@ -23,10 +23,12 @@ namespace GVM {
 
             string seguridadCs = rm.GetString("GVMSeguridadConnectionString");
             string gvmCs = rm.GetString("GVMConnectionString");
-            builder.Services.AddDbContext<GVMContext>(options => options.UseSqlServer(gvmCs, options => options.EnableRetryOnFailure()));
+
+            builder.Services.AddDbContext<GVMContext>(options => options.UseLazyLoadingProxies()
+                .UseSqlServer(gvmCs, sqlServerOptions => sqlServerOptions.EnableRetryOnFailure()));
+
             builder.Services.AddDbContext<SeguridadContext>(options => options.UseLazyLoadingProxies()
-                    .UseSqlServer(seguridadCs, sqlServerOptions => sqlServerOptions.EnableRetryOnFailure())
-            );
+                .UseSqlServer(seguridadCs, sqlServerOptions => sqlServerOptions.EnableRetryOnFailure()));
 
             builder.Services.AddSingleton<SeguridadService>();
             builder.Services.AddBlazorise(options => { options.Immediate = true; })

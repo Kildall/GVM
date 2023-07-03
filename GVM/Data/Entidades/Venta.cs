@@ -18,10 +18,10 @@ namespace GVM.Data.Entidades
         public DateTime FechaInicio { get; set; }
         public DateTime FechaUltimaActualizacion { get; set; }
 
-        public Cliente Cliente { get; set; }
+        public virtual Cliente Cliente { get; set; }
 
         [ForeignKey("Estado")]
-        public EstadoVenta EstadoVenta { get; set; }
-        public ICollection<ProductoVenta> Productos { get; set; }
+        public virtual EstadoVenta EstadoVenta { get; set; }
+        public virtual ICollection<ProductoVenta> Productos { get; set; }
     }
 }
