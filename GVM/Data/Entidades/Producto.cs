@@ -18,7 +18,7 @@ namespace GVM.Data.Entidades
         public string Marca { get; set; }
         public double Precio { get; set; }
 
-        public ICollection<CompraProducto> Compras { get; set; }
-        public ICollection<ProductoVenta> Ventas { get; set; }
+        public virtual ICollection<CompraProducto> Compras { get; set; }
+        public virtual ICollection<ProductoVenta> Ventas { get; set; }
     }
 }

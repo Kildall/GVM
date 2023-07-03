@@ -19,12 +19,12 @@ namespace GVM.Data.Entidades
         public int Estado { get; set; }
 
         [ForeignKey("RepartidorId")]
-        public Repartidor Repartidor { get; set; }
+        public virtual Repartidor Repartidor { get; set; }
 
         [ForeignKey("EnvioId")]
-        public Envio Envio { get; set; }
+        public virtual Envio Envio { get; set; }
 
         [ForeignKey("Estado")]
-        public EstadoEnvio EstadoEnvio { get; set; }
+        public virtual EstadoEnvio EstadoEnvio { get; set; }
     }
 }

@@ -14,6 +14,6 @@ namespace GVM.Data.Entidades
         public int RepartidorId { get; set; }
         public string Nombre { get; set; }
         public string Telefono { get; set; }
-        public ICollection<RepartidorEnvio> Envios { get; set; }
+        public virtual ICollection<RepartidorEnvio> Envios { get; set; }
     }
 }
