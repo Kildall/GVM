@@ -1,4 +1,10 @@
 ﻿@using GVM.Data.ViewModels;
+@using GVM.Data;
+@inject GVMContext _GVMContext;
+@using GVM.Data.Entidades;
+@using Microsoft.EntityFrameworkCore;
+
+
 @if (Compra != null)
 {
     <div class="container text-center">
@@ -70,7 +76,6 @@
 
         </div>
     </div>
-
     <Div>
     </Div>
 }
@@ -80,4 +85,12 @@
 @code {
     [Parameter]
     public CompraViewModel Compra { get; set; }
+
+    public List<EmpleadoViewModel> Empleados;
+
+    protected override async Task OnInitializedAsync()
+    {
+        List<Empleado> empleados = await _GVMContext.Empleados.ToListAsync();
+    }
+
 }

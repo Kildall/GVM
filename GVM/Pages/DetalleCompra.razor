@@ -23,7 +23,7 @@
 
         Compra compra = await _GVMContext.Compras.
         Include(c => c.Productos)
-        .ThenInclude(p => p.Producto)
+        .ThenInclude(p => p.Producto)  
         .Include(c => c.Distribuidor)
         .Include(c => c.Empleado)
         .FirstOrDefaultAsync(c => c.CompraId == CompraId);
