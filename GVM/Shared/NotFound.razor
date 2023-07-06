@@ -3,7 +3,19 @@
         <div class="col text-center">
             <h1 class="display-4">404 Not Found</h1>
             <p class="lead">Oops! La pagina que estas buscando no existe.</p>
-            <a href="/" class="btn btn-primary">Volver al Inicio</a>
+            <a @onclick="RestoreStatus" class="btn btn-primary">Volver al Inicio</a>
         </div>
     </div>
 </div>
+
+
+@code
+{
+    [CascadingParameter]
+    public ErrorBoundary? ErrorBoundary { get; set; }
+
+    private void RestoreStatus()
+    {
+        ErrorBoundary?.Recover();
+    }
+}

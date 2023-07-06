@@ -2,19 +2,25 @@
 @using GVM.Pages;
 @inject SeguridadService seguridad
 <ThemeProvider Theme="theme">
-    <ErrorBoundary>
+    <LoadingIndicator FullScreen FadeIn>
         <ChildContent>
             @if (!seguridad.EstaLogeado)
             {
-                <LoadingIndicator FullScreen FadeIn>
-                    <Login />
-                </LoadingIndicator>
+                <Login/>
             }
             else
             {
                 <Router AppAssembly="@typeof(Main).Assembly">
+
                     <Found Context="routeData">
-                        <RouteView RouteData="@routeData" DefaultLayout="@typeof(_Layout)"/>
+                        <ErrorBoundary @ref="ErrorBoundary">
+                            <ChildContent>
+                                <RouteView RouteData="@routeData" DefaultLayout="@typeof(_Layout)"/>
+                            </ChildContent>
+                            <ErrorContent Context="ex">
+                                <Error ReceivedException="ex" Boundary="ErrorBoundary" />
+                            </ErrorContent>
+                        </ErrorBoundary>
                     </Found>
                     <NotFound>
                         <LayoutView Layout="@typeof(_Layout)">
@@ -24,10 +30,14 @@
                 </Router>
             }
         </ChildContent>
-        <ErrorContent>
-            <Error />
-        </ErrorContent>
-    </ErrorBoundary>
+        <IndicatorTemplate>
+            <Animate Animation="Animations.ZoomOut" Auto Duration="TimeSpan.FromMilliseconds( 300 )">
+                <Div>
+                    <SpinKit Type="SpinKitType.Pulse" Size="100px" />
+                </Div>
+            </Animate>
+        </IndicatorTemplate>
+    </LoadingIndicator>
 </ThemeProvider>
 
 
@@ -43,6 +53,8 @@
                 Light = "#FFFFFF"
             }
         };
+
+    public ErrorBoundary? ErrorBoundary { get; set; }
 
     protected override void OnInitialized()
     {
