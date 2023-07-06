@@ -1,9 +1,7 @@
 ﻿@page "/historialcompras"
 @using GVM.Components
-@using GVM.Data;
 @using GVM.Data.ViewModels;
 @using GVM.Data.Entidades;
-@using Blazorise;
 @using Microsoft.EntityFrameworkCore;
 @inherits AuthorizedComponentPage
 
@@ -55,11 +53,11 @@
         }).ToList();
 
         await LoadingIndicator.Hide();
-        }
+    }
 
     //Realizar Busqueda - Pendiente
     public void RealizarBusqueda(ChangeEventArgs e)
     {
-
+        
     }
 }
