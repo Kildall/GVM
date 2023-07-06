@@ -1,39 +1,28 @@
 ﻿@inherits LayoutComponentBase
 
-<LoadingIndicator FullScreen FadeIn>
-    <ChildContent>
-        <Layout Sider>
-            <LayoutSider>
-                <LayoutSiderContent>
-                    @if (platform == DevicePlatform.WinUI)
-                    {
-                        <WindowsNavMenu />
-                    }
-                </LayoutSiderContent>
-            </LayoutSider>
-            <Layout>
-                <LayoutContent>
-                    <div class="m-2">
-                        @Body
-                    </div>
-                </LayoutContent>
-            </Layout>
-            <LayoutFooter>
-                @if (platform == DevicePlatform.Android)
-                {
-                    <AndroidNavBar />
-                }
-            </LayoutFooter>
-        </Layout>
-    </ChildContent>
-    <IndicatorTemplate>
-        <Animate Animation="Animations.ZoomOut" Auto Duration="TimeSpan.FromMilliseconds( 300 )">
-            <Div>
-                <SpinKit Type="SpinKitType.Pulse" Size="100px" />
-            </Div>
-        </Animate>
-    </IndicatorTemplate>
-</LoadingIndicator>
+<Layout Sider>
+    <LayoutSider>
+        <LayoutSiderContent>
+            @if (platform == DevicePlatform.WinUI)
+            {
+                <WindowsNavMenu />
+            }
+        </LayoutSiderContent>
+    </LayoutSider>
+    <Layout>
+        <LayoutContent>
+            <div class="m-2">
+                @Body
+            </div>
+        </LayoutContent>
+    </Layout>
+    <LayoutFooter>
+        @if (platform == DevicePlatform.Android)
+        {
+            <AndroidNavBar />
+        }
+    </LayoutFooter>
+</Layout>
 
 @code {
     DevicePlatform platform = DeviceInfo.Current.Platform;

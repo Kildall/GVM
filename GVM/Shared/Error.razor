@@ -1,8 +1,35 @@
-﻿<div class="vh-100 d-flex justify-content-center align-items-center">
-    <div class="text-center">
-        <Image Source="error_icon" class="rounded" alt="Error Image" />
+﻿@using Microsoft.Maui.Controls;
+@using Image = Microsoft.Maui.Controls.Image
+
+<div class="vh-100 d-flex align-items-stretch justify-content-center">
+    <div class="text-center m-auto">
+        <Image Source="images/error_icon.svg" class="rounded w-50 h-auto" alt="Error Image" />
         <h1 class="display-4 mt-2">Oops!</h1>
-        <p class="lead">Ocurrio un error desconocido.</p>
-        <NavLink href="/" class="btn btn-primary mt-3">Intentar de nuevo</NavLink>
+        @if (ReceivedException == null)
+        {
+            <p class="lead">Ocurrio un error desconocido.</p>
+        }
+        else
+        {
+            <p class="lead">Ocurrio un error: @ReceivedException.Message</p>
+        }
+        <NavLink @onclick="Recover" class="btn btn-primary mt-3">Intentar de nuevo</NavLink>
     </div>
 </div>
+
+
+@code
+{
+    [Parameter]
+    public Exception ReceivedException { get; set; }
+
+    [Parameter]
+    public ErrorBoundary Boundary { get; set; }
+
+
+    public void Recover()
+    {
+        if(Boundary != null)
+            Boundary.Recover();
+    }
+}
