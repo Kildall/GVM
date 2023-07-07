@@ -21,11 +21,11 @@ namespace GVM.Components {
         [Inject]
         public GVMContext GVMContext { get; set; }
 
-        private IDisposable? registration;
+        private IDisposable? _registration;
 
         protected override void OnAfterRender(bool firstRender) {
             if (firstRender) {
-                registration =
+                _registration =
                     NavigationManager.RegisterLocationChangingHandler(OnLocationChanging);
             }
         }
@@ -57,6 +57,6 @@ namespace GVM.Components {
             return segments.Length > 1 ? "/" + segments[1] : null;
         }
 
-        public void Dispose() => registration?.Dispose();
+        public void Dispose() => _registration?.Dispose();
     }
 }

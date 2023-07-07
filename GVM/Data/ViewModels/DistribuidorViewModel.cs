@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace GVM.Data.ViewModels {
-    public class EmpleadoViewModel { 
-        public int EmpleadoId { get; set; }
+    public class DistribuidorViewModel 
+    {
+        public int DistribuidorId { get; set; }
         public string Nombre { get; set; } = string.Empty;
-        public string Cargo { get; set; } = string.Empty;
     }
 }

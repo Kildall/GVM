@@ -1,30 +1,98 @@
 ﻿@page "/detallecompra/{CompraId:int}"
 @using GVM.Data.ViewModels;
 @using GVM.Data.Entidades;
-@using GVM.Data;
 @using Microsoft.EntityFrameworkCore;
 @using GVM.Components;
+@using System.Globalization
 @inherits AuthorizedComponentPage;
 
-<CompraForm Compra="Compra" Empleados="Empleados" />
+@*
+    TODO: Agregar funcion para guardar la informacion
+    TODO: Agregar validaciones
+    TODO: Agregar drawer para agregar productos
+*@
+<MudCard>
+    <MudForm>
+        <div class="container text-center my-5">
+            <MudCardContent>
+                <div class="row mb-2">
+                    <div class="col-2">
+                        <MudTextField Class="border text-center rounded p-2" T="string" Label="ID" Placeholder="@Compra.CompraId.ToString()" ReadOnly="true" />
+                    </div>
+                    <div class="col-5">
+                        <MudAutocomplete Class="border rounded p-2" T="string" @bind-Value="@Compra.Empleado.Nombre" Label="Empleado" SearchFunc="@SearchEmpleado"
+                                         ResetValueOnEmptyText="true"
+                                         CoerceText="true" CoerceValue="true" />
+                    </div>
+                    <div class="col-5">
+                        <MudAutocomplete Class="border rounded p-2" T="string" @bind-Value="@Compra.Distribuidor.Nombre" Label="Distribuidor" SearchFunc="@SearchDistribuidor"
+                                         ResetValueOnEmptyText="true"
+                                         CoerceText="true" CoerceValue="true" />
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-4">
+                        <MudDatePicker Class="border rounded p-2" Label="Fecha" Placeholder=@Compra.Fecha.Date.ToString("MM/dd/yyyy") />
+                    </div>
+                    <div class="col-4">
+                        <MudTimePicker Class="border rounded p-2" Label="Hora" Placeholder=@Compra.Fecha.TimeOfDay.ToString() />
+                    </div>
+                    <div class="col-4">
+                        <MudTextField Class="border rounded p-2" T="double?" Label="Monto" Value="null" Placeholder=@Compra.Monto.ToString(CultureInfo.CurrentCulture) />
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-6">
+                        <MudTextField Class="border rounded p-2" T="string" Label="Descripcion" Placeholder=@Compra.Descripcion />
+                    </div>
+                </div>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Class="float-end" Variant="Variant.Filled" Color="Color.Primary">
+                    Modificar Datos
+                </MudButton>
+            </MudCardActions>
+        </div>
+    </MudForm>
+</MudCard>
+<MudCard>
+    <MudCardContent>
+        <div class="row mb-2">
+            <div class="col-6">
+                <MudList>
+                    @foreach (var producto in Compra.Productos)
+                    {
+                        <MudListItem Class="fw-bold"><MudIcon Icon="@Icons.Material.Outlined.Diamond" Color="Color.Warning" />@producto.Nombre</MudListItem>
+                    }
+                </MudList>
+            </div>
+        </div>
+    </MudCardContent>
+    <MudCardActions>
+        <MudButton Class="float-end" Variant="Variant.Filled" Color="Color.Primary">Agregar Productos</MudButton>
+    </MudCardActions>
+</MudCard>
+
 
 @code {
     [Parameter]
     public int CompraId { get; set; }
 
     public List<EmpleadoViewModel> Empleados;
-    public CompraViewModel Compra;
+    public List<DistribuidorViewModel> Distribuidores;
+    public CompraViewModel Compra = new ();
 
 
     [CascadingParameter]
-    LoadingIndicator loadingIndicator { get; set; }
+    LoadingIndicator LoadingIndicator { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        await loadingIndicator.Show();
+        LoadingIndicator.Show();
 
         Compra compra = await GVMContext.Compras.FirstOrDefaultAsync(c => c.CompraId == CompraId);
         List<Empleado> empleados = await GVMContext.Empleados.ToListAsync();
+        List<Distribuidor> distribuidores = await GVMContext.Distribuidores.ToListAsync();
 
         Compra = new CompraViewModel
             {
@@ -52,8 +120,30 @@
                 Cargo = empleado.Cargo
             }).ToList();
 
-        await loadingIndicator.Hide();
+
+        Distribuidores = distribuidores.Select(distribuidor => new DistribuidorViewModel()
+        {
+            DistribuidorId = distribuidor.DistribuidorId,
+            Nombre = distribuidor.Nombre
+        }).ToList();
+
+         LoadingIndicator.Hide();
     }
 
+    private async Task<IEnumerable<string>> SearchEmpleado(string value)
+    {
+        await Task.Delay(5);
+        if (string.IsNullOrEmpty(value))
+            return Empleados.Select(e => e.Nombre);
+        return Empleados.Where(x => x.Nombre.Contains(value, StringComparison.InvariantCultureIgnoreCase)).Select(e => e.Nombre);
+    }
+
+    private async Task<IEnumerable<string>> SearchDistribuidor(string value)
+    {
+        await Task.Delay(5);
+        if (string.IsNullOrEmpty(value))
+            return Distribuidores.Select(e => e.Nombre);
+        return Distribuidores.Where(x => x.Nombre.Contains(value, StringComparison.InvariantCultureIgnoreCase)).Select(e => e.Nombre);
+    }
 
 }

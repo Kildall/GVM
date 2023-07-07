@@ -8,10 +8,10 @@ namespace GVM.Data.ViewModels {
     public class ProductoViewModel 
     {
         public int ProductoId { get; set; }
-        public string Nombre { get; set; }
+        public string Nombre { get; set; } = string.Empty;
         public int Cantidad { get; set; }
         public double Medida { get; set; }
-        public string Marca { get; set; }
+        public string Marca { get; set; } = string.Empty;
         public double Precio { get; set; }
     }
 }

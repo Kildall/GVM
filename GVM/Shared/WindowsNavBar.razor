@@ -1,0 +1,77 @@
+﻿<MudNavMenu class="aligned">
+    <MudNavLink Href="/compras">
+        <div class="row">
+            <div class="col-6">
+                Inventario
+            </div>
+            <div class="col-6">
+                <MudIcon class="ml-2" Icon="@Icons.Material.Filled.Inventory" Color="Color.Primary"/>
+            </div>
+        </div>
+    </MudNavLink>
+    <MudNavLink Href="/ventas">
+        <div class="row">
+            <div class="col-6">
+                Ventas
+            </div>
+            <div class="col-6">
+                <MudIcon class="ml-2" Icon="@Icons.Material.Filled.PointOfSale" Color="Color.Primary" />
+            </div>
+        </div>
+        
+    </MudNavLink>
+    <NavLink href="/validar_seguridad">
+        <MudButton Size="Size.Small" Color="Color.Primary" class="m-2 border-1 border-white rounded-3 text-end mud-theme-primary">
+            <MudIcon Icon="@Icons.Material.Filled.Add" Color="Color.Tertiary"/>
+        </MudButton>
+    </NavLink>
+    <MudNavLink Href="/envios">
+        <div class="row">
+            <div class="col-6">
+                Envios
+            </div>
+            <div class="col-6">
+                <MudIcon class="ml-2" Icon="@Icons.Material.Filled.DeliveryDining" Color="Color.Primary" />
+            </div>
+        </div>
+    </MudNavLink>
+    <MudNavLink Href="/informes">
+        <div class="row">
+            <div class="col-6">
+                Informes
+            </div>
+            <div class="col-6">
+                <MudIcon class="ml-2" Icon="@Icons.Material.Filled.PieChart" Color="Color.Primary" />
+            </div>
+        </div>
+    </MudNavLink>
+</MudNavMenu>
+
+                
+<style>
+    .aligned {
+        position: absolute;
+        top: 50%;
+        -ms-transform: translateY(-50%);
+        -webkit-transform: translateY(-50%);
+        transform: translateY(-50%);
+        text-align: center;
+    }
+
+    .inner-border {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .inner-border::before {
+        content: "";
+        position: absolute;
+        top: 10%;
+        left: 10%;
+        right: 10%;
+        bottom: 10%;
+        border: 1px solid white;
+        border-radius: inherit;
+        pointer-events: none;
+    }
+</style>
