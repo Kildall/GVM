@@ -1,15 +1,15 @@
-﻿@page "/historialcompras"
+﻿@page "/compras"
 @using GVM.Components
 @using GVM.Data.ViewModels;
 @using GVM.Data.Entidades;
 @using Microsoft.EntityFrameworkCore;
 @inherits AuthorizedComponentPage
 
-<nav class="navbar bg-body-tertiary container-fluid">
+<nav class="navbar mud-background container-fluid">
   <form class="container-fluid">
     <div class="input-group">
-            <span class="input-group-text" id="basic-addon1"><i class="fas fa-search"></i></span>
-      <input type="text" class="form-control" placeholder="Buscar..." aria-label="Buscar" aria-describedby="basic-addon1" @oninput="RealizarBusqueda">
+        <span class="input-group-text" id="basic-addon1"><MudIcon Icon="@Icons.Material.Filled.Search"></MudIcon></span>
+        <input type="text" class="form-control" placeholder="Buscar..." aria-label="Buscar" aria-describedby="basic-addon1" @oninput="RealizarBusqueda">
     </div>
   </form>
 </nav>
@@ -36,9 +36,9 @@
     Mapea los resultados de la consulta a una lista de objetos CompraViewModel y
     Oculta el indicador de carga una vez que se han cargado los datos */
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task  OnInitializedAsync()
     {
-        await LoadingIndicator.Show();
+        LoadingIndicator.Show();
 
         List<Compra> listaCompras = await GVMContext.Compras.ToListAsync();
 
@@ -52,7 +52,7 @@
             Descripcion = compra.Descripcion
         }).ToList();
 
-        await LoadingIndicator.Hide();
+         LoadingIndicator.Hide();
     }
 
     //Realizar Busqueda - Pendiente

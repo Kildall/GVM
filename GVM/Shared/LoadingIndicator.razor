@@ -1,0 +1,42 @@
+﻿@inherits ComponentBase
+<CascadingValue Value="this">
+    @if (_visible)
+    {
+        <div class="backdrop">
+            <MudProgressCircular Indeterminate="true" Size="Size.Large" Color="Color.Primary"/>
+        </div>
+    }
+    @ChildContent
+</CascadingValue>
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+    private bool _visible = false;
+
+    public void Show()
+    {
+        _visible = true;
+        StateHasChanged();
+    }
+
+    public void Hide()
+    {
+        _visible = false;
+        StateHasChanged();
+    }
+}
+
+<style>
+    .backdrop {
+        position: fixed;
+        z-index: 9999;
+        height: 100%;
+        width: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.2); 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>

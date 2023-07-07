@@ -8,9 +8,9 @@
     <p><strong>Empleado:</strong> @Compra.Empleado.Nombre</p>
     <p><strong>Monto:</strong> $@Compra.Monto</p>
     <div class="button-container">
-        <Button Class="bubble-button" Color="Color.Primary" Clicked="() => EditarCompraHandler(Compra.CompraId)">
+        <button class="bubble-button mud-theme-primary" @onclick="() => EditarCompraHandler(Compra.CompraId)">
             <span class="oi oi-pencil"></span> Editar
-        </Button>
+        </button>
     </div>
 </div>
 

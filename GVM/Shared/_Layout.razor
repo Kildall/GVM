@@ -1,29 +1,73 @@
-﻿@inherits LayoutComponentBase
+﻿@using GVM.Services
+@using GVM.Pages
+@inject SeguridadService Seguridad
+@inherits LayoutComponentBase
+<MudThemeProvider Theme="_theme" />
+<MudDialogProvider />
+<MudSnackbarProvider />
 
-<Layout Sider>
-    <LayoutSider>
-        <LayoutSiderContent>
+<MudLayout >
+    <LoadingIndicator>
+        @if (!Seguridad.EstaLogeado)
+        {
+            <Login/>
+        }
+        else
+        {
+            <MudAppBar class="d-none"></MudAppBar>
             @if (platform == DevicePlatform.WinUI)
             {
-                <WindowsNavMenu />
+                <MudDrawer Open="true" Class="min-vh-100"  Anchor="Anchor.Left"  Variant="@DrawerVariant.Persistent">
+                    <WindowsNavBar/>
+                </MudDrawer>
             }
-        </LayoutSiderContent>
-    </LayoutSider>
-    <Layout>
-        <LayoutContent>
-            <div class="m-2">
-                @Body
-            </div>
-        </LayoutContent>
-    </Layout>
-    <LayoutFooter>
-        @if (platform == DevicePlatform.Android)
-        {
-            <AndroidNavBar />
+            <MudMainContent>
+                <MudContainer MaxWidth="MaxWidth.ExtraLarge">
+                    @Body
+                </MudContainer>
+            </MudMainContent>
+            @if (platform == DevicePlatform.Android)
+            {
+                <AndroidNavBar/>
+            }
         }
-    </LayoutFooter>
-</Layout>
+    </LoadingIndicator>
+</MudLayout>
+
+
 
 @code {
     DevicePlatform platform = DeviceInfo.Current.Platform;
+
+    MudTheme _theme = new ()
+        {
+            Palette = new PaletteLight()
+            {
+                Primary = "#3A32B7",
+                Secondary = "#9A96D1",
+                Tertiary = "#FFFFFF",
+                Background = "#FFFFFF",
+                BackgroundGrey = "#A7A9B7",
+                TextPrimary = "#181B30",
+                TextSecondary = "#ACAEBB",
+                Error = "#B00020",
+                Success = "#00E676",
+            },
+            Typography = new Typography()
+            {
+                Default =
+                {
+                    FontFamily = new [] { "DM Sans" },
+                    FontSize = "1.0rem",
+                    FontWeight = 500,
+                    LineHeight = 1.6,
+                    LetterSpacing = ".0075em"
+                }
+            },
+            LayoutProperties = new LayoutProperties()
+            {
+                AppbarHeight = "0px",
+                DrawerWidthLeft = "12em"
+            }
+        };
 }

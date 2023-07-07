@@ -86,7 +86,7 @@
 
     private async void HandleLogin()
     {
-        await LoadingIndicator.Show();
+        LoadingIndicator.Show();
         try
         {
             ValidationContext context = new ValidationContext(Ingreso);
@@ -105,10 +105,10 @@
         {
             await JsRuntime.InvokeVoidAsync("alert", e.Message);
         }
-        await LoadingIndicator.Hide();
+        LoadingIndicator.Hide();
     }
 
-    private async void HandleRegister()
+    private async Task HandleRegister()
     {
     }
 

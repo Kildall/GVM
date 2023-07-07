@@ -1,9 +1,8 @@
 ﻿@using Microsoft.Maui.Controls;
-@using Image = Microsoft.Maui.Controls.Image
 
 <div class="vh-100 d-flex align-items-stretch justify-content-center">
     <div class="text-center m-auto">
-        <Image Source="images/error_icon.svg" class="rounded w-50 h-auto" alt="Error Image" />
+        <MudImage Src="images/error_icon.svg" Fluid="true" Class="rounded" Alt="Error Image" />
         <h1 class="display-4 mt-2">Oops!</h1>
         @if (ReceivedException == null)
         {
