@@ -47,22 +47,13 @@
         <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
     </ItemGroup>
 
-    <ItemGroup>
-      <None Remove="Resources\Splash\splash.svg" />
-    </ItemGroup>
-
-    <ItemGroup>
+	<ItemGroup>
         <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
-        <PackageReference Include="Blazorise.Animate" Version="1.2.3" />
-        <PackageReference Include="Blazorise.Bootstrap5" Version="1.2.3" />
-        <PackageReference Include="Blazorise.Icons.FontAwesome" Version="1.2.3" />
-        <PackageReference Include="Blazorise.LoadingIndicator" Version="1.2.3" />
-        <PackageReference Include="Blazorise.SpinKit" Version="1.2.3" />
-        <PackageReference Include="CommunityToolkit.Maui" Version="5.2.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.8" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="7.0.8" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.8" />
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
+        <PackageReference Include="MudBlazor" Version="6.6.0" />
     </ItemGroup>
 
     <ItemGroup>

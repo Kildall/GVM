@@ -1,24 +1,22 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
-using Blazorise;
-using Blazorise.Bootstrap5;
-using Blazorise.Icons.FontAwesome;
 using GVM.Data;
 using System.Reflection;
 using System.Resources;
 using GVM.Security;
 using GVM.Services;
-using CommunityToolkit.Maui;
+using MudBlazor.Services;
 
 namespace GVM {
     public static class MauiProgram {
         public static MauiApp CreateMauiApp() {
             var builder = MauiApp.CreateBuilder();
             builder.UseMauiApp<App>()
-                .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts => {
-                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-            });
+                    fonts.AddFont("DMSans-Regular.ttf", "DMSansRegular");
+                    fonts.AddFont("DMSans-Medium.ttf", "DMSansMedium");
+                    fonts.AddFont("DMSans-Bold.ttf", "DMSansBold");
+                });
             ResourceManager rm = new ResourceManager("GVM.Properties.Resources", Assembly.GetExecutingAssembly());
 
             string seguridadCs = rm.GetString("GVMSeguridadConnectionString");
@@ -31,11 +29,9 @@ namespace GVM {
                 .UseSqlServer(seguridadCs, sqlServerOptions => sqlServerOptions.EnableRetryOnFailure()));
 
             builder.Services.AddSingleton<SeguridadService>();
-            builder.Services.AddBlazorise(options => { options.Immediate = true; })
-                .AddBootstrap5Providers()
-                .AddFontAwesomeIcons();
 
             builder.Services.AddMauiBlazorWebView();
+            builder.Services.AddMudServices();
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();
             builder.Logging.AddDebug();

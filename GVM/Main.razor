@@ -1,59 +1,29 @@
 ﻿@using GVM.Services
 @using GVM.Pages;
 @inject SeguridadService seguridad
-<ThemeProvider Theme="theme">
-    <LoadingIndicator FullScreen FadeIn>
-        <ChildContent>
-            @if (!seguridad.EstaLogeado)
-            {
-                <Login/>
-            }
-            else
-            {
-                <Router AppAssembly="@typeof(Main).Assembly">
 
-                    <Found Context="routeData">
-                        <ErrorBoundary @ref="ErrorBoundary">
-                            <ChildContent>
-                                <RouteView RouteData="@routeData" DefaultLayout="@typeof(_Layout)"/>
-                            </ChildContent>
-                            <ErrorContent Context="ex">
-                                <Error ReceivedException="ex" Boundary="ErrorBoundary" />
-                            </ErrorContent>
-                        </ErrorBoundary>
-                    </Found>
-                    <NotFound>
-                        <LayoutView Layout="@typeof(_Layout)">
-                            <NotFound/>
-                        </LayoutView>
-                    </NotFound>
-                </Router>
-            }
-        </ChildContent>
-        <IndicatorTemplate>
-            <Animate Animation="Animations.ZoomOut" Auto Duration="TimeSpan.FromMilliseconds( 300 )">
-                <Div>
-                    <SpinKit Type="SpinKitType.Pulse" Size="100px" />
-                </Div>
-            </Animate>
-        </IndicatorTemplate>
-    </LoadingIndicator>
-</ThemeProvider>
 
+
+<Router AppAssembly="@typeof(Main).Assembly">
+
+    <Found Context="routeData">
+        <ErrorBoundary @ref="ErrorBoundary">
+            <ChildContent>
+                <RouteView RouteData="@routeData" DefaultLayout="@typeof(_Layout)"/>
+            </ChildContent>
+            <ErrorContent Context="ex">
+                <Error ReceivedException="ex" Boundary="ErrorBoundary" />
+            </ErrorContent>
+        </ErrorBoundary>
+    </Found>
+    <NotFound>
+        <LayoutView Layout="@typeof(_Layout)">
+            <NotFound/>
+        </LayoutView>
+    </NotFound>
+</Router>
 
 @code {
-    Theme theme = new Theme
-        {
-            ColorOptions = new ThemeColorOptions
-            {
-                Primary = "#3A32B7"
-            },
-            BackgroundOptions = new ThemeBackgroundOptions
-            {
-                Light = "#FFFFFF"
-            }
-        };
-
     public ErrorBoundary? ErrorBoundary { get; set; }
 
     protected override void OnInitialized()
