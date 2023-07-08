@@ -1,0 +1,56 @@
+﻿@page "/ventas"
+@using GVM.Data.Entidades
+@using GVM.Components
+@using GVM.Components.Ventas
+@using GVM.Data.ViewModels
+@using Microsoft.EntityFrameworkCore
+@inherits AuthorizedComponentPage
+
+<div class="container-sm container-md">
+    <div class="py-3">
+        <MudTextField T="string" Variant="Variant.Outlined" Label="Search" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" style="position: sticky; top: 0; z-index: 10;"/>
+    </div>
+    <div class="py-3 text-center">
+        <MudText Typo="Typo.h5" Class="fw-bold" Color="Color.Primary">Ventas realizadas</MudText>
+        <div class="list-group mt-2 text-start">
+            @foreach (VentaViewModel venta in VentasList)
+            {
+                <VentaCard Venta="venta" AbrirDetalle="AbrirDetalle"/>
+            }
+        </div>
+    </div>
+    <div class="py-3 d-flex justify-content-center align-items-center">
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AbrirCrear">Agregar Venta</MudButton>
+    </div>
+</div>
+
+
+
+
+
+
+@code {
+    [CascadingParameter]
+    public LoadingIndicator LoadingIndicator { get; set; }
+    List<VentaViewModel> VentasList = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        LoadingIndicator.Show();
+        List<Venta> ventas = await GVMContext.Ventas.ToListAsync();
+        VentasList = Mapper.Map<List<Venta>, List<VentaViewModel>>(ventas);
+        VentasList = VentasList.OrderBy(v => v.FechaUltimaActualizacion).ToList();
+        LoadingIndicator.Hide();
+    }
+
+    private void AbrirDetalle(int ventaId)
+    {
+        NavigationManager.NavigateTo($"/ventas/{ventaId}");
+    }
+
+    private void AbrirCrear()
+    {
+        NavigationManager.NavigateTo("/ventas/crear");
+    }
+
+}

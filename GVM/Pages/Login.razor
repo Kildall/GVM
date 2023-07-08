@@ -89,6 +89,7 @@
         LoadingIndicator.Show();
         try
         {
+            Ingreso.Email = Ingreso.Email.ToLower().Trim();
             ValidationContext context = new ValidationContext(Ingreso);
             List<ValidationResult> results = new List<ValidationResult>();
             bool isValid = Validator.TryValidateObject(Ingreso, context, results, validateAllProperties: true);
@@ -110,6 +111,29 @@
 
     private async Task HandleRegister()
     {
+        LoadingIndicator.Show();
+        try
+        {
+            Registro.Email = Registro.Email.ToLower().Trim();
+            Registro.Nombre = Registro.Nombre.ToLower().Trim();
+
+            ValidationContext context = new ValidationContext(Registro);
+            List<ValidationResult> results = new List<ValidationResult>();
+            bool isValid = Validator.TryValidateObject(Registro, context, results, validateAllProperties: true);
+            if (isValid)
+                await SeguridadService.RegistrarAsync(Registro.Nombre, Registro.Email, Registro.Clave);
+            else
+                Errors.AddRange(results.Select(r => r.ErrorMessage));
+        }
+        catch (AuthenticationException e)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+        }
+        catch (Exception e)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+        }
+        LoadingIndicator.Hide();
     }
 
     public class LoginData

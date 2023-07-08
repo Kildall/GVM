@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using GVM.Data;
 using GVM.Services;
 using Microsoft.AspNetCore.Components;
@@ -20,6 +21,9 @@ namespace GVM.Components {
 
         [Inject]
         public GVMContext GVMContext { get; set; }
+
+        [Inject]
+        public IMapper Mapper { get; set; }
 
         private IDisposable? _registration;
 

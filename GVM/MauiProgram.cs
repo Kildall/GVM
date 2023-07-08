@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Resources;
 using GVM.Security;
 using GVM.Services;
+using GVM.Utils.Profiler;
 using MudBlazor.Services;
 
 namespace GVM {
@@ -32,6 +33,7 @@ namespace GVM {
 
             builder.Services.AddMauiBlazorWebView();
             builder.Services.AddMudServices();
+            builder.Services.AddAutoMapper(typeof(MappingProfiles));
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();
             builder.Logging.AddDebug();

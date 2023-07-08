@@ -48,6 +48,8 @@
     </ItemGroup>
 
 	<ItemGroup>
+        <PackageReference Include="AutoMapper" Version="12.0.1" />
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
         <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.8" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="7.0.8" />
@@ -73,6 +75,15 @@
 
     <ItemGroup>
       <None Include="wwwroot\images\error_icon.svg" />
+      <None Include="wwwroot\svg\package.svg" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="wwwroot\svg\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <MauiAsset Include="wwwroot\svg\package.svg" />
     </ItemGroup>
 
     <ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionGVMHideInfoBar="True" /></VisualStudio></ProjectExtensions>
