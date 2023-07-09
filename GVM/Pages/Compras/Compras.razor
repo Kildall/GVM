@@ -32,12 +32,12 @@
 
     protected override async Task  OnInitializedAsync()
     {
-        LoadingIndicator.Show();
+        await LoadingIndicator.Show();
 
         List<Compra> compras = await GVMContext.Compras.ToListAsync();
         ComprasList = Mapper.Map<List<Compra>, List<CompraViewModel>>(compras);
 
-        LoadingIndicator.Hide();
+        await LoadingIndicator.Hide();
     }
 
     // TODO: Funcion de busqueda

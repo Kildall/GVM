@@ -1,139 +1,192 @@
 ﻿@page "/login"
+@using GVM.Components.Misc
 @using GVM.Services
 @using System.ComponentModel.DataAnnotations
 @using System.Text
 @using GVM.Utils.Errors
 @inject SeguridadService SeguridadService
 @inject IJSRuntime JsRuntime
+@inject ISnackbar Snackbar
 
 <div class="d-flex justify-content-center align-items-center vh-100">
-    <div class="row">
-        <div class="col">
-            <div class="shadow-lg p-3 mb-5 bg-body rounded">
-                <ul class="nav nav-pills mb-3 gap-2 justify-content-center" id="pills-tab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="pills-login-tab" data-bs-toggle="pill" data-bs-target="#pills-login" type="button" role="tab" aria-controls="pills-login" aria-selected="true">Login</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-register-tab" data-bs-toggle="pill" data-bs-target="#pills-register" type="button" role="tab" aria-controls="pills-register" aria-selected="false">Register</button>
-                    </li>
-                </ul>
-                <div class="tab-content p-3 bg-white rounded" id="pills-tabContent">
-                    <div class="tab-pane fade show active p-3" id="pills-login" role="tabpanel" aria-labelledby="pills-login-tab">
-                        <EditForm Model="Ingreso" OnValidSubmit="HandleLogin">
-                            <div class="mb-3">
-                                <label for="loginEmail" class="form-label">Email</label>
-                                <InputText id="loginEmail" @bind-Value="Ingreso.Email" class="form-control"/>
-                            </div>
-                            <div class="mb-3">
-                                <label for="loginPassword" class="form-label">Contraseña</label>
-                                <InputText id="loginPassword" type="password" @bind-Value="Ingreso.Clave" class="form-control"/>
-                            </div>
-                            <div class="d-flex justify-content-center">
-                                <button type="submit" class="btn btn-primary">Ingresar</button>
-                            </div>
-                            <ul>
-                                @foreach (string error in Errors)
-                                {
-                                    <li>@error</li>
-                                }
-                            </ul>
-                            
-                        </EditForm>
-                    </div>
-                    <div class="tab-pane fade p-3" id="pills-register" role="tabpanel" aria-labelledby="pills-register-tab">
-                        <EditForm Model="Registro" OnValidSubmit="HandleRegister">
-                            <div class="mb-3">
-                                <label for="registerEmail" class="form-label">Email address</label>
-                                <InputText id="registerEmail" @bind-Value="Registro.Email" class="form-control"/>
-                            </div>
-                            <div class="mb-3">
-                                <label for="registerName" class="form-label">Nombre</label>
-                                <InputText id="registerName" @bind-Value="Registro.Nombre" class="form-control"/>
-                            </div>
-                            <div class="mb-3">
-                                <label for="registerPassword" class="form-label">Password</label>
-                                <InputText id="registerPassword" type="password" @bind-Value="Registro.Clave" class="form-control"/>
-                            </div>
-                            <div class="mb-3">
-                                <label for="confirmPassword" class="form-label">Confirm Password</label>
-                                <InputText id="confirmPassword" type="password" @bind-Value="Registro.ConfirmarClave" class="form-control"/>
-                            </div>
-                            <div class="d-flex justify-content-center">
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </div>
-                            <ul>
-                                @foreach (string error in Errors)
-                                {
-                                    <li>@error</li>
-                                }
-                            </ul>
-                        </EditForm>
-                    </div>
+    <MudTabs Border="true" PanelClass="py-8">
+        <MudTabPanel Text="Login">
+            <EditForm Model="Ingreso" OnValidSubmit="HandleLogin">
+                <div class="mb-3">
+                    <MudTextField @bind-Value="Ingreso.Email" Label="Email" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Outlined.Email" />
                 </div>
+                <div class="mb-3">
+                    <MudTextField @bind-Value="Ingreso.Clave" Label="Password" Variant="Variant.Outlined" InputType="@_passwordInput" Adornment="Adornment.End" AdornmentIcon="@_passwordInputIcon" OnAdornmentClick="MostrarContraseña" AdornmentAriaLabel="Mostrar Contraseña" />
+                </div>
+                <div class="d-flex justify-content-center align-items-center m-3">
+                    <MudButton ButtonType="ButtonType.Submit" Class="rounded-pill" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" EndIcon="@Icons.Material.Outlined.Login">Ingresar</MudButton>
+                </div>
+            </EditForm>
+        </MudTabPanel>
+        <MudTabPanel Text="Registrarse">
+            <EditForm Model="Registro" OnValidSubmit="HandleRegister">
+                
+                <div class="mb-3">
+                    <MudTextField @bind-Value="Registro.Nombre" Label="Nombre" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Outlined.Person" />
+                </div>
+                <div class="mb-3">
+                    <MudTextField @bind-Value="Registro.Email" Label="Email" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Outlined.Email" />
+                </div>
+                <div class="mb-3">
+                    <MudTextField @bind-Value="Registro.Clave" Label="Contraseña" Variant="Variant.Outlined" InputType="InputType.Password" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Outlined.Password" />
+                </div>
+                <div class="mb-3">
+                    <MudTextField @bind-Value="Registro.ConfirmarClave" Label="Repetir Contraseña" Variant="Variant.Outlined" InputType="InputType.Password"/>
+                </div>
+                <div class="d-flex justify-content-center m-3">
+                    <MudButton ButtonType="ButtonType.Submit" Class="rounded-pill" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" EndIcon="@Icons.Material.Outlined.ElectricBolt">Registrarse</MudButton>
+                </div>
+            </EditForm>
+        </MudTabPanel>
+    </MudTabs>
+</div>
+
+<MudDrawer @bind-Open="@_drawer" Width="100%" Height="fit-content" Anchor="Anchor.Bottom" Elevation="1" Variant="@DrawerVariant.Temporary">
+    <div class="d-flex flex-column justify-content-center align-items-center h-100 m-5">
+        <div class="row text-center">
+            <MudImage Src="svg/pending_register.svg" Height="300"/>
+        </div>
+        <div class="row text-center mt-3">
+            <div class="col-sm-12 col-md">
+                <MudText Typo="Typo.h4" Class="fw-bolder">Registro Pendiente</MudText>
+                <MudText Typo="Typo.h6" Class="text-black-50">
+                    Aun no tienes cuenta con nuestro sistema, comunicate a ventas@gvm.com.ar para obtener la tuya!
+                </MudText>
             </div>
         </div>
     </div>
-</div>
+</MudDrawer>
 
 @code {
     [CascadingParameter]
     public LoadingIndicator LoadingIndicator { get; set; }
 
-    public LoginData Ingreso { get; set; } = new LoginData();
-    public RegisterData Registro { get; set; } = new RegisterData();
-    public List<string> Errors { get; set; } = new List<string>();
+    LoginData Ingreso { get; set; } = new ();
+    RegisterData Registro { get; set; } = new ();
+
+    List<Snackbar> _snackbarErrors = new();
+
+    bool _drawer;
+
+    bool _isShow;
+    InputType _passwordInput = InputType.Password;
+    string _passwordInputIcon = Icons.Material.Filled.Visibility;
+
+    void MostrarContraseña()
+    {
+        @if (_isShow)
+        {
+            _isShow = false;
+            _passwordInputIcon = Icons.Material.Filled.Visibility;
+            _passwordInput = InputType.Password;
+        }
+        else
+        {
+            _isShow = true;
+            _passwordInputIcon = Icons.Material.Filled.VisibilityOff;
+            _passwordInput = InputType.Text;
+        }
+    }
 
     private async void HandleLogin()
     {
-        LoadingIndicator.Show();
+        bool result = false;
         try
         {
-            Ingreso.Email = Ingreso.Email.ToLower().Trim();
+            Snackbar.Clear();
             ValidationContext context = new ValidationContext(Ingreso);
             List<ValidationResult> results = new List<ValidationResult>();
             bool isValid = Validator.TryValidateObject(Ingreso, context, results, validateAllProperties: true);
             if (isValid)
-                await SeguridadService.ValidarLoginAsync(Ingreso.Email, Ingreso.Clave);
+            {
+                await LoadingIndicator.Show();
+                result = await SeguridadService.ValidarLoginAsync(Ingreso.Email, Ingreso.Clave);
+            }
             else
-                Errors.AddRange(results.Select(r => r.ErrorMessage));
+            {
+                ShowErrors(results.Select(r => r.ErrorMessage));
+                return;
+            }
         }
         catch (AuthenticationException e)
         {
-            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+            Snackbar.Add(e.Message, Severity.Error);
         }
         catch (Exception e)
         {
-            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+            Snackbar.Add("Un error desconocido ha ocurrido", Severity.Error);
         }
-        LoadingIndicator.Hide();
+        finally
+        {
+            await LoadingIndicator.Hide();
+        }
+        if (result)
+        {
+            Ingreso = new LoginData();
+        }
     }
 
     private async Task HandleRegister()
     {
-        LoadingIndicator.Show();
+        bool result = false;
         try
         {
-            Registro.Email = Registro.Email.ToLower().Trim();
-            Registro.Nombre = Registro.Nombre.ToLower().Trim();
-
+            Snackbar.Clear();
             ValidationContext context = new ValidationContext(Registro);
             List<ValidationResult> results = new List<ValidationResult>();
             bool isValid = Validator.TryValidateObject(Registro, context, results, validateAllProperties: true);
             if (isValid)
-                await SeguridadService.RegistrarAsync(Registro.Nombre, Registro.Email, Registro.Clave);
+            {
+                await LoadingIndicator.Show(false);
+                result = await SeguridadService.RegistrarAsync(Registro.Nombre, Registro.Email, Registro.Clave);
+            }
             else
-                Errors.AddRange(results.Select(r => r.ErrorMessage));
+            {
+                ShowErrors(results.Select(r => r.ErrorMessage));
+                return;
+            }
         }
         catch (AuthenticationException e)
         {
-            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+            Snackbar.Add(e.Message, Severity.Error);
         }
         catch (Exception e)
         {
-            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+            Snackbar.Add("Un error desconocido ha ocurrido", Severity.Error);
         }
-        LoadingIndicator.Hide();
+        finally
+        {
+            await LoadingIndicator.Hide();
+        }
+
+        if (result)
+        {
+            Registro = new RegisterData();
+            _drawer = true;
+
+        }
+        else
+        {
+            Snackbar.Add("No se pudo completar el registro", Severity.Warning);
+        }
+    }
+
+    private void ShowErrors(IEnumerable<string> errors)
+    {
+        foreach (var error in errors)
+        {
+            var snackback = Snackbar.Add(error, Severity.Error, options =>
+            {
+                options.Icon = Icons.Material.Outlined.Error;
+                options.CloseAfterNavigation = true;
+            });
+            _snackbarErrors.Add(snackback);
+        }
     }
 
     public class LoginData

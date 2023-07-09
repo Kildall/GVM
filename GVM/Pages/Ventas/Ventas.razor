@@ -36,11 +36,11 @@
 
     protected override async Task OnInitializedAsync()
     {
-        LoadingIndicator.Show();
+        await LoadingIndicator.Show();
         List<Venta> ventas = await GVMContext.Ventas.ToListAsync();
         VentasList = Mapper.Map<List<Venta>, List<VentaViewModel>>(ventas);
         VentasList = VentasList.OrderBy(v => v.FechaUltimaActualizacion).ToList();
-        LoadingIndicator.Hide();
+        await LoadingIndicator.Hide();
     }
 
     private void AbrirDetalle(int ventaId)
