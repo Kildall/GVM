@@ -27,7 +27,7 @@ namespace GVM.Services {
         public async Task<bool> RegistrarAsync(string nombre, string email, string clave) {
             nombre = nombre.Trim();
             email = email.Trim().ToLower();
-            var user = new Usuario(nombre) { Email = email, Clave = HashClave(clave), Habilitado = false };
+            var user = new Usuario(nombre) { Nombre = nombre, Email = email, Clave = HashClave(clave), Habilitado = false };
             _seguridadContext.Usuarios.Add(user);
             await _seguridadContext.SaveChangesAsync();
             return true;

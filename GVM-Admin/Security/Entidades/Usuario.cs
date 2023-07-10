@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GVM.Security.Entidades {
+namespace GVM_Admin.Security.Entidades {
     [Table("Usuario")]
     public class Usuario : EntidadSeguridad {
         public int UsuarioId { get; set; }
