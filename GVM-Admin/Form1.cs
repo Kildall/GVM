@@ -58,5 +58,25 @@ namespace GVM_Admin {
             dgvRoles.Refresh();
             dgvPermisos.Refresh();
         }
+
+        private void btnAdminRoles_Click(object sender, EventArgs e) {
+            if (dbContext != null && dgvUsuarios.CurrentRow != null) {
+                var usuario = (Usuario)dgvUsuarios.CurrentRow.DataBoundItem;
+                AdminRoles form = new AdminRoles(dbContext, usuario);
+                Hide();
+                form.FormClosing += (o, args) => { this.Show(); };
+                form.Show();
+            }
+        }
+
+        private void btnEditarRol_Click(object sender, EventArgs e) {
+            if (dbContext != null && dgvRoles.CurrentRow != null) {
+                var rol = (Rol)dgvRoles.CurrentRow.DataBoundItem;
+                EditarRol form = new EditarRol(dbContext, rol);
+                Hide();
+                form.FormClosing += (o, args) => { this.Show(); };
+                form.Show();
+            }
+        }
     }
 }

@@ -4,7 +4,7 @@ namespace GVM_Admin.Security.Entidades {
     [Table("Rol")]
     public class Rol : EntidadSeguridad {
         public int RolId { get; set; }
-        public virtual IEnumerable<RolPermiso> Permisos { get; set; }
+        public virtual ICollection<RolPermiso> Permisos { get; set; }
 
         public Rol(string nombre) : base(nombre) { }
         public override bool CheckeaPermiso(string nombrePermiso) {

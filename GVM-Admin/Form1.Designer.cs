@@ -40,8 +40,8 @@
             label2 = new Label();
             label3 = new Label();
             gbRoles = new GroupBox();
-            btnEliminarRol = new Button();
-            btnAgregarRol = new Button();
+            btnEditarRol = new Button();
+            btnAdminRol = new Button();
             gbPermisos = new GroupBox();
             btnEliminarPermiso = new Button();
             btnAgregarPermiso = new Button();
@@ -172,8 +172,8 @@
             // 
             // gbRoles
             // 
-            gbRoles.Controls.Add(btnEliminarRol);
-            gbRoles.Controls.Add(btnAgregarRol);
+            gbRoles.Controls.Add(btnEditarRol);
+            gbRoles.Controls.Add(btnAdminRol);
             gbRoles.Location = new Point(462, 462);
             gbRoles.Name = "gbRoles";
             gbRoles.Size = new Size(144, 100);
@@ -181,23 +181,25 @@
             gbRoles.TabStop = false;
             gbRoles.Text = "Roles";
             // 
-            // btnEliminarRol
+            // btnEditarRol
             // 
-            btnEliminarRol.Location = new Point(6, 51);
-            btnEliminarRol.Name = "btnEliminarRol";
-            btnEliminarRol.Size = new Size(132, 23);
-            btnEliminarRol.TabIndex = 1;
-            btnEliminarRol.Text = "Eliminar Rol";
-            btnEliminarRol.UseVisualStyleBackColor = true;
+            btnEditarRol.Location = new Point(6, 51);
+            btnEditarRol.Name = "btnEditarRol";
+            btnEditarRol.Size = new Size(132, 23);
+            btnEditarRol.TabIndex = 1;
+            btnEditarRol.Text = "Editar Rol";
+            btnEditarRol.UseVisualStyleBackColor = true;
+            btnEditarRol.Click += btnEditarRol_Click;
             // 
-            // btnAgregarRol
+            // btnAdminRol
             // 
-            btnAgregarRol.Location = new Point(6, 22);
-            btnAgregarRol.Name = "btnAgregarRol";
-            btnAgregarRol.Size = new Size(132, 23);
-            btnAgregarRol.TabIndex = 0;
-            btnAgregarRol.Text = "Agregar Rol";
-            btnAgregarRol.UseVisualStyleBackColor = true;
+            btnAdminRol.Location = new Point(6, 22);
+            btnAdminRol.Name = "btnAdminRol";
+            btnAdminRol.Size = new Size(132, 23);
+            btnAdminRol.TabIndex = 0;
+            btnAdminRol.Text = "Administrar Roles";
+            btnAdminRol.UseVisualStyleBackColor = true;
+            btnAdminRol.Click += btnAdminRoles_Click;
             // 
             // gbPermisos
             // 
@@ -212,6 +214,7 @@
             // 
             // btnEliminarPermiso
             // 
+            btnEliminarPermiso.Enabled = false;
             btnEliminarPermiso.Location = new Point(6, 51);
             btnEliminarPermiso.Name = "btnEliminarPermiso";
             btnEliminarPermiso.Size = new Size(132, 23);
@@ -221,6 +224,7 @@
             // 
             // btnAgregarPermiso
             // 
+            btnAgregarPermiso.Enabled = false;
             btnAgregarPermiso.Location = new Point(6, 22);
             btnAgregarPermiso.Name = "btnAgregarPermiso";
             btnAgregarPermiso.Size = new Size(132, 23);
@@ -284,8 +288,8 @@
         private Label label2;
         private Label label3;
         private GroupBox gbRoles;
-        private Button btnEliminarRol;
-        private Button btnAgregarRol;
+        private Button btnEditarRol;
+        private Button btnAdminRol;
         private GroupBox gbPermisos;
         private Button btnEliminarPermiso;
         private Button btnAgregarPermiso;
