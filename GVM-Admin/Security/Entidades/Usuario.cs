@@ -1,22 +1,27 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace GVM_Admin.Security.Entidades {
-    [Table("Usuario")]
-    public class Usuario : EntidadSeguridad {
+
+    public class Usuario {
         public int UsuarioId { get; set; }
+
+        [Required]
+        [MaxLength(50)]
+        public string Nombre { get; set; }
+        
+        [Required]
+        [MaxLength(50)]
+        [EmailAddress]
         public string Email { get; set; }
+
+        [MaxLength(256)]
+        [Required]
         public string Clave { get; set; }
         public bool Habilitado { get; set; }
-        public virtual ICollection<UsuarioRol> Roles { get; set; }
+        public virtual ICollection<EntidadUsuario> Permisos { get; set; } = new List<EntidadUsuario>();
 
-
-        public Usuario(string nombre) : base(nombre) { }
-
-        public override bool CheckeaPermiso(string nombrePermiso) {
-            if (Roles == null) {
-                return false;
-            }
-            return Roles.Any(rol => rol.Rol.CheckeaPermiso(nombrePermiso));
+        public bool CheckeaPermiso(string nombrePermiso) {
+            return Permisos.Any(rol => rol.Entidad.CheckeaPermiso(nombrePermiso));
         }
     }
 }

@@ -1,14 +1,16 @@
-﻿using GVM.Security.Entidades;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace GVM.Security.Entidades {
-    [Table("Permiso")]
-    public class Permiso : EntidadSeguridad {
-        public int PermisoId { get; set; }
-
-        public Permiso(string nombre) : base(nombre) { }
+﻿namespace GVM.Security.Entidades {
+    public class Permiso : Entidad {
+        public Permiso(string nombre) : base(nombre) {
+            Tipo = TipoEntidad.Permiso;
+        }
         public override bool CheckeaPermiso(string nombrePermiso) {
             return Nombre == nombrePermiso;
+        }
+        public override ICollection<Entidad> ListaPermiso(TipoEntidad? tipo) {
+            if (tipo != TipoEntidad.Permiso) {
+                return new List<Entidad>();
+            }
+            return new List<Entidad> { this };
         }
     }
 }

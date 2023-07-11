@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using GVM.Security;
+using GVM_Admin.Security;
 using GVM_Admin.Security.Entidades;
 
 namespace GVM_Admin {
@@ -20,35 +20,47 @@ namespace GVM_Admin {
             InitializeComponent();
             tbNombre.Text = _rol.Nombre;
             dgvSistema.DataSource = _dbContext.Permisos.ToList();
-            dgvRol.DataSource = _rol.Permisos.Select(rp => rp.Permiso).ToList();
+            var permisosEnRol = new List<Entidad>();
+            foreach (var entidad in _rol.Permisos) {
+                permisosEnRol.AddRange(entidad.ListaPermiso(TipoEntidad.Permiso));
+            }
+            dgvPermisosRol.DataSource = permisosEnRol;
         }
 
         private void btnAgregar_Click(object sender, EventArgs e) {
             if (dgvSistema.CurrentRow != null) {
-                var permiso = (Permiso)dgvSistema.CurrentRow.DataBoundItem;
-                var ur = new RolPermiso() {
-                    Rol = _rol,
-                    Permiso = permiso
-                };
-                _rol.Permisos.Add(ur);
-                dgvRol.DataSource = _rol.Permisos.Select(rp => rp.Permiso).ToList();
+                var permiso = (Entidad)dgvSistema.CurrentRow.DataBoundItem;
+                _rol.Permisos.Add(permiso);
+                var permisosEnRol = new List<Entidad>();
+                foreach (var entidad in _rol.Permisos) {
+                    permisosEnRol.AddRange(entidad.ListaPermiso(TipoEntidad.Permiso));
+                }
+                dgvPermisosRol.DataSource = permisosEnRol;
             }
         }
 
         private void btnSacar_Click(object sender, EventArgs e) {
-            if (dgvRol.CurrentRow != null) {
-                var permiso = (Permiso)dgvRol.CurrentRow.DataBoundItem;
-                var rp = _rol.Permisos.FirstOrDefault(x => x.Permiso == permiso);
+            if (dgvPermisosRol.CurrentRow != null) {
+                var permiso = (Entidad)dgvPermisosRol.CurrentRow.DataBoundItem;
+                var rp = _rol.Permisos.FirstOrDefault(permiso);
                 if (rp == null) {
                     throw new Exception("Not found permiso");
                 }
                 _rol.Permisos.Remove(rp);
-                dgvRol.DataSource = _rol.Permisos.Select(x => x.Permiso).ToList();
+                var permisosEnRol = new List<Entidad>();
+                foreach (var entidad in _rol.Permisos) {
+                    permisosEnRol.AddRange(entidad.ListaPermiso(TipoEntidad.Permiso));
+                }
+                dgvPermisosRol.DataSource = permisosEnRol;
             }
         }
 
         private void tbNombre_TextChanged(object sender, EventArgs e) {
             tbNombre.Text = _rol.Nombre;
+        }
+
+        private void EditarRol_Load(object sender, EventArgs e) {
+
         }
     }
 }

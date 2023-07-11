@@ -1,6 +1,6 @@
-using GVM.Security;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
+using GVM_Admin.Security;
 using GVM_Admin.Security.Entidades;
 
 namespace GVM_Admin {
@@ -27,11 +27,12 @@ namespace GVM_Admin {
             if (dbContext != null && dgvUsuarios.CurrentRow != null) {
                 var usuario = (Usuario)dgvUsuarios.CurrentRow.DataBoundItem;
 
-                dbContext.Entry(usuario)
-                    .Collection(u => u.Roles)
-                    .Load();
-                dgvRoles.DataSource = null;
-                dgvRoles.DataSource = usuario.Roles.Select(ur => ur.Rol).ToList();
+                var roles = new List<Entidad>();
+                foreach (var entidad in usuario.Permisos) {
+                    roles.AddRange(entidad.Entidad.ListaPermiso(TipoEntidad.Rol));
+                }
+
+                dgvRoles.DataSource = roles;
             }
         }
 
@@ -39,14 +40,11 @@ namespace GVM_Admin {
             if (dbContext != null && dgvUsuarios.CurrentRow != null) {
                 var usuario = (Usuario)dgvUsuarios.CurrentRow.DataBoundItem;
 
-                dbContext.Entry(usuario)
-                    .Collection(r => r.Roles)
-                    .Load();
-                dgvPermisos.DataSource = null;
-                var permisos = usuario.Roles
-                    .SelectMany(ur => ur.Rol.Permisos
-                        .Select(x => x.Permiso).ToList()
-                    ).Distinct().ToList();
+                var permisos = new List<Entidad>();
+                foreach (var entidad in usuario.Permisos) {
+                    permisos.AddRange(entidad.Entidad.ListaPermiso(TipoEntidad.Permiso));
+                }
+
                 dgvPermisos.DataSource = permisos;
             }
         }

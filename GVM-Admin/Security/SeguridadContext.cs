@@ -1,14 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Configuration;
 using GVM_Admin.Security.Entidades;
+using Microsoft.EntityFrameworkCore;
 
-namespace GVM.Security {
+namespace GVM_Admin.Security {
     public class SeguridadContext : DbContext {
 
 
@@ -17,10 +11,19 @@ namespace GVM.Security {
                 .UseSqlServer(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder) {
+            modelBuilder.Entity<Entidad>()
+                .HasDiscriminator<string>("Type")
+                .HasValue<Rol>("Rol")
+                .HasValue<Permiso>("Permiso");
+
+            modelBuilder.Entity<Rol>()
+                .HasMany(r => r.Permisos)
+                .WithMany();
+        }
+
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Rol> Roles { get; set; }
         public DbSet<Permiso> Permisos { get; set; }
-        public DbSet<UsuarioRol> UsuarioRoles { get; set; }
-        public DbSet<RolPermiso> RolPermisos { get; set; }
     }
 }

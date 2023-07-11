@@ -27,7 +27,7 @@
             dgvSistema = new DataGridView();
             nombreDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             permisoBindingSource = new BindingSource(components);
-            dgvRol = new DataGridView();
+            dgvPermisosRol = new DataGridView();
             nombreDataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
             permisoBindingSource1 = new BindingSource(components);
             tbNombre = new TextBox();
@@ -39,7 +39,7 @@
             label3 = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvSistema).BeginInit();
             ((System.ComponentModel.ISupportInitialize)permisoBindingSource).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)dgvRol).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvPermisosRol).BeginInit();
             ((System.ComponentModel.ISupportInitialize)permisoBindingSource1).BeginInit();
             groupBox1.SuspendLayout();
             SuspendLayout();
@@ -68,15 +68,15 @@
             // 
             // dgvRol
             // 
-            dgvRol.AutoGenerateColumns = false;
-            dgvRol.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvRol.Columns.AddRange(new DataGridViewColumn[] { nombreDataGridViewTextBoxColumn1 });
-            dgvRol.DataSource = permisoBindingSource1;
-            dgvRol.Location = new Point(424, 34);
-            dgvRol.Name = "dgvRol";
-            dgvRol.RowTemplate.Height = 25;
-            dgvRol.Size = new Size(196, 404);
-            dgvRol.TabIndex = 2;
+            dgvPermisosRol.AutoGenerateColumns = false;
+            dgvPermisosRol.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvPermisosRol.Columns.AddRange(new DataGridViewColumn[] { nombreDataGridViewTextBoxColumn1 });
+            dgvPermisosRol.DataSource = permisoBindingSource1;
+            dgvPermisosRol.Location = new Point(424, 34);
+            dgvPermisosRol.Name = "dgvPermisosRol";
+            dgvPermisosRol.RowTemplate.Height = 25;
+            dgvPermisosRol.Size = new Size(196, 404);
+            dgvPermisosRol.TabIndex = 2;
             // 
             // nombreDataGridViewTextBoxColumn1
             // 
@@ -162,14 +162,15 @@
             Controls.Add(label2);
             Controls.Add(btnSacar);
             Controls.Add(btnAgregar);
-            Controls.Add(dgvRol);
+            Controls.Add(dgvPermisosRol);
             Controls.Add(dgvSistema);
             Controls.Add(groupBox1);
             Name = "EditarRol";
             Text = "Editar Rol";
+            Load += EditarRol_Load;
             ((System.ComponentModel.ISupportInitialize)dgvSistema).EndInit();
             ((System.ComponentModel.ISupportInitialize)permisoBindingSource).EndInit();
-            ((System.ComponentModel.ISupportInitialize)dgvRol).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvPermisosRol).EndInit();
             ((System.ComponentModel.ISupportInitialize)permisoBindingSource1).EndInit();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
@@ -180,7 +181,7 @@
         #endregion
 
         private DataGridView dgvSistema;
-        private DataGridView dgvRol;
+        private DataGridView dgvPermisosRol;
         private TextBox tbNombre;
         private Label label1;
         private GroupBox groupBox1;

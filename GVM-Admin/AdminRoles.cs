@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using GVM.Security;
+using GVM_Admin.Security;
 using GVM_Admin.Security.Entidades;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,30 +23,34 @@ namespace GVM_Admin {
 
         private void AgregarRol_Load(object sender, EventArgs e) {
             dgvSistema.DataSource = _dbContext.Roles.ToList();
-            dgvUsuario.DataSource = _usuario.Roles.Select(x => x.Rol).ToList();
+            dgvUsuario.DataSource = _usuario.Permisos.Select(x => x.Entidad).ToList();
         }
 
         private void btnAgregar_Click(object sender, EventArgs e) {
             if (dgvSistema.CurrentRow != null) {
-                var rol = (Rol)dgvSistema.CurrentRow.DataBoundItem;
-                var ur = new UsuarioRol() {
-                    Rol = rol,
+                var entidad = (Entidad)dgvSistema.CurrentRow.DataBoundItem;
+                var eu = new EntidadUsuario() {
+                    Entidad = entidad,
                     Usuario = _usuario
                 };
-                _usuario.Roles.Add(ur);
-                dgvUsuario.DataSource = _usuario.Roles.Select(x => x.Rol).ToList();
+                _usuario.Permisos.Add(eu);
+                dgvUsuario.DataSource = _usuario.Permisos
+                    .Where(e => e.Entidad.Tipo == TipoEntidad.Rol)
+                    .Select(x => (Rol)x.Entidad).ToList();
             }
         }
 
         private void btnSacar_Click(object sender, EventArgs e) {
             if (dgvUsuario.CurrentRow != null) {
-                var rol = (Rol)dgvUsuario.CurrentRow.DataBoundItem;
-                var ur = _usuario.Roles.FirstOrDefault(x => x.Rol == rol);
+                var entidad = (Entidad)dgvUsuario.CurrentRow.DataBoundItem;
+                var ur = _usuario.Permisos.FirstOrDefault(x => x.Entidad == entidad);
                 if (ur == null) {
                     throw new Exception("Not found rol");
                 }
-                _usuario.Roles.Remove(ur);
-                dgvUsuario.DataSource = _usuario.Roles.Select(x => x.Rol).ToList();
+                _usuario.Permisos.Remove(ur);
+                dgvUsuario.DataSource = _usuario.Permisos
+                    .Where(e => e.Entidad.Tipo == TipoEntidad.Rol)
+                    .Select(x => (Rol)x.Entidad).ToList();
             }
         }
     }

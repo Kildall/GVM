@@ -35,7 +35,7 @@ namespace GVM.Components {
         }
 
         private ValueTask OnLocationChanging(LocationChangingContext context) {
-            if (!SeguridadService.ValidarPermiso(GetFirstRouteSegment(context.TargetLocation))) {
+            if (!SeguridadService.Usuario.CheckeaPermiso(GetFirstRouteSegment(context.TargetLocation))) {
                 context.PreventNavigation();
             }
 
