@@ -8,10 +8,10 @@ namespace GVM.Data.ViewModels {
     public class VentaViewModel {
         public int VentaId { get; set; }
         public int ClienteId { get; set; }
-        public EstadoVentaViewModel Estado { get; set; }
+        public EstadoVentaViewModel Estado { get; set; } = new();
         public DateTime FechaInicio { get; set; }
         public DateTime FechaUltimaActualizacion { get; set; }
-        public ClienteViewModel Cliente { get; set; }
+        public ClienteViewModel Cliente { get; set; } = new ();
         public List<ProductoViewModel> Productos { get; set; } = new();
     }
 }
