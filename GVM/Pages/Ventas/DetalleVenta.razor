@@ -1,0 +1,67 @@
+﻿@page "/ventas/{VentaId:int}"
+@using GVM.Components
+@using GVM.Data.Entidades
+@using GVM.Data.ViewModels
+@using Microsoft.EntityFrameworkCore
+@inherits AuthorizedComponentPage
+
+<h3>DetalleVenta</h3>
+<div class="container-sm container-md text-center my-5">
+    <div class="row mb-2">
+        <div class="col">
+            <MudTextField T="string" @bind-Value="_venta.Cliente.Nombre" Label="Cliente" />
+        </div>
+    </div>
+@*    <div class="row mb-2">
+        <div class="col">
+            <MudTextField Class="border rounded p-2" T="string" Label="Calle" Placeholder=@_venta.Cliente.Direccion.Calle1 />
+        </div>
+    </div>
+    <div class="row mb-2">
+        <div class="col">
+            <MudTextField Class="border rounded p-2" T="string" Label="Piso/Departamento/Puerta" Placeholder=@_venta.Cliente.Direccion.Calle2 />
+        </div>
+    </div>
+    <div class="row mb-2">
+        <div class="col">
+            <MudTextField Class="border rounded p-2" T="string" Label="Codigo Postal" Placeholder=@_venta.Cliente.Direccion.CodigoPostal />
+        </div>
+    </div>
+    <div class="row mb-2">
+        <div class="col">
+            <MudTextField Class="border rounded p-2" T="string" Label="Localidad / Barrio" Placeholder=@_venta.Cliente.Direccion.Localidad />
+        </div>
+    </div>
+    <div class="row mb-2">
+        <div class="col">
+            <MudAutocomplete Class="border rounded p-2" T="string" @bind-Value="@_venta.Cliente.Direccion.Provincia" Label="Provincia" SearchFunc="@SearchProvincia"
+                             ResetValueOnEmptyText="true"
+                             CoerceText="true" CoerceValue="true" />
+        </div>
+    </div>
+    <div class="row mb-2">
+        <div class="col">
+            <MudTextField Class="border rounded p-2" T="string" Label="Detalle" Placeholder=@_venta.Cliente.Direccion.Detalle />
+        </div>
+    </div>*@
+    <MudButton Class="float-end" Variant="Variant.Filled" Color="Color.Primary">
+        Modificar Datos
+    </MudButton>
+</div>
+
+@code {
+    [CascadingParameter]
+    public LoadingIndicator LoadingIndicator { get; set; }
+    [Parameter]
+    public int VentaId { get; set; }
+    VentaViewModel _venta = new ();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadingIndicator.Show();
+        var venta = await GVMContext.Ventas.FirstOrDefaultAsync(v => v.VentaId == VentaId);
+        _venta = Mapper.Map<Venta, VentaViewModel>(venta);
+        await LoadingIndicator.Hide();
+    }
+
+}

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace GVM.Security.Entidades {
+namespace GVM_Admin.Security.Entidades {
 
     public class Usuario {
         public int UsuarioId { get; set; }
