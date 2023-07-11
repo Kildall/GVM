@@ -25,36 +25,33 @@ namespace GVM.Services {
         }
 
         public async Task<bool> RegistrarAsync(string nombre, string email, string clave) {
-                var user = new Usuario(nombre) { Email = email, Clave = HashClave(clave), Habilitado = false };
-                _seguridadContext.Usuarios.Add(user);
-                await _seguridadContext.SaveChangesAsync();
-                return true;
+            nombre = nombre.Trim();
+            email = email.Trim().ToLower();
+            var user = new Usuario { Nombre = nombre, Email = email, Clave = HashClave(clave), Habilitado = false };
+            _seguridadContext.Usuarios.Add(user);
+            await _seguridadContext.SaveChangesAsync();
+            return true;
         }
 
-        public async Task<Usuario> ValidarLoginAsync(string email, string clave) {
-                Usuario user = await _seguridadContext.Usuarios
-                    .SingleOrDefaultAsync(u => u.Email == email);
+        public async Task<bool> ValidarLoginAsync(string email, string clave) {
+            email = email.ToLower().Trim();
+            Usuario user = await _seguridadContext.Usuarios
+                .SingleOrDefaultAsync(u => u.Email == email);
 
-                if (user == null) {
-                    throw new EmailNotFoundException(email);
-                }
+            if (user == null) {
+                throw new EmailNotFoundException(email);
+            }
 
-                if (!ValidarClave(user.Clave, clave)) {
-                    throw new IncorrectPasswordException("Contraseña incorrecta");
-                }
+            if (!ValidarClave(user.Clave, clave)) {
+                throw new IncorrectPasswordException("Contraseña incorrecta");
+            }
 
-                if (!EstaLogeado) {
-                    EstaLogeado = true;
-                    Usuario = user;
-                    NotifyStateChanged();
-                }
-                return user;
-
-
-        }
-
-        public bool ValidarPermiso(string permiso) {
-            return Usuario.CheckeaPermiso(permiso);
+            if (!EstaLogeado) {
+                EstaLogeado = true;
+                Usuario = user;
+                NotifyStateChanged();
+            }
+            return true;
         }
 
         private string HashClave(string clave) {

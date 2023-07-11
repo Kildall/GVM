@@ -14,7 +14,7 @@ namespace GVM.Data.Entidades
         [Key]
         public int VentaId { get; set; }
         public int ClienteId { get; set; }
-        public int Estado { get; set; } 
+        public int Estado { get; set; }
         public DateTime FechaInicio { get; set; }
         public DateTime FechaUltimaActualizacion { get; set; }
 

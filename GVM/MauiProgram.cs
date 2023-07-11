@@ -5,7 +5,9 @@ using System.Reflection;
 using System.Resources;
 using GVM.Security;
 using GVM.Services;
+using GVM.Utils.Profiler;
 using MudBlazor.Services;
+using MudBlazor;
 
 namespace GVM {
     public static class MauiProgram {
@@ -31,7 +33,13 @@ namespace GVM {
             builder.Services.AddSingleton<SeguridadService>();
 
             builder.Services.AddMauiBlazorWebView();
-            builder.Services.AddMudServices();
+            builder.Services.AddMudServices(config => {
+                config.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.BottomCenter;
+                config.SnackbarConfiguration.VisibleStateDuration = 3000;
+                config.SnackbarConfiguration.HideTransitionDuration = 200;
+                config.SnackbarConfiguration.ShowTransitionDuration = 200;
+            });
+            builder.Services.AddAutoMapper(typeof(MappingProfiles));
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();
             builder.Logging.AddDebug();

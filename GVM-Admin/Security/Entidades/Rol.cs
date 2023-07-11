@@ -1,4 +1,4 @@
-﻿namespace GVM.Security.Entidades {
+﻿namespace GVM_Admin.Security.Entidades {
     public class Rol : Entidad {
         public virtual ICollection<Entidad> Permisos { get; set; } = new List<Entidad>();
 
@@ -8,6 +8,7 @@
         public override bool CheckeaPermiso(string nombrePermiso) {
             return Permisos.Any(permiso => permiso.CheckeaPermiso(nombrePermiso));
         }
+
         public override ICollection<Entidad> ListaPermiso(TipoEntidad? tipo) {
             List<Entidad> permisos = new List<Entidad>();
             if (tipo == Tipo) {

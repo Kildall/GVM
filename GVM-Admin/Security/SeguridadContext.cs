@@ -1,9 +1,14 @@
-﻿using GVM.Security.Entidades;
+﻿using System.Configuration;
+using GVM_Admin.Security.Entidades;
 using Microsoft.EntityFrameworkCore;
 
-namespace GVM.Security {
+namespace GVM_Admin.Security {
     public class SeguridadContext : DbContext {
-        public SeguridadContext(DbContextOptions<SeguridadContext> options) : base(options) {
+
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
+            optionsBuilder.UseLazyLoadingProxies()
+                .UseSqlServer(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {

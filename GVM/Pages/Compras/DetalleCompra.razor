@@ -1,4 +1,4 @@
-﻿@page "/detallecompra/{CompraId:int}"
+﻿@page "/compras/{CompraId:int}"
 @using GVM.Data.ViewModels;
 @using GVM.Data.Entidades;
 @using Microsoft.EntityFrameworkCore;
@@ -17,33 +17,33 @@
             <MudCardContent>
                 <div class="row mb-2">
                     <div class="col-2">
-                        <MudTextField Class="border text-center rounded p-2" T="string" Label="ID" Placeholder="@Compra.CompraId.ToString()" ReadOnly="true" />
+                        <MudTextField Variant="Variant.Outlined" Class="text-center rounded p-2" T="string" Label="ID" Placeholder="@Compra.CompraId.ToString()" ReadOnly="true" />
                     </div>
                     <div class="col-5">
-                        <MudAutocomplete Class="border rounded p-2" T="string" @bind-Value="@Compra.Empleado.Nombre" Label="Empleado" SearchFunc="@SearchEmpleado"
+                        <MudAutocomplete Variant="Variant.Outlined" Class="rounded p-2" T="string" @bind-Value="@Compra.Empleado.Nombre" Label="Empleado" SearchFunc="@SearchEmpleado"
                                          ResetValueOnEmptyText="true"
                                          CoerceText="true" CoerceValue="true" />
                     </div>
                     <div class="col-5">
-                        <MudAutocomplete Class="border rounded p-2" T="string" @bind-Value="@Compra.Distribuidor.Nombre" Label="Distribuidor" SearchFunc="@SearchDistribuidor"
+                        <MudAutocomplete Class="rounded p-2" T="string" @bind-Value="@Compra.Distribuidor.Nombre" Label="Distribuidor" SearchFunc="@SearchDistribuidor"
                                          ResetValueOnEmptyText="true"
                                          CoerceText="true" CoerceValue="true" />
                     </div>
                 </div>
                 <div class="row mb-2">
                     <div class="col-4">
-                        <MudDatePicker Class="border rounded p-2" Label="Fecha" Placeholder=@Compra.Fecha.Date.ToString("MM/dd/yyyy") />
+                        <MudDatePicker Variant="Variant.Outlined" Class="rounded p-2" Label="Fecha" Placeholder=@Compra.Fecha.Date.ToString("MM/dd/yyyy") />
                     </div>
                     <div class="col-4">
-                        <MudTimePicker Class="border rounded p-2" Label="Hora" Placeholder=@Compra.Fecha.TimeOfDay.ToString() />
+                        <MudTimePicker Variant="Variant.Outlined" Class="rounded p-2" Label="Hora" Placeholder=@Compra.Fecha.TimeOfDay.ToString() />
                     </div>
                     <div class="col-4">
-                        <MudTextField Class="border rounded p-2" T="double?" Label="Monto" Value="null" Placeholder=@Compra.Monto.ToString(CultureInfo.CurrentCulture) />
+                        <MudTextField Variant="Variant.Outlined" Class="rounded p-2" T="double?" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney" Label="Monto" Value="null" Placeholder=@Compra.Monto.ToString(CultureInfo.CurrentCulture) />
                     </div>
                 </div>
                 <div class="row mb-2">
                     <div class="col-6">
-                        <MudTextField Class="border rounded p-2" T="string" Label="Descripcion" Placeholder=@Compra.Descripcion />
+                        <MudTextField Variant="Variant.Outlined" Class="rounded p-2" T="string" Label="Descripcion" Placeholder=@Compra.Descripcion />
                     </div>
                 </div>
             </MudCardContent>
@@ -88,7 +88,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        LoadingIndicator.Show();
+        await LoadingIndicator.Show();
 
         Compra compra = await GVMContext.Compras.FirstOrDefaultAsync(c => c.CompraId == CompraId);
         List<Empleado> empleados = await GVMContext.Empleados.ToListAsync();
@@ -127,7 +127,7 @@
             Nombre = distribuidor.Nombre
         }).ToList();
 
-         LoadingIndicator.Hide();
+         await LoadingIndicator.Hide();
     }
 
     private async Task<IEnumerable<string>> SearchEmpleado(string value)

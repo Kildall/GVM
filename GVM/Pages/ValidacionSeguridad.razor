@@ -1,9 +1,10 @@
 ﻿@page "/validar_seguridad"
 @using GVM.Components
+@using GVM.Security
 @inherits AuthorizedComponentPage
 
 <h1>Validacion de Seguridad</h1>
-<h3>Validacion de permiso "Delete": @TienePermiso</h3>
+<h3>Validacion de permiso "Ventas": @TienePermiso</h3>
 <h3>Datos del usuario logueado: </h3>
 <ul class="list-group">
     <li class="list-group-item">Nombre: @SeguridadService.Usuario.Nombre</li>
@@ -12,15 +13,16 @@
 </ul>
 <h2>Roles y sus permisos del usuario logueado: </h2>
 <ul class="list-group">
-    @foreach (var rol in @SeguridadService.Usuario.Roles)
+    @foreach (var entidad in @SeguridadService.Usuario.Permisos)
     {
-        <li class="list-group-item active">Nombre: @rol.Rol.Nombre</li>
-        <li class="list-group">
-            @foreach (var permiso in rol.Rol.Permisos)
+        @foreach (var rol in @entidad.Entidad.ListaPermiso(TipoEntidad.Rol))
+        {
+            <p>Rol: @rol.Nombre</p>
+            @foreach (var permiso in @rol.ListaPermiso(TipoEntidad.Permiso))
             {
-                <l1 class="list-group-item">Permiso: @permiso.Permiso.Nombre</l1>
+                <p>Permiso: @permiso.Nombre</p>
             }
-        </li>
+        }
     }
 </ul>
 
@@ -31,7 +33,7 @@
     bool TienePermiso { get; set; }
     protected override void OnInitialized()
     {
-        TienePermiso = SeguridadService.ValidarPermiso("Delete");
+        TienePermiso = SeguridadService.Usuario.CheckeaPermiso("/venta");
     }
 
 

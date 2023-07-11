@@ -2,7 +2,7 @@
 <CascadingValue Value="this">
     @if (_visible)
     {
-        <div class="backdrop">
+        <div class="@(_solidBackdrop ? "solid-backdrop" : "transparent-backdrop")">
             <MudProgressCircular Indeterminate="true" Size="Size.Large" Color="Color.Primary"/>
         </div>
     }
@@ -13,28 +13,43 @@
     [Parameter]
     public RenderFragment ChildContent { get; set; }
     private bool _visible = false;
+    private bool _solidBackdrop = true;
 
-    public void Show()
+    public async Task Show(bool solidBackdrop = true)
     {
         _visible = true;
-        StateHasChanged();
+        _solidBackdrop = solidBackdrop;
+        await InvokeAsync(StateHasChanged);
     }
 
-    public void Hide()
+
+    public async Task Hide()
     {
         _visible = false;
-        StateHasChanged();
+        await InvokeAsync(StateHasChanged);
     }
 }
 
 <style>
-    .backdrop {
+    .solid-backdrop {
         position: fixed;
         z-index: 9999;
         height: 100%;
         width: 100%;
         overflow: auto;
-        background-color: rgba(0,0,0,0.2); 
+        background-color: white; 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .transparent-backdrop {
+        position: fixed;
+        z-index: 9999;
+        height: 100%;
+        width: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.2);
         display: flex;
         align-items: center;
         justify-content: center;
