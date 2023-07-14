@@ -43,6 +43,9 @@
                 </div>
             </EditForm>
         </MudTabPanel>
+        <div class="d-flex justify-content-center m-3">
+            <MudButton Class="rounded-pill" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" EndIcon="@Icons.Material.Outlined.ElectricBolt" OnClick="LoginAsAdmin">Login as Admin</MudButton>
+        </div>
     </MudTabs>
 </div>
 
@@ -174,6 +177,11 @@
         {
             Snackbar.Add("No se pudo completar el registro", Severity.Warning);
         }
+    }
+
+    private async void LoginAsAdmin()
+    {
+        await SeguridadService.ValidarLoginAsync("pedro@asd.com", "asdasd12");
     }
 
     private void ShowErrors(IEnumerable<string> errors)

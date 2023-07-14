@@ -21,7 +21,7 @@ namespace GVM.Security.Entidades {
         public virtual ICollection<EntidadUsuario> Permisos { get; set; } = new List<EntidadUsuario>();
 
         public bool CheckeaPermiso(string nombrePermiso) {
-            return Permisos.Any(rol => rol.Entidad.CheckeaPermiso(nombrePermiso));
+            return Permisos.Any(eu => eu.Entidad.CheckeaPermiso(nombrePermiso));
         }
     }
 }
