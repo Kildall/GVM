@@ -1,4 +1,9 @@
-﻿@page "/compras/{CompraId:int}"
+﻿@*
+    TODO: Agregar funcion para guardar la informacion
+    TODO: Agregar validaciones
+    TODO: Agregar drawer para agregar productos
+*@
+@* @page "/compras/{CompraId:int}"
 @using GVM.Data.ViewModels;
 @using GVM.Data.Entidades;
 @using Microsoft.EntityFrameworkCore;
@@ -6,11 +11,7 @@
 @using System.Globalization
 @inherits AuthorizedComponentPage;
 
-@*
-    TODO: Agregar funcion para guardar la informacion
-    TODO: Agregar validaciones
-    TODO: Agregar drawer para agregar productos
-*@
+
 <MudCard>
     <MudForm>
         <div class="container text-center my-5">
@@ -147,3 +148,4 @@
     }
 
 }
+ *@

@@ -1,4 +1,4 @@
-﻿@page "/ventas/crear"
+﻿@* @page "/ventas/crear"
 @using GVM.Data.ViewModels
 @using GVM.Components
 @using GVM.Data.Entidades
@@ -60,65 +60,66 @@
                     <div class="col-6">
                         <MudTextField Class="border rounded p-2" T="string" Label="Notas de la venta" Placeholder=@Venta.Descripcion />
                     </div>
-                </div>*@
+                </div>
             <MudButton Class="float-end" Variant="Variant.Filled" Color="Color.Primary">
                 Modificar Datos
             </MudButton>
     </div>
 
 @code {
-    List<ClienteViewModel> Clientes = new();
-    VentaViewModel Venta = new();
-    DireccionViewModel Direccion = new();
-    EnvioViewModel Envio = new();
+     List<ClienteViewModel> Clientes = new();
+     VentaViewModel Venta = new();
+     DireccionViewModel Direccion = new();
+     EnvioViewModel Envio = new();
 
-    protected override async Task OnInitializedAsync()
-    {
-        List<Cliente> clientes = await GVMContext.Clientes.ToListAsync();
-        Clientes = Mapper.Map<List<Cliente>, List<ClienteViewModel>>(clientes);
-        Clientes = Clientes.OrderBy(c => c.Nombre).ToList();
-    }
+     protected override async Task OnInitializedAsync()
+     {
+         List<Cliente> clientes = await GVMContext.Clientes.ToListAsync();
+         Clientes = Mapper.Map<List<Cliente>, List<ClienteViewModel>>(clientes);
+         Clientes = Clientes.OrderBy(c => c.Nombre).ToList();
+     }
 
-    private async Task<IEnumerable<ClienteViewModel>> SearchCliente(string arg)
-    {
-        await Task.Delay(1);
-        if (string.IsNullOrEmpty(arg))
-            return Clientes;
-        return Clientes.Where(x => x.Nombre.Contains(arg, StringComparison.InvariantCultureIgnoreCase));
-    }
+     private async Task<IEnumerable<ClienteViewModel>> SearchCliente(string arg)
+     {
+         await Task.Delay(1);
+         if (string.IsNullOrEmpty(arg))
+             return Clientes;
+         return Clientes.Where(x => x.Nombre.Contains(arg, StringComparison.InvariantCultureIgnoreCase));
+     }
 
-    private async Task<IEnumerable<string>> SearchProvincia(string arg)
-    {
-        await Task.Delay(1);
-        if (string.IsNullOrEmpty(arg))
-            return provincias;
-        return provincias.Where(x => x.Contains(arg, StringComparison.InvariantCultureIgnoreCase));
-    }
+     private async Task<IEnumerable<string>> SearchProvincia(string arg)
+     {
+         await Task.Delay(1);
+         if (string.IsNullOrEmpty(arg))
+             return provincias;
+         return provincias.Where(x => x.Contains(arg, StringComparison.InvariantCultureIgnoreCase));
+     }
 
 
-    string[] provincias = {
-        "Buenos Aires",
-        "Catamarca",
-        "Chaco",
-        "Chubut",
-        "Córdoba",
-        "Corrientes",
-        "Entre Ríos",
-        "Formosa",
-        "Jujuy",
-        "La Pampa",
-        "La Rioja",
-        "Mendoza",
-        "Misiones",
-        "Neuquén",
-        "Río Negro",
-        "Salta",
-        "San Juan",
-        "San Luis",
-        "Santa Cruz",
-        "Santa Fe",
-        "Santiago del Estero",
-        "Tierra del Fuego",
-        "Tucumán"
-    };
+     string[] provincias = {
+         "Buenos Aires",
+         "Catamarca",
+         "Chaco",
+         "Chubut",
+         "Córdoba",
+         "Corrientes",
+         "Entre Ríos",
+         "Formosa",
+         "Jujuy",
+         "La Pampa",
+         "La Rioja",
+         "Mendoza",
+         "Misiones",
+         "Neuquén",
+         "Río Negro",
+         "Salta",
+         "San Juan",
+         "San Luis",
+         "Santa Cruz",
+         "Santa Fe",
+         "Santiago del Estero",
+         "Tierra del Fuego",
+         "Tucumán"
+     };
 }
+ *@

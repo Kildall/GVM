@@ -1,6 +1,5 @@
 ﻿@using GVM.Services
 @using GVM.Pages;
-@inject SeguridadService seguridad
 
 
 
@@ -25,10 +24,4 @@
 
 @code {
     public ErrorBoundary? ErrorBoundary { get; set; }
-
-    protected override void OnInitialized()
-    {
-        seguridad.OnChange += StateHasChanged;
-        base.OnInitialized();
-    }
 }

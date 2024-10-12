@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AutoMapper;
 using GVM.Data;
 using GVM.Services;
 using Microsoft.AspNetCore.Components;
@@ -15,8 +14,6 @@ namespace GVM.Components {
         [Inject]
         public NavigationManager NavigationManager { get; set; }
 
-        [Inject]
-        public IMapper Mapper { get; set; }
 
         [Inject]
         public APIService ApiService { get; set; }

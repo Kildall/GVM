@@ -1,6 +1,6 @@
 ﻿@using GVM.Services
 @using GVM.Pages
-@inject SeguridadService Seguridad
+@inject APIService API
 @inherits LayoutComponentBase
 <MudThemeProvider Theme="_theme" />
 <MudDialogProvider />
@@ -8,28 +8,21 @@
 
 <MudLayout >
     <LoadingIndicator>
-        @if (!Seguridad.EstaLogeado)
+        <MudAppBar class="d-none"></MudAppBar>
+        @if (platform == DevicePlatform.WinUI)
         {
-            <Login/>
+            <MudDrawer Open="true" Class="min-vh-100"  Anchor="Anchor.Left"  Variant="@DrawerVariant.Persistent">
+                <WindowsNavBar/>
+            </MudDrawer>
         }
-        else
+        <MudMainContent>
+            <MudContainer MaxWidth="MaxWidth.ExtraLarge">
+                @Body
+            </MudContainer>
+        </MudMainContent>
+        @if (platform == DevicePlatform.Android)
         {
-            <MudAppBar class="d-none"></MudAppBar>
-            @if (platform == DevicePlatform.WinUI)
-            {
-                <MudDrawer Open="true" Class="min-vh-100"  Anchor="Anchor.Left"  Variant="@DrawerVariant.Persistent">
-                    <WindowsNavBar/>
-                </MudDrawer>
-            }
-            <MudMainContent>
-                <MudContainer MaxWidth="MaxWidth.ExtraLarge">
-                    @Body
-                </MudContainer>
-            </MudMainContent>
-            @if (platform == DevicePlatform.Android)
-            {
-                <AndroidNavBar/>
-            }
+            <AndroidNavBar/>
         }
     </LoadingIndicator>
 </MudLayout>

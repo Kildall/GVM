@@ -4,7 +4,6 @@ using GVM.Data;
 using System.Reflection;
 using System.Resources;
 using GVM.Services;
-using GVM.Utils.Profiler;
 using MudBlazor.Services;
 using MudBlazor;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,7 +30,7 @@ namespace GVM {
                 config.SnackbarConfiguration.HideTransitionDuration = 200;
                 config.SnackbarConfiguration.ShowTransitionDuration = 200;
             });
-            builder.Services.AddAutoMapper(typeof(MappingProfiles));
+
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();
             builder.Logging.AddDebug();

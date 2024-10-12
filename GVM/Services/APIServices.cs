@@ -33,7 +33,7 @@ namespace GVM.Services {
 
         public async Task<bool> LoginAsync(string username, string password) {
             var loginData = new { Username = username, Password = password };
-            var response = await _httpClient.PostAsJsonAsync("api/login", loginData);
+            var response = await _httpClient.PostAsJsonAsync("/api/auth/login", loginData);
 
             if (response.IsSuccessStatusCode) {
                 var content = await response.Content.ReadAsStringAsync();
