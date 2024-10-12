@@ -12,55 +12,41 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace GVM.Components {
     public class AuthorizedComponentPage : ComponentBase, IDisposable {
-
-        [Inject]
-        public SeguridadService SeguridadService { get; set; }
-
         [Inject]
         public NavigationManager NavigationManager { get; set; }
 
         [Inject]
-        public GVMContext GVMContext { get; set; }
+        public IMapper Mapper { get; set; }
 
         [Inject]
-        public IMapper Mapper { get; set; }
+        public APIService ApiService { get; set; }
 
         private IDisposable? _registration;
 
+        protected override void OnInitialized() {
+            base.OnInitialized();
+            ApiService.SessionExpired += OnSessionExpired;
+        }
+
         protected override void OnAfterRender(bool firstRender) {
             if (firstRender) {
-                _registration =
-                    NavigationManager.RegisterLocationChangingHandler(OnLocationChanging);
+                _registration = NavigationManager.RegisterLocationChangingHandler(OnLocationChanging);
             }
         }
 
         private ValueTask OnLocationChanging(LocationChangingContext context) {
-            if (!SeguridadService.Usuario.CheckeaPermiso(GetFirstRouteSegment(context.TargetLocation))) {
-                context.PreventNavigation();
-            }
-
-            if (!SeguridadService.EstaLogeado) {
-                NavigationManager.NavigateTo("/login");
-            }
-
             return ValueTask.CompletedTask;
         }
 
-        private string GetFirstRouteSegment(string url) {
-            string[] segments;
-
-            if (Uri.IsWellFormedUriString(url, UriKind.Absolute)) {
-                Uri uri = new Uri(url);
-                segments = uri.AbsolutePath.Split('/');
-            } else if (Uri.IsWellFormedUriString(url, UriKind.Relative)) {
-                segments = url.Split('/');
-            } else {
-                throw new UriFormatException("The provided URL is not a valid absolute or relative URL.");
-            }
-
-            return segments.Length > 1 ? "/" + segments[1] : null;
+        private void OnSessionExpired(object sender, EventArgs e) {
+            InvokeAsync(() => {
+                NavigationManager.NavigateTo("/login", forceLoad: true);
+            });
         }
 
-        public void Dispose() => _registration?.Dispose();
+        public void Dispose() {
+            _registration?.Dispose();
+            ApiService.SessionExpired -= OnSessionExpired;
+        }
     }
 }

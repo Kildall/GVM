@@ -1,12 +1,14 @@
 ﻿@page "/login"
 @using GVM.Components.Misc
 @using GVM.Services
+@using GVM.Data.Request
+@using GVM.Data.Response
 @using System.ComponentModel.DataAnnotations
 @using System.Text
 @using GVM.Utils.Errors
-@inject SeguridadService SeguridadService
 @inject IJSRuntime JsRuntime
 @inject ISnackbar Snackbar
+@inject APIService API
 
 <div class="d-flex justify-content-center align-items-center vh-100">
     <MudTabs Border="true" PanelClass="py-8">
@@ -43,9 +45,6 @@
                 </div>
             </EditForm>
         </MudTabPanel>
-        <div class="d-flex justify-content-center m-3">
-            <MudButton Class="rounded-pill" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" EndIcon="@Icons.Material.Outlined.ElectricBolt" OnClick="LoginAsAdmin">Login as Admin</MudButton>
-        </div>
     </MudTabs>
 </div>
 
@@ -108,7 +107,11 @@
             if (isValid)
             {
                 await LoadingIndicator.Show();
-                result = await SeguridadService.ValidarLoginAsync(Ingreso.Email, Ingreso.Clave);
+                result = await API.LoginAsync(Ingreso.Email, Ingreso.Clave);
+                if(!result)
+                {
+                    Snackbar.Add("Usuario o contraseña incorrectos", Severity.Error);
+                }
             }
             else
             {
@@ -128,10 +131,6 @@
         {
             await LoadingIndicator.Hide();
         }
-        if (result)
-        {
-            Ingreso = new LoginData();
-        }
     }
 
     private async Task HandleRegister()
@@ -146,7 +145,8 @@
             if (isValid)
             {
                 await LoadingIndicator.Show(false);
-                result = await SeguridadService.RegistrarAsync(Registro.Nombre, Registro.Email, Registro.Clave);
+                var response = await API.PostAsync<SignupResponse>("/api/auth/signup", new SignupRequest(Registro.Email, Registro.Clave, Registro.Nombre));
+                result = response.status.success;
             }
             else
             {
@@ -177,11 +177,6 @@
         {
             Snackbar.Add("No se pudo completar el registro", Severity.Warning);
         }
-    }
-
-    private async void LoginAsAdmin()
-    {
-        await SeguridadService.ValidarLoginAsync("pedro@asd.com", "asdasd12");
     }
 
     private void ShowErrors(IEnumerable<string> errors)

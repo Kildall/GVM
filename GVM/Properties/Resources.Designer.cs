@@ -61,20 +61,11 @@ namespace GVM.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Data Source=34.176.216.213;Initial Catalog=GVM;User ID=gvm;Password=GyaXN2gAngN5C72RrF274k;Encrypt=True;Persist Security Info=True;TrustServerCertificate=True;Connection Timeout=30;Max Pool Size=500;.
+        ///   Looks up a localized string similar to http://localhost:8000.
         /// </summary>
-        internal static string GVMConnectionString {
+        internal static string API_URL {
             get {
-                return ResourceManager.GetString("GVMConnectionString", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Server=34.176.216.213;Initial Catalog=GVM_Seguridad;User ID=seguridad;Password=MBZXLn7J25z6VZhp44xYdG;Encrypt=True;Persist Security Info=True;TrustServerCertificate=True;Connection Timeout=30;Max Pool Size=500;.
-        /// </summary>
-        internal static string GVMSeguridadConnectionString {
-            get {
-                return ResourceManager.GetString("GVMSeguridadConnectionString", resourceCulture);
+                return ResourceManager.GetString("API_URL", resourceCulture);
             }
         }
     }
