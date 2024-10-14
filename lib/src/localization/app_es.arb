@@ -1,0 +1,11 @@
+{
+  "@@locale": "es",
+  "appTitle": "GVM",
+  "@appTitle": {
+    "description": "Title for the application"
+  },
+  "settingsPageTitle": "Opciones",
+  "@settingsPageTitle": {
+    "description": "Settings options"
+  }
+}
