@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:gvm_flutter/src/views/home/home_view.dart';
+import 'package:gvm_flutter/src/services/api/auth_service.dart';
+import 'package:provider/provider.dart';
 import 'package:gvm_flutter/src/views/landing.dart';
 import 'package:gvm_flutter/src/views/login/login_view.dart';
 import 'package:gvm_flutter/src/views/signup/signup_view.dart';
 import 'package:gvm_flutter/src/widgets/auth/auth_wrapper.dart';
-
+import 'package:gvm_flutter/src/widgets/layout/authenticated_layout.dart';
 
 import 'settings/settings_controller.dart';
-import 'views/settings/settings_view.dart';
 
 class GVMApp extends StatelessWidget {
   final SettingsController settingsController;
@@ -40,31 +40,41 @@ class GVMApp extends StatelessWidget {
           theme: ThemeData(),
           darkTheme: ThemeData.dark(),
           themeMode: settingsController.themeMode,
-          onGenerateRoute: (RouteSettings routeSettings) {
-            return MaterialPageRoute<void>(
-              settings: routeSettings,
+          initialRoute: '/',
+          onGenerateRoute: (settings) {
+            return MaterialPageRoute(
+              settings: settings,
               builder: (BuildContext context) {
-                switch (routeSettings.name) {
-                  case LandingView.routeName:
-                    return LandingView();
+                final authService = Provider.of<AuthService>(context);
+                
+                if (settings.name == '/') {
+                  return authService.isAuthenticated
+                      ? AuthWrapper(
+                          child: AuthenticatedLayout(
+                            settingsController: settingsController,
+                          ),
+                        )
+                      : LandingView();
+                }
+                
+                // Handle other routes
+                switch (settings.name) {
                   case LoginView.routeName:
                     return LoginView();
                   case SignupView.routeName:
                     return SignupView();
-                  case SettingsView.routeName:
-                    return AuthWrapper(
-                      child: SettingsView(controller: settingsController),
-                    );
-                  case HomeView.routeName:
-                    return AuthWrapper(child: HomeView());
                   default:
-                    return AuthWrapper(
-                      child: Placeholder(), // Replace with your default authenticated page
-                    );
+                    return authService.isAuthenticated
+                        ? AuthWrapper(
+                            child: AuthenticatedLayout(
+                              settingsController: settingsController,
+                            ),
+                          )
+                        : LandingView();
                 }
               },
             );
-          }
+          },
         );
       },
     );

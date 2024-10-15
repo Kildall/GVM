@@ -29,6 +29,41 @@ class APIService {
     return false;
   }
 
+    Future<bool> logout() async {
+    try {
+      final token = await _authService.getToken();
+      if (token == null) {
+        // If there's no token, we consider the user already logged out
+        return true;
+      }
+
+      final response = await _httpClient.post(
+        Uri.parse('$baseUrl/api/auth/logout'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        if (responseData['status']['success']) {
+          // Clear local auth state
+          await _authService.logout();
+          return true;
+        }
+      }
+
+      // If the server request fails, we still clear the local auth state
+      await _authService.logout();
+      return false;
+    } catch (e) {
+      // If an error occurs, we still clear the local auth state
+      await _authService.logout();
+      return false;
+    }
+  }
+
   Future<Map<String, dynamic>> get(String endpoint) async {
     return _sendRequest('GET', endpoint);
   }
