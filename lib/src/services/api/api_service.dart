@@ -1,131 +1,34 @@
-import 'dart:convert';
-import 'package:gvm_flutter/src/services/api/auth_service.dart';
-import 'package:http/http.dart' as http;
+import 'package:gvm_flutter/src/services/http_service.dart';
 
 class APIService {
-  final String baseUrl;
-  final http.Client _httpClient = http.Client();
-  final AuthService _authService;
+  final HTTPService _httpService;
+  final Future<String?> Function()? getToken;
 
-  APIService(this.baseUrl, this._authService);
+  APIService(String baseUrl, Future<String?> Function() this.getToken)
+      : _httpService = HTTPService(baseUrl);
 
-  Future<bool> login(String email, String password, bool remember) async {
-    final response = await _httpClient.post(
-      Uri.parse('$baseUrl/api/auth/login'),
-      body: jsonEncode({'email': email, 'password': password, 'remember': remember}),
-      headers: {'Content-Type': 'application/json'},
-    );
-
-    if (response.statusCode == 200) {
-      final responseData = jsonDecode(response.body);
-      if (responseData['status']['success']) {
-        await _authService.login(
-          responseData['data']['token'],
-          responseData['data']['expires'],
-        );
-        return true;
-      }
-    }
-    return false;
+  Future<Map<String, String>> _getAuthHeaders() async {
+    final token = await getToken?.call();
+    return token != null ? {'Authorization': 'Bearer $token'} : {};
   }
 
-    Future<bool> logout() async {
-    try {
-      final token = await _authService.getToken();
-      if (token == null) {
-        // If there's no token, we consider the user already logged out
-        return true;
-      }
-
-      final response = await _httpClient.post(
-        Uri.parse('$baseUrl/api/auth/logout'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final responseData = jsonDecode(response.body);
-        if (responseData['status']['success']) {
-          // Clear local auth state
-          await _authService.logout();
-          return true;
-        }
-      }
-
-      // If the server request fails, we still clear the local auth state
-      await _authService.logout();
-      return false;
-    } catch (e) {
-      // If an error occurs, we still clear the local auth state
-      await _authService.logout();
-      return false;
-    }
+  Future<Map<String, dynamic>> get(String endpoint, {Map<String, dynamic>? queryParams}) async {
+    final headers = await _getAuthHeaders();
+    return _httpService.sendRequest('GET', endpoint, headers: headers, queryParameters: queryParams);
   }
 
-  Future<Map<String, dynamic>> get(String endpoint) async {
-    return _sendRequest('GET', endpoint);
+  Future<Map<String, dynamic>> post(String endpoint, {dynamic body}) async {
+    final headers = await _getAuthHeaders();
+    return _httpService.sendRequest('POST', endpoint, headers: headers, body: body);
   }
 
-  Future<Map<String, dynamic>> post(String endpoint, dynamic data) async {
-    return _sendRequest('POST', endpoint, data: data);
+  Future<Map<String, dynamic>> put(String endpoint, {dynamic body}) async {
+    final headers = await _getAuthHeaders();
+    return _httpService.sendRequest('PUT', endpoint, headers: headers, body: body);
   }
 
-  Future<Map<String, dynamic>> put(String endpoint, dynamic data) async {
-    return _sendRequest('PUT', endpoint, data: data);
+  Future<Map<String, dynamic>> delete(String endpoint) async {
+    final headers = await _getAuthHeaders();
+    return _httpService.sendRequest('DELETE', endpoint, headers: headers);
   }
-
-  Future<void> delete(String endpoint) async {
-    await _sendRequest('DELETE', endpoint);
-  }
-
-    Future<Map<String, dynamic>> _sendRequest(String method, String endpoint, {dynamic data}) async {
-    final token = await _authService.getToken();
-    if (token == null) {
-      throw UnauthorizedAccessException('No valid token. Please login.');
-    }
-
-    final headers = {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $token',
-    };
-
-    http.Response response;
-    final uri = Uri.parse('$baseUrl$endpoint');
-
-    switch (method) {
-      case 'GET':
-        response = await _httpClient.get(uri, headers: headers);
-        break;
-      case 'POST':
-        response = await _httpClient.post(uri, headers: headers, body: jsonEncode(data));
-        break;
-      case 'PUT':
-        response = await _httpClient.put(uri, headers: headers, body: jsonEncode(data));
-        break;
-      case 'DELETE':
-        response = await _httpClient.delete(uri, headers: headers);
-        break;
-      default:
-        throw Exception('Unsupported HTTP method');
-    }
-
-    if (response.statusCode == 401) {
-      await _authService.logout();
-      throw UnauthorizedAccessException('Session is no longer valid. Please login again.');
-    }
-
-    final responseData = jsonDecode(response.body);
-    if (!responseData['status']['success']) {
-      throw Exception('API request failed: ${responseData['status']['errors'].join(', ')}');
-    }
-
-    return responseData['data'];
- }
-}
-
-class UnauthorizedAccessException implements Exception {
-  final String message;
-  UnauthorizedAccessException(this.message);
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gvm_flutter/src/services/api/api_service.dart';
+import 'package:gvm_flutter/src/services/api/auth_service.dart';
 
 import 'package:gvm_flutter/src/settings/settings_controller.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -18,7 +18,7 @@ class SettingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final apiService = Provider.of<APIService>(context);
+    final authService = Provider.of<AuthService>(context);
     
     return Scaffold(
       appBar: AppBar(
@@ -32,7 +32,7 @@ class SettingsView extends StatelessWidget {
         // SettingsController is updated, which rebuilds the MaterialApp.
         child: Column(
           children: [
-            ElevatedButton(onPressed: () => apiService.logout(), child: Text('Logout')),
+            ElevatedButton(onPressed: () => authService.logout(), child: Text('Logout')),
             DropdownButton<ThemeMode>(
               // Read the selected themeMode from the controller
               value: controller.themeMode,

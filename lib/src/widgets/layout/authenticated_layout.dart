@@ -5,7 +5,7 @@ import 'package:gvm_flutter/src/settings/settings_controller.dart';
 class AuthenticatedLayout extends StatefulWidget {
   final SettingsController settingsController;
 
-  const AuthenticatedLayout({Key? key, required this.settingsController}) : super(key: key);
+  const AuthenticatedLayout({super.key, required this.settingsController});
 
   @override
   _AuthenticatedLayoutState createState() => _AuthenticatedLayoutState();

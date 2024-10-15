@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gvm_flutter/src/services/api/auth_service.dart';
 import 'package:provider/provider.dart';
-import 'package:gvm_flutter/src/services/api/api_service.dart';
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget({super.key});
@@ -23,9 +23,9 @@ class _LoginWidgetState extends State<LoginWidget> {
       });
 
       try {
-        final apiService = Provider.of<APIService>(context, listen: false);
+        final authService = Provider.of<AuthService>(context, listen: false);
 
-        bool success = await apiService.login(
+        bool success = await authService.login(
           _emailController.text,
           _passwordController.text,
           remember

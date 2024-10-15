@@ -26,9 +26,9 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AuthService()),
+        ChangeNotifierProvider(create: (_) => AuthService(dotenv.env['API_URL'] ?? '')),
         ProxyProvider<AuthService, APIService>(
-          update: (_, authService, __) => APIService(dotenv.env['API_URL'] ?? '', authService),
+          update: (_, authService, __) => APIService(dotenv.env['API_URL'] ?? '', authService.getToken),
         ),
       ],
       child: GVMApp(settingsController: settingsController),
