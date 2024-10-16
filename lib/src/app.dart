@@ -4,14 +4,10 @@ import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:gvm_flutter/src/services/api/auth_service.dart';
-import 'package:gvm_flutter/src/widgets/layout/splash_screen_loader.dart';
-import 'package:provider/provider.dart';
+import 'package:gvm_flutter/src/services/auth/auth_listener.dart';
 import 'package:gvm_flutter/src/views/landing.dart';
-import 'package:gvm_flutter/src/views/login/login_view.dart';
-import 'package:gvm_flutter/src/views/signup/signup_view.dart';
-import 'package:gvm_flutter/src/widgets/auth/auth_wrapper.dart';
-import 'package:gvm_flutter/src/widgets/layout/authenticated_layout.dart';
+import 'package:gvm_flutter/src/widgets/layout/base_layout.dart';
+import 'package:gvm_flutter/src/widgets/layout/navbar/navbar.dart';
 
 import 'settings/settings_controller.dart';
 
@@ -68,9 +64,10 @@ class _GVMAppState extends State<GVMApp> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
+    final navItems = getNavItems(widget.settingsController);
+
     return ListenableBuilder(
       listenable: widget.settingsController,
       builder: (BuildContext context, Widget? child) {
@@ -91,45 +88,13 @@ class _GVMAppState extends State<GVMApp> {
           theme: ThemeData(),
           darkTheme: ThemeData.dark(),
           themeMode: widget.settingsController.themeMode,
-          initialRoute: '/',
-          onGenerateRoute: (settings) {
-            return MaterialPageRoute(
-              settings: settings,
-              builder: (BuildContext context) {
-                final authService = Provider.of<AuthService>(context);
-
-                if (authService.isLoading) {
-                  return SplashScreen();
-                }
-                
-                if (settings.name == '/') {
-                  return authService.isAuthenticated
-                      ? AuthWrapper(
-                          child: AuthenticatedLayout(
-                            settingsController: widget.settingsController,
-                          ),
-                        )
-                      : LandingView();
-                }
-                
-                // Handle other routes
-                switch (settings.name) {
-                  case LoginView.routeName:
-                    return LoginView();
-                  case SignupView.routeName:
-                    return SignupView();
-                  default:
-                    return authService.isAuthenticated
-                        ? AuthWrapper(
-                            child: AuthenticatedLayout(
-                              settingsController: widget.settingsController,
-                            ),
-                          )
-                        : LandingView();
-                }
-              },
-            );
-          },
+          home: AuthListener(
+            authenticated: BaseLayout(
+              navItems: navItems.map((item) => item.item).toList(),
+              children: navItems.map((item) => item.widget).toList(),
+            ),
+            unAuthenticated: const LandingView(),
+          ),
         );
       },
     );
