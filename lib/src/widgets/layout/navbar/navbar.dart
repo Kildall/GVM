@@ -14,9 +14,13 @@ List<NavItem> getNavItems(SettingsController settingsController) {
   final user = AuthManager.instance.currentUser;
   final List<NavItem> navItems = [];
 
+  if (user == null) {
+    return [];
+  }
+
   // Helper function to check permissions
   bool hasPermission(String permission) {
-    return user?.permissions.contains(permission) ?? false;
+    return user.permissions.contains(permission);
   }
 
   // Products
@@ -47,9 +51,10 @@ List<NavItem> getNavItems(SettingsController settingsController) {
 
   // Add
   navItems.add(NavItem(
-    item: BottomNavigationBarItem(icon: Icon(Icons.add), label: 'Add'),
+    item:
+        BottomNavigationBarItem(icon: Icon(Icons.add_business), label: 'Home'),
     widget: Center(
-      child: Text('Add Page',
+      child: Text('Home Page',
           style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
     ),
   ));

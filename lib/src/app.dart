@@ -7,7 +7,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:gvm_flutter/src/services/auth/auth_listener.dart';
 import 'package:gvm_flutter/src/views/landing.dart';
 import 'package:gvm_flutter/src/widgets/layout/base_layout.dart';
-import 'package:gvm_flutter/src/widgets/layout/navbar/navbar.dart';
 
 import 'settings/settings_controller.dart';
 
@@ -66,8 +65,6 @@ class _GVMAppState extends State<GVMApp> {
 
   @override
   Widget build(BuildContext context) {
-    final navItems = getNavItems(widget.settingsController);
-
     return ListenableBuilder(
       listenable: widget.settingsController,
       builder: (BuildContext context, Widget? child) {
@@ -90,8 +87,7 @@ class _GVMAppState extends State<GVMApp> {
           themeMode: widget.settingsController.themeMode,
           home: AuthListener(
             authenticated: BaseLayout(
-              navItems: navItems.map((item) => item.item).toList(),
-              children: navItems.map((item) => item.widget).toList(),
+              settingsController: widget.settingsController,
             ),
             unAuthenticated: const LandingView(),
           ),
