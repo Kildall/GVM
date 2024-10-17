@@ -69,6 +69,7 @@ class _GVMAppState extends State<GVMApp> {
       listenable: widget.settingsController,
       builder: (BuildContext context, Widget? child) {
         return MaterialApp(
+          title: 'GVM',
           navigatorKey: _navigatorKey,
           restorationScopeId: 'app',
           localizationsDelegates: const [
