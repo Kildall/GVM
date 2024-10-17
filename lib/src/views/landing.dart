@@ -9,16 +9,20 @@ class LandingView extends StatefulWidget {
 }
 
 class _LandingViewState extends State<LandingView> {
-  final _loginFormKey = GlobalKey<FormState>();
-  final _signupFormKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _nameController = TextEditingController();
-  bool remember = false;
   bool _isLoading = false;
-  bool _isLoginView = true;
   bool _showAuthForm = false;
+  bool _isLoginView = true;
+
+  // Define colors
+  final Color _backgroundColor =
+      Color(0xFFEEEAFF); // Light cool purple background
+  final Color _accentColor = Color(0xFFB1A6FF); // Deep purple-blue accent color
+  final Color _textColor = Color(0xFF1E1A33); // Very dark purple-blue for text
 
   void _toggleAuthForm() {
     setState(() {
@@ -44,8 +48,7 @@ class _LandingViewState extends State<LandingView> {
   }
 
   void _submitForm() async {
-    final formKey = _isLoginView ? _loginFormKey : _signupFormKey;
-    if (formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
       });
@@ -53,13 +56,14 @@ class _LandingViewState extends State<LandingView> {
       try {
         if (_isLoginView) {
           await AuthManager.instance
-              .login(_emailController.text, _passwordController.text, remember);
+              .login(_emailController.text, _passwordController.text, false);
+          _showMessage('Login successful');
         } else {
           await AuthManager.instance.signup(_emailController.text,
               _passwordController.text, _nameController.text);
+          _showMessage('Sign up successful');
         }
-        _showMessage(_isLoginView ? 'Login successful' : 'Signup successful');
-        _toggleAuthForm(); // Go back to welcome screen after successful auth
+        _toggleAuthForm();
       } catch (e) {
         _showMessage('An error occurred: ${e.toString()}');
       } finally {
@@ -79,9 +83,74 @@ class _LandingViewState extends State<LandingView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Welcome')),
-      body: Center(
-        child: _showAuthForm ? _buildAuthForm() : _buildWelcomeButtons(),
+      body: Stack(
+        children: [
+          // Background with artifacts
+          Container(
+            decoration: BoxDecoration(
+              color: _backgroundColor,
+              image: DecorationImage(
+                image: AssetImage('assets/images/background_pattern.png'),
+                repeat: ImageRepeat.repeat,
+              ),
+            ),
+          ),
+          // Top-left triangle
+          Positioned(
+            top: 0,
+            left: 0,
+            child: Container(
+              width: 150,
+              height: 150,
+              decoration: BoxDecoration(
+                color: _accentColor.withOpacity(0.1),
+                borderRadius:
+                    BorderRadius.only(bottomRight: Radius.circular(150)),
+              ),
+            ),
+          ),
+          // Bottom-right triangle
+          Positioned(
+            bottom: 0,
+            right: 0,
+            child: Container(
+              width: 200,
+              height: 200,
+              decoration: BoxDecoration(
+                color: _accentColor.withOpacity(0.1),
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(200)),
+              ),
+            ),
+          ),
+          // Main content
+          SafeArea(
+            child: Column(
+              children: [
+                // Back button
+                if (_showAuthForm)
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: IconButton(
+                        icon: Icon(Icons.arrow_back, color: _textColor),
+                        onPressed: _toggleAuthForm,
+                      ),
+                    ),
+                  ),
+                Expanded(
+                  child: Center(
+                    child: SingleChildScrollView(
+                      child: _showAuthForm
+                          ? _buildAuthForm()
+                          : _buildWelcomeButtons(),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -90,199 +159,145 @@ class _LandingViewState extends State<LandingView> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        ElevatedButton(
-          child: Text('Login'),
-          onPressed: () {
-            setState(() {
-              _isLoginView = true;
-              _toggleAuthForm();
-            });
-          },
+        // Add logo here
+        // Image.asset('assets/logo.png', height: 100),
+        SizedBox(height: 40),
+        Text(
+          'Welcome',
+          style: TextStyle(
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+            color: _textColor,
+          ),
         ),
+        SizedBox(height: 40),
+        _buildButton('Login', () {
+          setState(() {
+            _isLoginView = true;
+            _toggleAuthForm();
+          });
+        }),
         SizedBox(height: 20),
-        ElevatedButton(
-          child: Text('Sign Up'),
-          onPressed: () {
-            setState(() {
-              _isLoginView = false;
-              _toggleAuthForm();
-            });
-          },
-        ),
+        _buildButton('Sign Up', () {
+          setState(() {
+            _isLoginView = false;
+            _toggleAuthForm();
+          });
+        }),
       ],
     );
   }
 
   Widget _buildAuthForm() {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: _isLoginView ? _buildLoginForm() : _buildSignupForm(),
-      ),
-    );
-  }
-
-  Widget _buildLoginForm() {
-    return Form(
-      key: _loginFormKey,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            'Login',
-            style: Theme.of(context).textTheme.headlineLarge,
-          ),
-          SizedBox(height: 24),
-          TextFormField(
-            controller: _emailController,
-            decoration: InputDecoration(labelText: 'Email'),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your email';
-              }
-              if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                  .hasMatch(value)) {
-                return 'Please enter a valid email address';
-              }
-              return null;
-            },
-          ),
-          SizedBox(height: 16),
-          TextFormField(
-            controller: _passwordController,
-            decoration: InputDecoration(labelText: 'Password'),
-            obscureText: true,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your password';
-              }
-              return null;
-            },
-          ),
-          SizedBox(height: 16),
-          Row(
-            children: [
-              Checkbox(
-                value: remember,
-                onChanged: (bool? value) {
-                  setState(() {
-                    remember = value ?? false;
-                  });
-                },
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(height: 40),
+            Text(
+              _isLoginView ? 'Login' : 'Sign Up',
+              style: TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+                color: _textColor,
               ),
-              Text('Remember me'),
-            ],
-          ),
-          SizedBox(height: 24),
-          _buildSubmitButton(),
-          SizedBox(height: 16),
-          _buildToggleAuthModeButton(),
-          SizedBox(height: 16),
-          _buildBackButton(),
-        ],
+            ),
+            SizedBox(height: 40),
+            if (!_isLoginView) _buildTextField('Name', _nameController, false),
+            if (!_isLoginView) SizedBox(height: 20),
+            _buildTextField('Email', _emailController, false),
+            SizedBox(height: 20),
+            _buildTextField('Password', _passwordController, true),
+            if (!_isLoginView) SizedBox(height: 20),
+            if (!_isLoginView)
+              _buildTextField(
+                  'Confirm Password', _confirmPasswordController, true),
+            SizedBox(height: 40),
+            _buildButton(_isLoginView ? 'Log In' : 'Sign Up',
+                _isLoading ? null : _submitForm),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                    _isLoginView
+                        ? "Don't have an account?"
+                        : "Already have an account?",
+                    style: TextStyle(color: _textColor)),
+                TextButton(
+                  onPressed: _toggleAuthMode,
+                  child: Text(_isLoginView ? 'Create now' : 'Login',
+                      style: TextStyle(color: _accentColor)),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildSignupForm() {
-    return Form(
-      key: _signupFormKey,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            'Sign Up',
-            style: Theme.of(context).textTheme.headlineLarge,
-          ),
-          SizedBox(height: 24),
-          TextFormField(
-            controller: _nameController,
-            decoration: InputDecoration(labelText: 'Name'),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your name';
-              }
-              return null;
-            },
-          ),
-          SizedBox(height: 16),
-          TextFormField(
-            controller: _emailController,
-            decoration: InputDecoration(labelText: 'Email'),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your email';
-              }
-              if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                  .hasMatch(value)) {
-                return 'Please enter a valid email address';
-              }
-              return null;
-            },
-          ),
-          SizedBox(height: 16),
-          TextFormField(
-            controller: _passwordController,
-            decoration: InputDecoration(labelText: 'Password'),
-            obscureText: true,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter a password';
-              }
-              if (value.length < 8) {
-                return 'Password must be at least 8 characters long';
-              }
-              return null;
-            },
-          ),
-          SizedBox(height: 16),
-          TextFormField(
-            controller: _confirmPasswordController,
-            decoration: InputDecoration(labelText: 'Confirm Password'),
-            obscureText: true,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please confirm your password';
-              }
-              if (value != _passwordController.text) {
-                return 'Passwords do not match';
-              }
-              return null;
-            },
-          ),
-          SizedBox(height: 24),
-          _buildSubmitButton(),
-          SizedBox(height: 16),
-          _buildToggleAuthModeButton(),
-          SizedBox(height: 16),
-          _buildBackButton(),
-        ],
+  Widget _buildTextField(
+      String label, TextEditingController controller, bool isPassword) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: Colors.white,
+        labelText: label,
+        labelStyle: TextStyle(color: _textColor),
+        floatingLabelBehavior: FloatingLabelBehavior.never,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: _accentColor),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: _accentColor, width: 2),
+        ),
+        suffixIcon: isPassword && _isLoginView
+            ? TextButton(
+                onPressed: () {
+                  // Handle forgot password
+                },
+                child: Text('Forgot?', style: TextStyle(color: _accentColor)),
+              )
+            : null,
       ),
+      obscureText: isPassword,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'This field is required';
+        }
+        if (label == 'Email' &&
+            !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+          return 'Please enter a valid email address';
+        }
+        if (label == 'Confirm Password' && value != _passwordController.text) {
+          return 'Passwords do not match';
+        }
+        return null;
+      },
     );
   }
 
-  Widget _buildSubmitButton() {
+  Widget _buildButton(String text, VoidCallback? onPressed) {
     return ElevatedButton(
-      onPressed: _isLoading ? null : _submitForm,
-      child: _isLoading
-          ? CircularProgressIndicator()
-          : Text(_isLoginView ? 'Login' : 'Sign Up'),
-    );
-  }
-
-  Widget _buildToggleAuthModeButton() {
-    return TextButton(
-      onPressed: _toggleAuthMode,
-      child: Text(_isLoginView
-          ? 'Need an account? Sign Up'
-          : 'Already have an account? Login'),
-    );
-  }
-
-  Widget _buildBackButton() {
-    return TextButton(
-      onPressed: _toggleAuthForm,
-      child: Text('Back to Welcome Screen'),
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: _accentColor,
+        foregroundColor: Colors.white,
+        minimumSize: Size(250, 50),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(25),
+        ),
+      ),
+      child: _isLoading && (text == 'Log In' || text == 'Sign Up')
+          ? CircularProgressIndicator(color: Colors.white)
+          : Text(text),
     );
   }
 
