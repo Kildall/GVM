@@ -6,8 +6,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class SettingsView extends StatefulWidget {
   const SettingsView({super.key, required this.controller});
 
-  static const routeName = '/settings';
-
   final SettingsController controller;
 
   @override

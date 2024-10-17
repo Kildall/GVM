@@ -23,7 +23,6 @@ class GVMApp extends StatefulWidget {
 }
 
 class _GVMAppState extends State<GVMApp> {
-  final _navigatorKey = GlobalKey<NavigatorState>();
   late AppLinks _appLinks;
   StreamSubscription<Uri>? _linkSubscription;
 
@@ -59,7 +58,6 @@ class _GVMAppState extends State<GVMApp> {
     if (uri.host == 'kildall.ar') {
       final path = uri.path.isEmpty ? '/' : uri.path;
       debugPrint('Navigating to: $path');
-      _navigatorKey.currentState?.pushNamed(path);
     }
   }
 
@@ -69,8 +67,6 @@ class _GVMAppState extends State<GVMApp> {
       listenable: widget.settingsController,
       builder: (BuildContext context, Widget? child) {
         return MaterialApp(
-          title: 'GVM',
-          navigatorKey: _navigatorKey,
           restorationScopeId: 'app',
           localizationsDelegates: const [
             AppLocalizations.delegate,

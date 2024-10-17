@@ -18,15 +18,10 @@ List<NavItem> getNavItems(SettingsController settingsController) {
     return [];
   }
 
-  // Helper function to check permissions
-  bool hasPermission(String permission) {
-    return user.permissions.contains(permission);
-  }
-
   // Products
-  if (hasPermission('product.browse') ||
-      hasPermission('supplier.browse') ||
-      hasPermission('purchase.browse')) {
+  if (user.hasPermission('product.browse') ||
+      user.hasPermission('supplier.browse') ||
+      user.hasPermission('purchase.browse')) {
     navItems.add(NavItem(
       item: BottomNavigationBarItem(
           icon: Icon(Icons.inventory), label: 'Products'),
@@ -38,7 +33,8 @@ List<NavItem> getNavItems(SettingsController settingsController) {
   }
 
   // Sales
-  if (hasPermission('sale.browse') || hasPermission('customer.browse')) {
+  if (user.hasPermission('sale.browse') ||
+      user.hasPermission('customer.browse')) {
     navItems.add(NavItem(
       item: BottomNavigationBarItem(
           icon: Icon(Icons.point_of_sale), label: 'Sales'),
@@ -60,7 +56,7 @@ List<NavItem> getNavItems(SettingsController settingsController) {
   ));
 
   // Employees
-  if (hasPermission('employee.browse')) {
+  if (user.hasPermission('employee.browse')) {
     navItems.add(NavItem(
       item:
           BottomNavigationBarItem(icon: Icon(Icons.badge), label: 'Employees'),

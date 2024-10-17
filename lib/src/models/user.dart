@@ -11,6 +11,10 @@ class User {
     required this.permissions,
   });
 
+  hasPermission(String permission) {
+    return permission.contains(permission);
+  }
+
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json['id'],
