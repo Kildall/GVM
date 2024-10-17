@@ -12,19 +12,23 @@ class APIService {
     return token != null ? {'Authorization': 'Bearer $token'} : {};
   }
 
-  Future<Map<String, dynamic>> get(String endpoint, {Map<String, dynamic>? queryParams}) async {
+  Future<Map<String, dynamic>> get(String endpoint,
+      {Map<String, dynamic>? queryParams}) async {
     final headers = await _getAuthHeaders();
-    return _httpService.sendRequest('GET', endpoint, headers: headers, queryParameters: queryParams);
+    return _httpService.sendRequest('GET', endpoint,
+        headers: headers, queryParameters: queryParams);
   }
 
   Future<Map<String, dynamic>> post(String endpoint, {dynamic body}) async {
     final headers = await _getAuthHeaders();
-    return _httpService.sendRequest('POST', endpoint, headers: headers, body: body);
+    return _httpService.sendRequest('POST', endpoint,
+        headers: headers, body: body);
   }
 
   Future<Map<String, dynamic>> put(String endpoint, {dynamic body}) async {
     final headers = await _getAuthHeaders();
-    return _httpService.sendRequest('PUT', endpoint, headers: headers, body: body);
+    return _httpService.sendRequest('PUT', endpoint,
+        headers: headers, body: body);
   }
 
   Future<Map<String, dynamic>> delete(String endpoint) async {

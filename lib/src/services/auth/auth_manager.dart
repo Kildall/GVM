@@ -81,7 +81,7 @@ class AuthManager {
     try {
       final response = await _apiService
           .post('/api/auth/validate-token', body: {'token': token});
-      return response['data']['valid'] == true;
+      return response['data']['valid'];
     } catch (e) {
       return false;
     }
