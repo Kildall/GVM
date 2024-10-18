@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 
+enum ViewState { landing, login, signup, verify, forgot }
+
 class LandingView extends StatefulWidget {
-  const LandingView({Key? key}) : super(key: key);
+  const LandingView({super.key});
 
   @override
   _LandingViewState createState() => _LandingViewState();
@@ -15,27 +17,18 @@ class _LandingViewState extends State<LandingView> {
   final _confirmPasswordController = TextEditingController();
   final _nameController = TextEditingController();
   bool _isLoading = false;
-  bool _showAuthForm = false;
-  bool _isLoginView = true;
+
+  // Define the view states
+  ViewState _currentState = ViewState.landing;
 
   // Define colors
-  final Color _backgroundColor =
-      Color(0xFFEEEAFF); // Light cool purple background
-  final Color _accentColor = Color(0xFFB1A6FF); // Deep purple-blue accent color
-  final Color _textColor = Color(0xFF1E1A33); // Very dark purple-blue for text
+  final Color _backgroundColor = Color(0xFFEEEAFF);
+  final Color _accentColor = Color(0xFFB1A6FF);
+  final Color _textColor = Color(0xFF1E1A33);
 
-  void _toggleAuthForm() {
+  void _changeState(ViewState newState) {
     setState(() {
-      _showAuthForm = !_showAuthForm;
-      if (!_showAuthForm) {
-        _clearControllers();
-      }
-    });
-  }
-
-  void _toggleAuthMode() {
-    setState(() {
-      _isLoginView = !_isLoginView;
+      _currentState = newState;
       _clearControllers();
     });
   }
@@ -54,16 +47,15 @@ class _LandingViewState extends State<LandingView> {
       });
 
       try {
-        if (_isLoginView) {
+        if (_currentState == ViewState.login) {
           await AuthManager.instance
               .login(_emailController.text, _passwordController.text, false);
           _showMessage('Login successful');
-        } else {
+        } else if (_currentState == ViewState.signup) {
           await AuthManager.instance.signup(_emailController.text,
               _passwordController.text, _nameController.text);
-          _showMessage('Sign up successful');
+          _changeState(ViewState.verify);
         }
-        _toggleAuthForm();
       } catch (e) {
         _showMessage('An error occurred: ${e.toString()}');
       } finally {
@@ -127,23 +119,21 @@ class _LandingViewState extends State<LandingView> {
             child: Column(
               children: [
                 // Back button
-                if (_showAuthForm)
+                if (_currentState != ViewState.landing)
                   Align(
                     alignment: Alignment.topLeft,
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: IconButton(
                         icon: Icon(Icons.arrow_back, color: _textColor),
-                        onPressed: _toggleAuthForm,
+                        onPressed: () => _changeState(ViewState.landing),
                       ),
                     ),
                   ),
                 Expanded(
                   child: Center(
                     child: SingleChildScrollView(
-                      child: _showAuthForm
-                          ? _buildAuthForm()
-                          : _buildWelcomeButtons(),
+                      child: _buildCurrentView(),
                     ),
                   ),
                 ),
@@ -155,12 +145,25 @@ class _LandingViewState extends State<LandingView> {
     );
   }
 
-  Widget _buildWelcomeButtons() {
+  Widget _buildCurrentView() {
+    switch (_currentState) {
+      case ViewState.landing:
+        return _buildLandingView();
+      case ViewState.login:
+        return _buildAuthForm(true);
+      case ViewState.signup:
+        return _buildAuthForm(false);
+      case ViewState.verify:
+        return _buildVerifyView();
+      case ViewState.forgot:
+        return _buildForgotView();
+    }
+  }
+
+  Widget _buildLandingView() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // Add logo here
-        // Image.asset('assets/logo.png', height: 100),
         SizedBox(height: 40),
         Text(
           'Welcome',
@@ -171,24 +174,14 @@ class _LandingViewState extends State<LandingView> {
           ),
         ),
         SizedBox(height: 40),
-        _buildButton('Login', () {
-          setState(() {
-            _isLoginView = true;
-            _toggleAuthForm();
-          });
-        }),
+        _buildButton('Login', () => _changeState(ViewState.login)),
         SizedBox(height: 20),
-        _buildButton('Sign Up', () {
-          setState(() {
-            _isLoginView = false;
-            _toggleAuthForm();
-          });
-        }),
+        _buildButton('Sign Up', () => _changeState(ViewState.signup)),
       ],
     );
   }
 
-  Widget _buildAuthForm() {
+  Widget _buildAuthForm(bool isLogin) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Form(
@@ -198,7 +191,7 @@ class _LandingViewState extends State<LandingView> {
           children: <Widget>[
             SizedBox(height: 40),
             Text(
-              _isLoginView ? 'Login' : 'Sign Up',
+              isLogin ? 'Login' : 'Sign Up',
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
@@ -206,30 +199,37 @@ class _LandingViewState extends State<LandingView> {
               ),
             ),
             SizedBox(height: 40),
-            if (!_isLoginView) _buildTextField('Name', _nameController, false),
-            if (!_isLoginView) SizedBox(height: 20),
+            if (!isLogin) _buildTextField('Name', _nameController, false),
+            if (!isLogin) SizedBox(height: 20),
             _buildTextField('Email', _emailController, false),
             SizedBox(height: 20),
             _buildTextField('Password', _passwordController, true),
-            if (!_isLoginView) SizedBox(height: 20),
-            if (!_isLoginView)
+            if (!isLogin) SizedBox(height: 20),
+            if (!isLogin)
               _buildTextField(
                   'Confirm Password', _confirmPasswordController, true),
             SizedBox(height: 40),
-            _buildButton(_isLoginView ? 'Log In' : 'Sign Up',
+            _buildButton(isLogin ? 'Log In' : 'Sign Up',
                 _isLoading ? null : _submitForm),
             SizedBox(height: 20),
+            if (isLogin)
+              TextButton(
+                onPressed: () => _changeState(ViewState.forgot),
+                child: Text('Forgot Password?',
+                    style: TextStyle(color: _accentColor)),
+              ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                    _isLoginView
+                    isLogin
                         ? "Don't have an account?"
-                        : "Already have an account?",
+                        : 'Already have an account?',
                     style: TextStyle(color: _textColor)),
                 TextButton(
-                  onPressed: _toggleAuthMode,
-                  child: Text(_isLoginView ? 'Create now' : 'Login',
+                  onPressed: () => _changeState(
+                      isLogin ? ViewState.signup : ViewState.login),
+                  child: Text(isLogin ? 'Create now' : 'Login',
                       style: TextStyle(color: _accentColor)),
                 ),
               ],
@@ -237,6 +237,72 @@ class _LandingViewState extends State<LandingView> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildVerifyView() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset(
+          'assets/images/verify_email.png',
+          height: 200,
+          width: 200,
+        ),
+        SizedBox(height: 40),
+        Text(
+          'Verify Your Email',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: _textColor,
+          ),
+        ),
+        SizedBox(height: 20),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 40),
+          child: Text(
+            'We\'ve sent a verification email to your inbox. Please check and follow the instructions to complete your registration.',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: _textColor),
+          ),
+        ),
+        SizedBox(height: 40),
+        _buildButton('Back to Login', () => _changeState(ViewState.login)),
+      ],
+    );
+  }
+
+  Widget _buildForgotView() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset(
+          'assets/images/forgot_password.png',
+          height: 200,
+          width: 200,
+        ),
+        SizedBox(height: 40),
+        Text(
+          'Forgot Password?',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: _textColor,
+          ),
+        ),
+        SizedBox(height: 20),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 40),
+          child: Text(
+            'Please contact support@gvm.ar for assistance in resetting your password.',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: _textColor),
+          ),
+        ),
+        SizedBox(height: 40),
+        _buildButton('Back to Login', () => _changeState(ViewState.login)),
+      ],
     );
   }
 
@@ -258,14 +324,6 @@ class _LandingViewState extends State<LandingView> {
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(color: _accentColor, width: 2),
         ),
-        suffixIcon: isPassword && _isLoginView
-            ? TextButton(
-                onPressed: () {
-                  // Handle forgot password
-                },
-                child: Text('Forgot?', style: TextStyle(color: _accentColor)),
-              )
-            : null,
       ),
       obscureText: isPassword,
       validator: (value) {
