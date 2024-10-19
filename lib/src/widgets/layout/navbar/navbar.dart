@@ -11,7 +11,8 @@ class NavItem {
   NavItem({required this.item, required this.widget});
 }
 
-List<NavItem> getNavItems(SettingsController settingsController) {
+List<NavItem> getNavItems(
+    SettingsController settingsController, BuildContext context) {
   final user = AuthManager.instance.currentUser;
   final List<NavItem> navItems = [];
 
@@ -48,8 +49,10 @@ List<NavItem> getNavItems(SettingsController settingsController) {
 
   // Add
   navItems.add(NavItem(
-    item:
-        BottomNavigationBarItem(icon: Icon(Icons.add_business), label: 'Home'),
+    item: BottomNavigationBarItem(
+        icon: Icon(Icons.add_business),
+        label: 'Home',
+        backgroundColor: Theme.of(context).colorScheme.onPrimary),
     widget: Center(
       child: HomeView(),
     ),

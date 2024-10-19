@@ -12,79 +12,37 @@ class BaseLayout extends StatefulWidget {
 }
 
 class _BaseLayoutState extends State<BaseLayout> {
-  int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    final navItems = getNavItems(widget.settingsController);
+    final navItems = getNavItems(widget.settingsController, context);
 
     final children = navItems.map((item) => item.widget).toList();
     final items = navItems.map((item) => item.item).toList();
 
-    return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: children,
-      ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.4),
-              spreadRadius: 5,
-              blurRadius: 7,
-              offset: Offset(0, 3), // changes position of shadow
-            ),
-          ],
-        ),
-        child: BottomAppBar(
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: List.generate(items.length, (index) {
-              if (index == items.length ~/ 2 && items.length > 2) {
-                // Center button
-                return Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  child: IconButton(
-                    icon: items[index].icon,
-                    onPressed: () => _onItemTapped(index),
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  ),
-                );
-              }
+    return DefaultTabController(
+      length: items.length,
+      child: Scaffold(
+        bottomNavigationBar: BottomAppBar(
+          elevation: 10,
+          padding: EdgeInsets.fromLTRB(2, 0, 2, 4),
+          child: TabBar(
+            tabAlignment: TabAlignment.fill,
+            labelColor: Theme.of(context).colorScheme.primary,
+            tabs: List.generate(items.length, (index) {
               // Other buttons
               return Container(
+                height: 100,
                 decoration: BoxDecoration(
-                  border: Border(
-                      top: BorderSide(
-                          color: _selectedIndex == index
-                              ? Theme.of(context).colorScheme.primary
-                              : Colors.transparent,
-                          width: 2)),
                   shape: BoxShape.rectangle,
                   color: Colors.transparent,
                 ),
-                child: IconButton(
-                  icon: items[index].icon,
-                  onPressed: () => _onItemTapped(index),
-                  color: _selectedIndex == index
-                      ? Theme.of(context).colorScheme.primary
-                      : null,
-                ),
+                child: items[index].icon,
               );
             }),
           ),
+        ),
+        body: TabBarView(
+          children: children,
         ),
       ),
     );

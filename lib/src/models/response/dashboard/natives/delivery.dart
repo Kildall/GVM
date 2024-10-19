@@ -1,4 +1,4 @@
-import 'package:intl/intl.dart';
+import 'package:jiffy/jiffy.dart';
 
 enum DeliveryStatus {
   PENDING_ASSIGNMENT,
@@ -41,7 +41,8 @@ class Delivery {
     );
   }
 
-  String get formattedDate => DateFormat('MMM d, y HH:mm').format(startDate);
+  String get formattedDate =>
+      Jiffy.parseFromDateTime(startDate).format(pattern: 'MMM d, y HH:mm');
 
   String get statusDisplay => status.toString().split('.').last;
 

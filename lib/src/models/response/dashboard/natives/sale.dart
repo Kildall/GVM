@@ -1,5 +1,5 @@
 import 'package:gvm_flutter/src/models/response/dashboard/natives/product.dart';
-import 'package:intl/intl.dart';
+import 'package:jiffy/jiffy.dart';
 
 enum SaleStatus { STARTED, IN_PROGRESS, COMPLETED, CANCELED }
 
@@ -33,7 +33,8 @@ class Sale {
   double get totalAmount =>
       products.fold(0, (sum, product) => sum + product.totalPrice);
 
-  String get formattedDate => DateFormat('MMM d, y HH:mm').format(startDate);
+  String get formattedDate =>
+      Jiffy.parseFromDateTime(startDate).format(pattern: 'MMM d, y HH:mm');
 
   String get statusDisplay => status.toString().split('.').last;
 
