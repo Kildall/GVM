@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 import 'package:gvm_flutter/src/settings/settings_controller.dart';
+import 'package:gvm_flutter/src/views/home/home_view.dart';
 import 'package:gvm_flutter/src/views/settings/settings_view.dart';
 
 class NavItem {
@@ -50,8 +51,7 @@ List<NavItem> getNavItems(SettingsController settingsController) {
     item:
         BottomNavigationBarItem(icon: Icon(Icons.add_business), label: 'Home'),
     widget: Center(
-      child: Text('Home Page',
-          style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
+      child: HomeView(),
     ),
   ));
 
