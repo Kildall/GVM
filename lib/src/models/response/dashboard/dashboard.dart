@@ -24,7 +24,7 @@ class Dashboard {
           .toList(),
       totalActiveSales: json['totalActiveSales'],
       totalActiveDeliveries: json['totalActiveDeliveries'],
-      totalSalesAmount: json['totalSalesAmount'],
+      totalSalesAmount: json['totalSalesAmount'].toDouble(),
     );
   }
 }

@@ -24,7 +24,8 @@ class _BaseLayoutState extends State<BaseLayout> {
       child: Scaffold(
         bottomNavigationBar: BottomAppBar(
           elevation: 10,
-          padding: EdgeInsets.fromLTRB(2, 0, 2, 4),
+          padding: EdgeInsets.fromLTRB(2, 0, 2, 1),
+          height: 70,
           child: TabBar(
             tabAlignment: TabAlignment.fill,
             labelColor: Theme.of(context).colorScheme.primary,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gvm_flutter/src/models/response/dashboard/dashboard.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class HomeDashboard extends StatefulWidget {
   const HomeDashboard({super.key});
@@ -21,10 +22,15 @@ class _HomeDashboardState extends State<HomeDashboard> {
   Future<Dashboard> _fetchDashboardData() async {
     try {
       final apiService = AuthManager.instance.apiService;
+
+      // TODO: Further wrap this function so that common errors are catched before reaching the client call
       final response = await apiService.get('/api/dashboard');
 
       if (response['status']['success']) {
         return Dashboard.fromJson(response['data']);
+      } else if ((response['status']['errors'] as List)
+          .any((x) => x['code'] == 1004)) {
+        throw Exception('User does not have access');
       } else {
         throw Exception('Failed to load dashboard data');
       }
@@ -42,11 +48,6 @@ class _HomeDashboardState extends State<HomeDashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Dashboard'),
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-        foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
-      ),
       body: RefreshIndicator(
         onRefresh: _refreshDashboard,
         child: FutureBuilder<Dashboard>(
@@ -116,31 +117,41 @@ class _HomeDashboardState extends State<HomeDashboard> {
   }
 
   Widget _buildSummaryCards(BuildContext context, Dashboard dashboard) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        _buildSummaryCard(
-          context,
-          'Active Sales',
-          dashboard.totalActiveSales.toString(),
-          Icons.shopping_cart,
-          Colors.blue,
-        ),
-        _buildSummaryCard(
-          context,
-          'Active Deliveries',
-          dashboard.totalActiveDeliveries.toString(),
-          Icons.local_shipping,
-          Colors.green,
-        ),
-        _buildSummaryCard(
-          context,
-          'Total Sales',
-          '\$${dashboard.totalSalesAmount.toStringAsFixed(2)}',
-          Icons.attach_money,
-          Colors.orange,
-        ),
-      ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final crossAxisCount = constraints.maxWidth > 600 ? 3 : 2;
+        return GridView.count(
+          crossAxisCount: crossAxisCount,
+          childAspectRatio: 1,
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+          children: [
+            _buildSummaryCard(
+              context,
+              'Active Sales',
+              dashboard.totalActiveSales.toString(),
+              Icons.shopping_cart,
+              Colors.blue,
+            ),
+            _buildSummaryCard(
+              context,
+              'Active Deliveries',
+              dashboard.totalActiveDeliveries.toString(),
+              Icons.local_shipping,
+              Colors.green,
+            ),
+            _buildSummaryCard(
+              context,
+              'Total Sales',
+              '\$${dashboard.totalSalesAmount.toStringAsFixed(2)}',
+              Icons.attach_money,
+              Colors.orange,
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -149,18 +160,28 @@ class _HomeDashboardState extends State<HomeDashboard> {
     return Card(
       elevation: 4,
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(8.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(icon, size: 32, color: color),
             SizedBox(height: 8),
-            Text(title, style: Theme.of(context).textTheme.labelSmall),
+            Text(
+              title,
+              style: Theme.of(context).textTheme.labelSmall,
+              textAlign: TextAlign.center,
+            ),
             SizedBox(height: 4),
-            Text(value,
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineMedium
-                    ?.copyWith(color: color)),
+            AutoSizeText(
+              value,
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineMedium
+                  ?.copyWith(color: color),
+              maxLines: 1,
+              minFontSize: 12,
+              textAlign: TextAlign.center,
+            ),
           ],
         ),
       ),
