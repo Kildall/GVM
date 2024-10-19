@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 import 'package:gvm_flutter/src/settings/settings_controller.dart';
-import 'package:gvm_flutter/src/views/home/home_view.dart';
+import 'package:gvm_flutter/src/views/home/home_dashboard.dart';
 import 'package:gvm_flutter/src/views/settings/settings_view.dart';
 
 class NavItem {
@@ -54,7 +54,7 @@ List<NavItem> getNavItems(
         label: 'Home',
         backgroundColor: Theme.of(context).colorScheme.onPrimary),
     widget: Center(
-      child: HomeView(),
+      child: HomeDashboard(),
     ),
   ));
 

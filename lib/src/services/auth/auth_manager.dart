@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:gvm_flutter/src/models/response/dashboard/natives/user.dart';
+import 'package:gvm_flutter/src/models/auth/user.dart';
 import 'package:gvm_flutter/src/services/api/api_service.dart';
 import 'package:gvm_flutter/src/services/auth/auth_exceptions.dart';
 

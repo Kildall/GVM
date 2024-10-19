@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:gvm_flutter/src/models/response/dashboard/dashboard.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 
-class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+class HomeDashboard extends StatefulWidget {
+  const HomeDashboard({super.key});
 
   @override
-  _HomeViewState createState() => _HomeViewState();
+  _HomeDashboardState createState() => _HomeDashboardState();
 }
 
-class _HomeViewState extends State<HomeView> {
+class _HomeDashboardState extends State<HomeDashboard> {
   late Future<Dashboard> _dashboardFuture;
 
   @override
