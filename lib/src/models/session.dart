@@ -1,3 +1,5 @@
+import 'package:gvm_flutter/src/models/user.dart';
+
 class Session {
   final String id;
   final String ip;
@@ -6,6 +8,7 @@ class Session {
   final DateTime createdAt;
   final DateTime expiresAt;
   final int? userId;
+  late final User? user;
 
   Session({
     required this.id,
@@ -18,7 +21,7 @@ class Session {
   });
 
   factory Session.fromJson(Map<String, dynamic> json) {
-    return Session(
+    final session = Session(
       id: json['id'],
       ip: json['ip'],
       userAgent: json['userAgent'],
@@ -27,5 +30,11 @@ class Session {
       expiresAt: DateTime.parse(json['expiresAt']),
       userId: json['userId'],
     );
+
+    if (json['user'] != null) {
+      session.user = User.fromJson(json['user']);
+    }
+
+    return session;
   }
 }

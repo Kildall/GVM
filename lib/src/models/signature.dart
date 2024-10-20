@@ -1,4 +1,5 @@
 import 'package:gvm_flutter/src/models/enums.dart';
+import 'package:gvm_flutter/src/models/user.dart';
 
 class Signature {
   final String id;
@@ -8,6 +9,7 @@ class Signature {
   final DateTime createdAt;
   final DateTime expiresAt;
   final int userId;
+  late final User? user;
 
   Signature({
     required this.id,
@@ -20,7 +22,7 @@ class Signature {
   });
 
   factory Signature.fromJson(Map<String, dynamic> json) {
-    return Signature(
+    final signature = Signature(
       id: json['id'],
       action: AccountAction.values
           .firstWhere((e) => e.toString() == 'AccountAction.${json['action']}'),
@@ -30,5 +32,11 @@ class Signature {
       expiresAt: DateTime.parse(json['expiresAt']),
       userId: json['userId'],
     );
+
+    if (json['user'] != null) {
+      signature.user = User.fromJson(json['user']);
+    }
+
+    return signature;
   }
 }

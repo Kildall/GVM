@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:gvm_flutter/src/services/auth/auth_listener.dart';
-import 'package:gvm_flutter/src/views/landing.dart';
+import 'package:gvm_flutter/src/views/landing/landing.dart';
 import 'package:gvm_flutter/src/widgets/layout/base_layout.dart';
 
 import 'settings/settings_controller.dart';

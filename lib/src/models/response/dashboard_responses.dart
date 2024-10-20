@@ -1,22 +1,22 @@
-import 'package:gvm_flutter/src/models/response/dashboard/natives/delivery.dart';
-import 'package:gvm_flutter/src/models/response/dashboard/natives/sale.dart';
+import 'package:gvm_flutter/src/models/delivery.dart';
+import 'package:gvm_flutter/src/models/sale.dart';
 
-class Dashboard {
+class DashboardResponse {
   final List<Sale> recentSales;
   final List<Delivery> recentDeliveries;
   final int totalActiveSales;
   final int totalActiveDeliveries;
   final double totalSalesAmount;
 
-  Dashboard(
+  DashboardResponse(
       {required this.recentSales,
       required this.recentDeliveries,
       required this.totalActiveSales,
       required this.totalActiveDeliveries,
       required this.totalSalesAmount});
 
-  factory Dashboard.fromJson(Map<String, dynamic> json) {
-    return Dashboard(
+  factory DashboardResponse.fromJson(Map<String, dynamic> json) {
+    return DashboardResponse(
       recentSales:
           (json['recentSales'] as List).map((s) => Sale.fromJson(s)).toList(),
       recentDeliveries: (json['recentDeliveries'] as List)

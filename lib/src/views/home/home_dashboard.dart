@@ -1,7 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:gvm_flutter/src/models/response/dashboard/dashboard.dart';
-import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/material.dart';
+import 'package:gvm_flutter/src/models/enums.dart';
+import 'package:gvm_flutter/src/models/response/dashboard_responses.dart';
+import 'package:gvm_flutter/src/services/api/api_errors.dart';
+import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 
 class HomeDashboard extends StatefulWidget {
   const HomeDashboard({super.key});
@@ -11,7 +13,7 @@ class HomeDashboard extends StatefulWidget {
 }
 
 class _HomeDashboardState extends State<HomeDashboard> {
-  late Future<Dashboard> _dashboardFuture;
+  late Future<DashboardResponse?> _dashboardFuture;
 
   @override
   void initState() {
@@ -19,24 +21,28 @@ class _HomeDashboardState extends State<HomeDashboard> {
     _dashboardFuture = _fetchDashboardData();
   }
 
-  Future<Dashboard> _fetchDashboardData() async {
+  void _showMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
+
+  Future<DashboardResponse?> _fetchDashboardData() async {
     try {
       final apiService = AuthManager.instance.apiService;
+      debugPrint('Fetching dashboard data...');
+      final response = await apiService.get<DashboardResponse>('/api/dashboard',
+          fromJson: DashboardResponse.fromJson);
 
-      // TODO: Further wrap this function so that common errors are catched before reaching the client call
-      final response = await apiService.get('/api/dashboard');
-
-      if (response['status']['success']) {
-        return Dashboard.fromJson(response['data']);
-      } else if ((response['status']['errors'] as List)
-          .any((x) => x['code'] == 1004)) {
-        throw Exception('User does not have access');
-      } else {
-        throw Exception('Failed to load dashboard data');
+      if (response.data != null) {
+        return response.data!;
       }
+    } on AuthException catch (_) {
+      _showMessage('You do not have access to this resource');
     } catch (e) {
       throw Exception('Error fetching dashboard data: $e');
     }
+    return null;
   }
 
   Future<void> _refreshDashboard() async {
@@ -50,7 +56,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: _refreshDashboard,
-        child: FutureBuilder<Dashboard>(
+        child: FutureBuilder<DashboardResponse?>(
           future: _dashboardFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -80,7 +86,8 @@ class _HomeDashboardState extends State<HomeDashboard> {
     );
   }
 
-  Widget _buildDashboardContent(BuildContext context, Dashboard dashboard) {
+  Widget _buildDashboardContent(
+      BuildContext context, DashboardResponse dashboard) {
     return SingleChildScrollView(
       physics: AlwaysScrollableScrollPhysics(),
       child: Container(
@@ -116,7 +123,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
     );
   }
 
-  Widget _buildSummaryCards(BuildContext context, Dashboard dashboard) {
+  Widget _buildSummaryCards(BuildContext context, DashboardResponse dashboard) {
     return LayoutBuilder(
       builder: (context, constraints) {
         final crossAxisCount = constraints.maxWidth > 600 ? 3 : 2;
@@ -188,13 +195,15 @@ class _HomeDashboardState extends State<HomeDashboard> {
     );
   }
 
-  Widget _buildLatestSales(Dashboard dashboard) {
+  Widget _buildLatestSales(DashboardResponse dashboard) {
     return ListView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
       itemCount: dashboard.recentSales.length,
       itemBuilder: (context, index) {
         final sale = dashboard.recentSales[index];
+        final totalAmount = sale.products!.fold<double>(0,
+            (sum, product) => sum + product.product.price * product.quantity);
         return Card(
           elevation: 4,
           margin: EdgeInsets.only(bottom: 16),
@@ -207,30 +216,30 @@ class _HomeDashboardState extends State<HomeDashboard> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      sale.customerName,
+                      sale.customer!.name,
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
-                    _buildStatusChip(sale.statusDisplay),
+                    _buildSaleStatusChip(sale.status),
                   ],
                 ),
                 SizedBox(height: 8),
                 Text(
-                  'Date: ${sale.formattedDate}',
+                  'Date: ${sale.startDate}',
                   style: TextStyle(color: Colors.grey[600]),
                 ),
                 SizedBox(height: 8),
                 Text(
-                  'Total: \$${sale.totalAmount.toStringAsFixed(2)}',
+                  'Total: \$${totalAmount.toStringAsFixed(2)}',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                 ),
                 SizedBox(height: 8),
                 Text('Products:',
                     style: TextStyle(fontWeight: FontWeight.w500)),
                 Column(
-                  children: sale.products.map((product) {
+                  children: sale.products!.map((product) {
                     return Text(
-                        '${product.name} (${product.quantity}x) - \$${product.price.toStringAsFixed(2)}');
+                        '${product.product.name} (${product.quantity}x) - \$${product.product.price.toStringAsFixed(2)}');
                   }).toList(),
                 ),
               ],
@@ -241,7 +250,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
     );
   }
 
-  Widget _buildOngoingDeliveries(Dashboard dashboard) {
+  Widget _buildOngoingDeliveries(DashboardResponse dashboard) {
     return ListView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
@@ -260,22 +269,24 @@ class _HomeDashboardState extends State<HomeDashboard> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      delivery.customerName,
+                      delivery.sale!.customer!.name,
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
-                    _buildStatusChip(delivery.statusDisplay),
+                    _buildDeliveryStatusChip(delivery.status),
                   ],
                 ),
                 SizedBox(height: 8),
                 Text(
-                  'Start: ${delivery.formattedDate}',
+                  'Start: ${delivery.startDate}',
                   style: TextStyle(color: Colors.grey[600]),
                 ),
                 SizedBox(height: 8),
                 Text('Address: ${delivery.address}'),
                 SizedBox(height: 8),
-                Text('Delivery Person: ${delivery.deliveryPerson}'),
+                // Conditional display of delivery person
+                if (delivery.deliveryPerson != null)
+                  Text('Delivery Person: ${delivery.deliveryPerson}'),
               ],
             ),
           ),
@@ -284,22 +295,40 @@ class _HomeDashboardState extends State<HomeDashboard> {
     );
   }
 
-  Widget _buildStatusChip(String status) {
+  // Separate into delivery and sale statuses
+  Widget _buildDeliveryStatusChip(DeliveryStatusEnum status) {
     Color color;
     switch (status) {
-      case 'COMPLETED':
-      case 'DELIVERED':
-        color = Colors.green;
-        break;
-      case 'IN_PROGRESS':
-        color = Colors.orange;
-        break;
-      case 'ASSIGNED':
-      case 'PENDING_ASSIGNMENT':
+      case DeliveryStatusEnum.PENDING_ASSIGNMENT:
         color = Colors.blue;
         break;
-      case 'CANCELED':
-      case 'DISPUTED':
+      case DeliveryStatusEnum.DELIVERED:
+      case DeliveryStatusEnum.ASSIGNED:
+        color = Colors.green;
+        break;
+      case DeliveryStatusEnum.CANCELED:
+      case DeliveryStatusEnum.DISPUTED:
+        color = Colors.red;
+        break;
+      default:
+        color = Colors.grey;
+    }
+    return Chip(
+      label: Text(status.name, style: TextStyle(color: Colors.white)),
+      backgroundColor: color,
+    );
+  }
+
+  Widget _buildSaleStatusChip(SaleStatusEnum status) {
+    Color color;
+    switch (status) {
+      case SaleStatusEnum.COMPLETED:
+        color = Colors.green;
+        break;
+      case SaleStatusEnum.IN_PROGRESS:
+        color = Colors.orange;
+        break;
+      case SaleStatusEnum.CANCELED:
         color = Colors.red;
         break;
       default:
@@ -308,7 +337,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
 
     return Chip(
       label: Text(
-        status,
+        status.name,
         style: TextStyle(color: Colors.white),
       ),
       backgroundColor: color,

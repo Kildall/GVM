@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:gvm_flutter/src/models/auth/user.dart';
+import 'package:gvm_flutter/src/models/response/auth_responses.dart';
+import 'package:gvm_flutter/src/models/response/generic_responses.dart';
 import 'package:gvm_flutter/src/services/api/api_service.dart';
 import 'package:gvm_flutter/src/services/auth/auth_exceptions.dart';
 
@@ -15,7 +18,7 @@ class AuthManager {
   final StreamController<bool>? _authStateController;
   late final APIService _apiService;
 
-  User? _currentUser;
+  AuthUser? _currentUser;
 
   AuthManager._(
     this._secureStorage,
@@ -73,18 +76,18 @@ class AuthManager {
     final userDataString = await _secureStorage.read(key: _userDataKey);
     if (userDataString != null) {
       final userData = json.decode(userDataString);
-      _currentUser = User.fromJson(userData);
+      _currentUser = AuthUser.fromJson(userData);
+    } else {
+      await _clearAuthData();
     }
   }
 
-  Future<bool> validateToken(String token) async {
-    try {
-      final response = await _apiService
-          .post('/api/auth/validate-token', body: {'token': token});
-      return response['data']['valid'];
-    } catch (e) {
-      return false;
-    }
+  Future<APIResponse<VerifyTokenResponse>> validateToken(String token) async {
+    final response = await _apiService.post<VerifyTokenResponse>(
+        '/api/auth/validate-token',
+        body: {'token': token},
+        fromJson: VerifyTokenResponse.fromJson);
+    return response;
   }
 
   /// Provides possibility to listen to Auth States.
@@ -124,62 +127,62 @@ class AuthManager {
   }
 
   Future<void> login(String email, String password, bool remember) async {
-    final response = await _apiService.post('/api/auth/login', body: {
-      'email': email,
-      'password': password,
-      'remember': remember,
-    });
+    final response = await _apiService.post<LoginResponse>('/api/auth/login',
+        body: {
+          'email': email,
+          'password': password,
+          'remember': remember,
+        },
+        fromJson: LoginResponse.fromJson);
 
-    if (response['status']['success']) {
-      final token = response['data']['token'];
-      final expirationDate = DateTime.parse(response['data']['expires']);
+    if (response.data != null) {
+      final token = response.data!.token;
+      final expirationDate = response.data!.expires;
       await setToken(token, expirationDate);
       await fetchUserData();
-
       _authStateController!.sink.add(true);
-      // After successful login, fetch user data
-    } else {
-      throw Exception('Login failed');
     }
   }
 
   Future<void> fetchUserData() async {
-    final response = await _apiService.get('/api/auth/user');
-    if (response['status']['success']) {
-      final userData = response['data']['user'];
-      _currentUser = User.fromJson(userData);
-      await _secureStorage.write(
-          key: _userDataKey, value: json.encode(userData));
-    } else {
-      throw Exception('Failed to fetch user data');
+    try {
+      final response = await _apiService.get<AuthUser>('/api/auth/user',
+          fromJson: AuthUser.fromJson);
+
+      if (response.data != null) {
+        final userData = response.data!;
+        _currentUser = userData;
+        await _secureStorage.write(
+            key: _userDataKey, value: json.encode(userData));
+      }
+    } catch (e) {
+      debugPrint('Error fetching user data: $e');
     }
   }
 
   Future<void> logout() async {
-    await _apiService.post('/api/auth/logout');
+    await _apiService.post<GenericMessageResponse>('/api/auth/logout',
+        fromJson: GenericMessageResponse.fromJson);
     await _clearAuthData();
   }
 
   Future<bool> signup(String email, String password, String name) async {
-    final response = await _apiService.post('/api/auth/signup', body: {
-      'email': email,
-      'password': password,
-      'name': name,
-    });
-
-    if (!response['status']['success']) {
-      return false;
-    }
+    await _apiService.post<GenericMessageResponse>('/api/auth/signup',
+        body: {
+          'email': email,
+          'password': password,
+          'name': name,
+        },
+        fromJson: GenericMessageResponse.fromJson);
 
     return true;
   }
 
-  Future<void> verifyAccount(String signature) async {
-    final response = await _apiService.get('/api/auth/verify/$signature');
+  Future<bool> verifyAccount(String signature) async {
+    await _apiService.get<GenericMessageResponse>('/api/auth/verify/$signature',
+        fromJson: GenericMessageResponse.fromJson);
 
-    if (!response['status']['success']) {
-      throw Exception('Account verification failed');
-    }
+    return true;
   }
 
   Future<void> _clearAuthData() async {
@@ -212,14 +215,15 @@ class AuthManager {
       return false;
     }
 
-    final isValid = await validateToken(token);
-    if (!isValid) {
-      await _clearAuthData();
+    final validationResult = await validateToken(token);
+    if (validationResult.data != null && validationResult.data!.valid) {
+      return true;
     }
-    return isValid;
+    await _clearAuthData();
+    return false;
   }
 
-  User? get currentUser => _currentUser;
+  AuthUser? get currentUser => _currentUser;
 
   APIService get apiService => _apiService;
 }

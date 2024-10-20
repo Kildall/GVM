@@ -1,3 +1,6 @@
+import 'package:gvm_flutter/src/models/customer.dart';
+import 'package:gvm_flutter/src/models/delivery.dart';
+
 class Address {
   final int id;
   final String name;
@@ -9,6 +12,8 @@ class Address {
   final String city;
   final String? details;
   final bool enabled;
+  late final Customer? customer;
+  late final List<Delivery>? deliveries;
 
   Address({
     required this.id,
@@ -24,7 +29,7 @@ class Address {
   });
 
   factory Address.fromJson(Map<String, dynamic> json) {
-    return Address(
+    final address = Address(
       id: json['id'],
       name: json['name'],
       customerId: json['customerId'],
@@ -36,5 +41,22 @@ class Address {
       details: json['details'],
       enabled: json['enabled'],
     );
+
+    if (json['customer'] != null) {
+      address.customer = Customer.fromJson(json['customer']);
+    }
+
+    if (json['deliveries'] != null) {
+      address.deliveries = (json['deliveries'] as List)
+          .map((e) => Delivery.fromJson(e))
+          .toList();
+    }
+
+    return address;
+  }
+
+  @override
+  String toString() {
+    return '$street1, $city, $state, $postalCode';
   }
 }

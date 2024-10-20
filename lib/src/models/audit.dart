@@ -1,4 +1,5 @@
 import 'package:gvm_flutter/src/models/enums.dart';
+import 'package:gvm_flutter/src/models/user.dart';
 
 class Audit {
   final int id;
@@ -6,6 +7,7 @@ class Audit {
   final AuditAction action;
   final String entityType;
   final int userId;
+  late final User user;
   final Map<String, dynamic>? data;
   final String? description;
 
@@ -20,15 +22,19 @@ class Audit {
   });
 
   factory Audit.fromJson(Map<String, dynamic> json) {
-    return Audit(
+    final audit = Audit(
       id: json['id'],
       timestamp: DateTime.parse(json['timestamp']),
       action: AuditAction.values
           .firstWhere((e) => e.toString() == 'AuditAction.${json['action']}'),
       entityType: json['entityType'],
       userId: json['userId'],
-      data: json['data'],
-      description: json['description'],
     );
+
+    if (json['user'] != null) {
+      audit.user = User.fromJson(json['user']);
+    }
+
+    return audit;
   }
 }

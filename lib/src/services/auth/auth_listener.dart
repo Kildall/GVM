@@ -18,6 +18,7 @@ class AuthListener extends StatelessWidget {
     return StreamBuilder(
       stream: AuthManager.instance.authStateAsStream,
       builder: (context, AsyncSnapshot<bool> authStateAsync) {
+        debugPrint('Auth state: ${authStateAsync.data}');
         if (authStateAsync.connectionState == ConnectionState.waiting) {
           return const Scaffold(
             body: Center(

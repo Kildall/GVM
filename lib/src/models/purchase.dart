@@ -1,10 +1,17 @@
+import 'package:gvm_flutter/src/models/employee.dart';
+import 'package:gvm_flutter/src/models/product.dart';
+import 'package:gvm_flutter/src/models/supplier.dart';
+
 class Purchase {
   final int id;
   final int employeeId;
+  late final Employee employee;
   final int supplierId;
+  late final Supplier supplier;
   final DateTime date;
   final double amount;
   final String description;
+  late final List<PurchaseProduct> products;
 
   Purchase({
     required this.id,
@@ -16,7 +23,7 @@ class Purchase {
   });
 
   factory Purchase.fromJson(Map<String, dynamic> json) {
-    return Purchase(
+    final purchase = Purchase(
       id: json['id'],
       employeeId: json['employeeId'],
       supplierId: json['supplierId'],
@@ -24,5 +31,15 @@ class Purchase {
       amount: json['amount'],
       description: json['description'],
     );
+
+    if (json['employee'] != null) {
+      purchase.employee = Employee.fromJson(json['employee']);
+    }
+
+    if (json['supplier'] != null) {
+      purchase.supplier = Supplier.fromJson(json['supplier']);
+    }
+
+    return purchase;
   }
 }
