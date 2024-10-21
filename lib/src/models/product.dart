@@ -1,81 +1,145 @@
-import 'package:gvm_flutter/src/models/purchase.dart';
-import 'package:gvm_flutter/src/models/sale.dart';
+//***  AUTO-GENERATED FILE - DO NOT MODIFY ***//
 
-class PurchaseProduct {
-  final int purchaseId;
-  final int productId;
-  final int quantity;
-  late final Purchase purchase;
-  late final Product product;
+import 'model_base.dart';
+import 'purchase_product.dart';
+import 'product_sale.dart';
 
-  PurchaseProduct({
-    required this.purchaseId,
-    required this.productId,
-    required this.quantity,
-  });
-
-  factory PurchaseProduct.fromJson(Map<String, dynamic> json) {
-    final purchaseProduct = PurchaseProduct(
-      purchaseId: json['purchaseId'],
-      productId: json['productId'],
-      quantity: json['quantity'],
-    );
-
-    if (json['purchase'] != null) {
-      purchaseProduct.purchase = Purchase.fromJson(json['purchase']);
-    }
-
-    if (json['product'] != null) {
-      purchaseProduct.product = Product.fromJson(json['product']);
-    }
-
-    return purchaseProduct;
-  }
-}
-
-class Product {
-  final int id;
-  final String name;
-  final int quantity;
-  final double measure;
-  final String brand;
-  final double price;
-  final bool enabled;
-  late final List<PurchaseProduct>? purchases;
-  late final List<ProductSale>? sales;
+class Product implements ToJson, Id {
+  @override
+  int? id;
+  String? name;
+  int? quantity;
+  double? measure;
+  String? brand;
+  double? price;
+  bool? enabled;
+  List<PurchaseProduct>? purchases;
+  List<ProductSale>? sales;
+  int? $purchasesCount;
+  int? $salesCount;
 
   Product({
-    required this.id,
-    required this.name,
+    this.id,
+    this.name,
     this.quantity = 0,
-    required this.measure,
-    required this.brand,
-    required this.price,
+    this.measure,
+    this.brand,
+    this.price,
     this.enabled = true,
+    this.purchases,
+    this.sales,
+    this.$purchasesCount,
+    this.$salesCount,
   });
 
-  factory Product.fromJson(Map<String, dynamic> json) {
-    final product = Product(
-      id: json['id'],
-      name: json['name'],
-      measure: json['measure'],
-      quantity: json['quantity'],
-      brand: json['brand'],
-      price: json['price'],
-      enabled: json['enabled'],
-    );
+  factory Product.fromJson(Map<String, dynamic> json) => Product(
+      id: json['id'] as int?,
+      name: json['name'] as String?,
+      quantity: json['quantity'] as int?,
+      measure: json['measure'] as double?,
+      brand: json['brand'] as String?,
+      price: json['price'] as double?,
+      enabled: json['enabled'] as bool?,
+      purchases: json['purchases'] != null
+          ? createModels<PurchaseProduct>(
+              json['purchases'], PurchaseProduct.fromJson)
+          : null,
+      sales: json['sales'] != null
+          ? createModels<ProductSale>(json['sales'], ProductSale.fromJson)
+          : null,
+      $purchasesCount: json['_count']?['purchases'] as int?,
+      $salesCount: json['_count']?['sales'] as int?);
 
-    if (json['purchases'] != null) {
-      product.purchases = (json['purchases'] as List)
-          .map((e) => PurchaseProduct.fromJson(e))
-          .toList();
-    }
-
-    if (json['sales'] != null) {
-      product.sales =
-          (json['sales'] as List).map((e) => ProductSale.fromJson(e)).toList();
-    }
-
-    return product;
+  Product copyWith({
+    int? id,
+    String? name,
+    int? quantity,
+    double? measure,
+    String? brand,
+    double? price,
+    bool? enabled,
+    List<PurchaseProduct>? purchases,
+    List<ProductSale>? sales,
+    int? $purchasesCount,
+    int? $salesCount,
+  }) {
+    return Product(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        quantity: quantity ?? this.quantity,
+        measure: measure ?? this.measure,
+        brand: brand ?? this.brand,
+        price: price ?? this.price,
+        enabled: enabled ?? this.enabled,
+        purchases: purchases ?? this.purchases,
+        sales: sales ?? this.sales,
+        $purchasesCount: $purchasesCount ?? this.$purchasesCount,
+        $salesCount: $salesCount ?? this.$salesCount);
   }
+
+  Product copyWithInstance(Product product) {
+    return Product(
+        id: product.id ?? id,
+        name: product.name ?? name,
+        quantity: product.quantity ?? quantity,
+        measure: product.measure ?? measure,
+        brand: product.brand ?? brand,
+        price: product.price ?? price,
+        enabled: product.enabled ?? enabled,
+        purchases: product.purchases ?? purchases,
+        sales: product.sales ?? sales,
+        $purchasesCount: product.$purchasesCount ?? $purchasesCount,
+        $salesCount: product.$salesCount ?? $salesCount);
+  }
+
+  @override
+  Map<String, dynamic> toJson() => ({
+        if (id != null) 'id': id,
+        if (name != null) 'name': name,
+        if (quantity != null) 'quantity': quantity,
+        if (measure != null) 'measure': measure,
+        if (brand != null) 'brand': brand,
+        if (price != null) 'price': price,
+        if (enabled != null) 'enabled': enabled,
+        if (purchases != null)
+          'purchases': purchases?.map((item) => item.toJson()).toList(),
+        if (sales != null)
+          'sales': sales?.map((item) => item.toJson()).toList(),
+        if ($purchasesCount != null || $salesCount != null)
+          '_count': {
+            if ($purchasesCount != null) 'purchases': $purchasesCount,
+            if ($salesCount != null) 'sales': $salesCount,
+          },
+      });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Product &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          name == other.name &&
+          quantity == other.quantity &&
+          measure == other.measure &&
+          brand == other.brand &&
+          price == other.price &&
+          enabled == other.enabled &&
+          areListsEqual(purchases, other.purchases) &&
+          areListsEqual(sales, other.sales) &&
+          $purchasesCount == other.$purchasesCount &&
+          $salesCount == other.$salesCount;
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      name.hashCode ^
+      quantity.hashCode ^
+      measure.hashCode ^
+      brand.hashCode ^
+      price.hashCode ^
+      enabled.hashCode ^
+      purchases.hashCode ^
+      sales.hashCode ^
+      $purchasesCount.hashCode ^
+      $salesCount.hashCode;
 }

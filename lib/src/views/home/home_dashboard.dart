@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:gvm_flutter/src/models/enums.dart';
+import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/response/dashboard_responses.dart';
 import 'package:gvm_flutter/src/services/api/api_errors.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
@@ -202,8 +202,10 @@ class _HomeDashboardState extends State<HomeDashboard> {
       itemCount: dashboard.recentSales.length,
       itemBuilder: (context, index) {
         final sale = dashboard.recentSales[index];
-        final totalAmount = sale.products!.fold<double>(0,
-            (sum, product) => sum + product.product.price * product.quantity);
+        final totalAmount = sale.products!.fold<double>(
+            0,
+            (sum, product) =>
+                sum + product.product!.price! * product.quantity!);
         return Card(
           elevation: 4,
           margin: EdgeInsets.only(bottom: 16),
@@ -216,11 +218,11 @@ class _HomeDashboardState extends State<HomeDashboard> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      sale.customer!.name,
+                      sale.customer!.name!,
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
-                    _buildSaleStatusChip(sale.status),
+                    _buildSaleStatusChip(sale.status!),
                   ],
                 ),
                 SizedBox(height: 8),
@@ -239,7 +241,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
                 Column(
                   children: sale.products!.map((product) {
                     return Text(
-                        '${product.product.name} (${product.quantity}x) - \$${product.product.price.toStringAsFixed(2)}');
+                        '${product.product!.name} (${product.quantity}x) - \$${product.product!.price!.toStringAsFixed(2)}');
                   }).toList(),
                 ),
               ],
@@ -269,11 +271,11 @@ class _HomeDashboardState extends State<HomeDashboard> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      delivery.sale!.customer!.name,
+                      delivery.sale!.customer!.name!,
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
-                    _buildDeliveryStatusChip(delivery.status),
+                    _buildDeliveryStatusChip(delivery.status!),
                   ],
                 ),
                 SizedBox(height: 8),
@@ -285,8 +287,8 @@ class _HomeDashboardState extends State<HomeDashboard> {
                 Text('Address: ${delivery.address}'),
                 SizedBox(height: 8),
                 // Conditional display of delivery person
-                if (delivery.deliveryPerson != null)
-                  Text('Delivery Person: ${delivery.deliveryPerson}'),
+                if (delivery.employee != null)
+                  Text('Delivery Person: ${delivery.employee!.name}'),
               ],
             ),
           ),

@@ -1,40 +1,111 @@
-import 'package:gvm_flutter/src/models/enums.dart';
-import 'package:gvm_flutter/src/models/user.dart';
+//***  AUTO-GENERATED FILE - DO NOT MODIFY ***//
 
-class Audit {
-  final int id;
-  final DateTime timestamp;
-  final AuditAction action;
-  final String entityType;
-  final int userId;
-  late final User user;
-  final Map<String, dynamic>? data;
-  final String? description;
+import 'model_base.dart';
+import 'audit_action.dart';
+import 'user.dart';
+
+class Audit implements ToJson, Id {
+  @override
+  int? id;
+  DateTime? timestamp;
+  AuditAction? action;
+  String? entityType;
+  int? userId;
+  User? user;
+  Map<String, dynamic>? data;
+  String? description;
 
   Audit({
-    required this.id,
-    required this.timestamp,
-    required this.action,
-    required this.entityType,
-    required this.userId,
+    this.id,
+    this.timestamp,
+    this.action,
+    this.entityType,
+    this.userId,
+    this.user,
     this.data,
     this.description,
   });
 
-  factory Audit.fromJson(Map<String, dynamic> json) {
-    final audit = Audit(
-      id: json['id'],
-      timestamp: DateTime.parse(json['timestamp']),
-      action: AuditAction.values
-          .firstWhere((e) => e.toString() == 'AuditAction.${json['action']}'),
-      entityType: json['entityType'],
-      userId: json['userId'],
-    );
+  factory Audit.fromJson(Map<String, dynamic> json) => Audit(
+      id: json['id'] as int?,
+      timestamp:
+          json['timestamp'] != null ? DateTime.parse(json['timestamp']) : null,
+      action: AuditAction.values.byName(json['action']),
+      entityType: json['entityType'] as String?,
+      userId: json['userId'] as int?,
+      user: json['user'] != null
+          ? User.fromJson(json['user'] as Map<String, dynamic>)
+          : null,
+      data: json['data'] as Map<String, dynamic>?,
+      description: json['description'] as String?);
 
-    if (json['user'] != null) {
-      audit.user = User.fromJson(json['user']);
-    }
-
-    return audit;
+  Audit copyWith({
+    int? id,
+    DateTime? timestamp,
+    AuditAction? action,
+    String? entityType,
+    int? userId,
+    User? user,
+    Map<String, dynamic>? data,
+    String? description,
+  }) {
+    return Audit(
+        id: id ?? this.id,
+        timestamp: timestamp ?? this.timestamp,
+        action: action ?? this.action,
+        entityType: entityType ?? this.entityType,
+        userId: userId ?? this.userId,
+        user: user ?? this.user,
+        data: data ?? this.data,
+        description: description ?? this.description);
   }
+
+  Audit copyWithInstance(Audit audit) {
+    return Audit(
+        id: audit.id ?? id,
+        timestamp: audit.timestamp ?? timestamp,
+        action: audit.action ?? action,
+        entityType: audit.entityType ?? entityType,
+        userId: audit.userId ?? userId,
+        user: audit.user ?? user,
+        data: audit.data ?? data,
+        description: audit.description ?? description);
+  }
+
+  @override
+  Map<String, dynamic> toJson() => ({
+        if (id != null) 'id': id,
+        if (timestamp != null) 'timestamp': timestamp,
+        if (action != null) 'action': action,
+        if (entityType != null) 'entityType': entityType,
+        if (userId != null) 'userId': userId,
+        if (user != null) 'user': user,
+        if (data != null) 'data': data,
+        if (description != null) 'description': description
+      });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Audit &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          timestamp == other.timestamp &&
+          action == other.action &&
+          entityType == other.entityType &&
+          userId == other.userId &&
+          user == other.user &&
+          data == other.data &&
+          description == other.description;
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      timestamp.hashCode ^
+      action.hashCode ^
+      entityType.hashCode ^
+      userId.hashCode ^
+      user.hashCode ^
+      data.hashCode ^
+      description.hashCode;
 }

@@ -1,0 +1,2 @@
+//***  AUTO-GENERATED FILE - DO NOT MODIFY ***//
+enum AuditAction { CREATE, UPDATE, DELETE }
