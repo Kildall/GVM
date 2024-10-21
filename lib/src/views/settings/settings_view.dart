@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 import 'package:gvm_flutter/src/settings/settings_controller.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingsView extends StatefulWidget {
   const SettingsView({super.key, required this.controller});
@@ -30,16 +30,16 @@ class _SettingsViewState extends State<SettingsView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (user != null) ...[
-                Text('User Information',
+                Text(AppLocalizations.of(context).userInformation,
                     style: Theme.of(context).textTheme.titleMedium),
                 SizedBox(height: 8),
-                Text('Name: ${user.name}'),
-                Text('Email: ${user.email}'),
+                Text('${AppLocalizations.of(context).name}: ${user.name}'),
+                Text('${AppLocalizations.of(context).email}: ${user.email}'),
                 SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Debug Mode',
+                    Text(AppLocalizations.of(context).debugMode,
                         style: Theme.of(context).textTheme.titleSmall),
                     Switch(
                       value: _debugMode,
@@ -53,7 +53,7 @@ class _SettingsViewState extends State<SettingsView> {
                   ],
                 ),
                 if (_debugMode) ...[
-                  Text('Permissions:',
+                  Text(AppLocalizations.of(context).permissions,
                       style: Theme.of(context).textTheme.titleSmall),
                   SizedBox(height: 8),
                   Container(
@@ -78,29 +78,29 @@ class _SettingsViewState extends State<SettingsView> {
               ],
               ElevatedButton(
                 onPressed: () => AuthManager.instance.logout(),
-                child: Text('Logout'),
+                child: Text(AppLocalizations.of(context).logout),
               ),
               SizedBox(height: 16),
               Divider(),
               SizedBox(height: 16),
-              Text('Theme Settings',
+              Text(AppLocalizations.of(context).themeSettings,
                   style: Theme.of(context).textTheme.titleMedium),
               SizedBox(height: 16),
               DropdownButton<ThemeMode>(
                 value: widget.controller.themeMode,
                 onChanged: widget.controller.updateThemeMode,
-                items: const [
+                items: [
                   DropdownMenuItem(
                     value: ThemeMode.system,
-                    child: Text('System Theme'),
+                    child: Text(AppLocalizations.of(context).systemTheme),
                   ),
                   DropdownMenuItem(
                     value: ThemeMode.light,
-                    child: Text('Light Theme'),
+                    child: Text(AppLocalizations.of(context).lightTheme),
                   ),
                   DropdownMenuItem(
                     value: ThemeMode.dark,
-                    child: Text('Dark Theme'),
+                    child: Text(AppLocalizations.of(context).darkTheme),
                   )
                 ],
               ),

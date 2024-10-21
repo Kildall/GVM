@@ -104,6 +104,10 @@
   "@email": {
     "description": "Label for user's email"
   },
+  "permissions": "Permisos",
+  "@permissions": {
+    "description": "Label for permissions"
+  },
   "debugMode": "Modo de depuración",
   "@debugMode": {
     "description": "Label for debug mode toggle"
