@@ -21,7 +21,7 @@ class _SettingsViewState extends State<SettingsView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).settingsPageTitle),
+        title: Text(AppLocalizations.of(context).settingsHomeTitle),
       ),
       body: SingleChildScrollView(
         child: Padding(

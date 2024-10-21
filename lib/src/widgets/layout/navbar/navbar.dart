@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 import 'package:gvm_flutter/src/settings/settings_controller.dart';
+import 'package:gvm_flutter/src/views/employees/employees_home.dart';
 import 'package:gvm_flutter/src/views/home/home_dashboard.dart';
+import 'package:gvm_flutter/src/views/products/products_home.dart';
+import 'package:gvm_flutter/src/views/sales/sales_home.dart';
 import 'package:gvm_flutter/src/views/settings/settings_view.dart';
 
 class NavItem {
@@ -26,11 +30,9 @@ List<NavItem> getNavItems(
       user.hasPermission('purchase.browse')) {
     navItems.add(NavItem(
       item: BottomNavigationBarItem(
-          icon: Icon(Icons.inventory), label: 'Products'),
-      widget: Center(
-        child: Text('Products Page',
-            style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
-      ),
+          icon: Icon(Icons.inventory),
+          label: AppLocalizations.of(context).productsHomeTitle),
+      widget: const ProductsHome(),
     ));
   }
 
@@ -39,11 +41,9 @@ List<NavItem> getNavItems(
       user.hasPermission('customer.browse')) {
     navItems.add(NavItem(
       item: BottomNavigationBarItem(
-          icon: Icon(Icons.point_of_sale), label: 'Sales'),
-      widget: Center(
-        child: Text('Sales Page',
-            style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
-      ),
+          icon: Icon(Icons.point_of_sale),
+          label: AppLocalizations.of(context).salesHomeTitle),
+      widget: const SalesHome(),
     ));
   }
 
@@ -51,29 +51,26 @@ List<NavItem> getNavItems(
   navItems.add(NavItem(
     item: BottomNavigationBarItem(
         icon: Icon(Icons.add_business),
-        label: 'Home',
+        label: AppLocalizations.of(context).dashboardHomeTitle,
         backgroundColor: Theme.of(context).colorScheme.onPrimary),
-    widget: Center(
-      child: HomeDashboard(),
-    ),
+    widget: const HomeDashboard(),
   ));
 
   // Employees
   if (user.hasPermission('employee.browse')) {
     navItems.add(NavItem(
-      item:
-          BottomNavigationBarItem(icon: Icon(Icons.badge), label: 'Employees'),
-      widget: Center(
-        child: Text('Employees Page',
-            style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
-      ),
+      item: BottomNavigationBarItem(
+          icon: Icon(Icons.badge),
+          label: AppLocalizations.of(context).employeesHomeTitle),
+      widget: const EmployeesHome(),
     ));
   }
 
   // Settings (always visible)
   navItems.add(NavItem(
-    item:
-        BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
+    item: BottomNavigationBarItem(
+        icon: Icon(Icons.settings),
+        label: AppLocalizations.of(context).settingsHomeTitle),
     widget: SettingsView(controller: settingsController),
   ));
 

@@ -88,10 +88,6 @@
   "@passwordsDoNotMatch": {
     "description": "Message for passwords do not match"
   },
-  "settingsPageTitle": "Opciones",
-  "@settingsPageTitle": {
-    "description": "Settings options"
-  },
   "userInformation": "Información del Usuario",
   "@userInformation": {
     "description": "Header for user information section"
@@ -187,5 +183,29 @@
   "pendingAssignment": "PENDIENTE DE ASIGNACIÓN",
   "@pendingAssignment": {
     "description": "Delivery status label for pending assignment"
+  },
+  "employeesHomeTitle": "Empleados",
+  "@employeesHomeTitle": {
+    "description": "Title for employees home page"
+  },
+  "productsHomeTitle": "Productos",
+  "@productsHomeTitle": {
+    "description": "Title for products home page"
+  },
+  "salesHomeTitle": "Ventas",
+  "@salesHomeTitle": {
+    "description": "Title for sales home page"
+  },
+  "deliveriesHomeTitle": "Entregas",
+  "@deliveriesHomeTitle": {
+    "description": "Title for deliveries home page"
+  },
+  "dashboardHomeTitle": "Inicio",
+  "@dashboardHomeTitle": {
+    "description": "Title for dashboard home page"
+  },
+  "settingsHomeTitle": "Opciones",
+  "@settingsHomeTitle": {
+    "description": "Title for settings home page"
   }
 }
