@@ -4,8 +4,184 @@
   "@appTitle": {
     "description": "Title for the application"
   },
+  "landingTitle": "Bienvenido a GVM",
+  "@landingTitle": {
+    "description": "Title for the landing page"
+  },
+  "login": "Iniciar sesión",
+  "@login": {
+    "description": "Label for login button"
+  },
+  "register": "Registrarse",
+  "@register": {
+    "description": "Label for register button"
+  },
+  "emailPlaceholder": "Correo electrónico",
+  "@emailPlaceholder": {
+    "description": "Placeholder for email input"
+  },
+  "passwordPlaceholder": "Contraseña",
+  "@passwordPlaceholder": {
+    "description": "Placeholder for password input"
+  },
+  "forgotPassword": "¿Olvidaste tu contraseña?",
+  "@forgotPassword": {
+    "description": "Label for forgot password"
+  },
+  "forgotPasswordText": "Por favor, contacta a soporte técnico en support@gvm.com para recuperar tu contraseña",
+  "@forgotPasswordText": {
+    "description": "Text for forgot password"
+  },
+  "backToLogin": "Volver al inicio de sesión",
+  "@backToLogin": {
+    "description": "Label for back to login"
+  },
+  "rememberMe": "Recuérdame",
+  "@rememberMe": {
+    "description": "Label for remember me"
+  },
+  "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+  "@alreadyHaveAccount": {
+    "description": "Label for already have account"
+  },
+  "namePlaceholder": "Nombre",
+  "@namePlaceholder": {
+    "description": "Placeholder for name input"
+  },
+  "confirmPassword": "Confirmar contraseña",
+  "@confirmPassword": {
+    "description": "Label for confirm password"
+  },
+  "incorrectPassword": "Contraseña incorrecta",
+  "@incorrectPassword": {
+    "description": "Message for incorrect password"
+  },
+  "userNotFound": "Usuario no encontrado",
+  "@userNotFound": {
+    "description": "Message for user not found"
+  },
+  "anErrorOccurred": "Ocurrió un error",
+  "@anErrorOccurred": {
+    "description": "Message for an error occurred"
+  },
+  "userAlreadyExists": "El usuario ya existe",
+  "@userAlreadyExists": {
+    "description": "Message for user already exists"
+  },
+  "verifyEmail": "Verificar correo electrónico",
+  "@verifyEmail": {
+    "description": "Message for verify email"
+  },
+  "verifyEmailText": "Hemos enviado un correo de verificación a tu correo electrónico. Por favor, revisa y sigue las instrucciones para completar tu registro.",
+  "@verifyEmailText": {
+    "description": "Message for verify email text"
+  },
+  "fieldRequired": "Este campo es requerido",
+  "@fieldRequired": {
+    "description": "Message for field required"
+  },
+  "invalidEmail": "Por favor, introduce una dirección de correo electrónico válida",
+  "@invalidEmail": {
+    "description": "Message for invalid email"
+  },
+  "passwordsDoNotMatch": "Las contraseñas no coinciden",
+  "@passwordsDoNotMatch": {
+    "description": "Message for passwords do not match"
+  },
   "settingsPageTitle": "Opciones",
   "@settingsPageTitle": {
     "description": "Settings options"
+  },
+  "userInformation": "Información del Usuario",
+  "@userInformation": {
+    "description": "Header for user information section"
+  },
+  "name": "Nombre",
+  "@name": {
+    "description": "Label for user's name"
+  },
+  "email": "Correo electrónico",
+  "@email": {
+    "description": "Label for user's email"
+  },
+  "debugMode": "Modo de depuración",
+  "@debugMode": {
+    "description": "Label for debug mode toggle"
+  },
+  "logout": "Cerrar sesión",
+  "@logout": {
+    "description": "Label for logout button"
+  },
+  "themeSettings": "Ajustes de tema",
+  "@themeSettings": {
+    "description": "Header for theme settings section"
+  },
+  "systemTheme": "Tema del sistema",
+  "@systemTheme": {
+    "description": "Option for system theme"
+  },
+  "lightTheme": "Tema claro",
+  "@lightTheme": {
+    "description": "Option for light theme"
+  },
+  "darkTheme": "Tema oscuro",
+  "@darkTheme": {
+    "description": "Option for dark theme"
+  },
+  "activeSales": "Ventas Activas",
+  "@activeSales": {
+    "description": "Label for active sales"
+  },
+  "activeDeliveries": "Entregas Activas",
+  "@activeDeliveries": {
+    "description": "Label for active deliveries"
+  },
+  "totalSales": "Ventas Totales",
+  "@totalSales": {
+    "description": "Label for total sales"
+  },
+  "latestSales": "Últimas Ventas",
+  "@latestSales": {
+    "description": "Header for latest sales section"
+  },
+  "date": "Fecha",
+  "@date": {
+    "description": "Label for date"
+  },
+  "total": "Total",
+  "@total": {
+    "description": "Label for total amount"
+  },
+  "products": "Productos",
+  "@products": {
+    "description": "Label for products"
+  },
+  "ongoingDeliveries": "Entregas en Curso",
+  "@ongoingDeliveries": {
+    "description": "Header for ongoing deliveries section"
+  },
+  "start": "Inicio",
+  "@start": {
+    "description": "Label for start time"
+  },
+  "address": "Dirección",
+  "@address": {
+    "description": "Label for address"
+  },
+  "started": "INICIADO",
+  "@started": {
+    "description": "Status label for started sales"
+  },
+  "completed": "COMPLETADO",
+  "@completed": {
+    "description": "Status label for completed sales"
+  },
+  "delivered": "ENTREGADO",
+  "@delivered": {
+    "description": "Delivery status label for delivered items"
+  },
+  "pendingAssignment": "PENDIENTE DE ASIGNACIÓN",
+  "@pendingAssignment": {
+    "description": "Delivery status label for pending assignment"
   }
 }

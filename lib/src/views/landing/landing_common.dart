@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LandingCommon {
   static final Color backgroundColor = Color(0xFFEEEAFF);
@@ -15,6 +16,7 @@ class LandingCommon {
     String label,
     TextEditingController controller,
     bool isPassword,
+    BuildContext context,
   ) {
     return TextFormField(
       controller: controller,
@@ -36,14 +38,14 @@ class LandingCommon {
       obscureText: isPassword,
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'This field is required';
+          return AppLocalizations.of(context).fieldRequired;
         }
         if (label == 'Email' &&
             !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-          return 'Please enter a valid email address';
+          return AppLocalizations.of(context).invalidEmail;
         }
         if (label == 'Confirm Password' && value != controller.text) {
-          return 'Passwords do not match';
+          return AppLocalizations.of(context).passwordsDoNotMatch;
         }
         return null;
       },

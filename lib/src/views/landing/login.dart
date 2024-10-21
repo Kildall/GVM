@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/services/api/api_errors.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 import 'package:gvm_flutter/src/views/landing/forgot_password.dart';
@@ -49,7 +50,7 @@ class _LoginViewState extends State<LoginView> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        'Login',
+                        AppLocalizations.of(context).login,
                         style: TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,
@@ -58,10 +59,16 @@ class _LoginViewState extends State<LoginView> {
                       ),
                       SizedBox(height: 40),
                       LandingCommon.buildTextField(
-                          'Email', _emailController, false),
+                          AppLocalizations.of(context).emailPlaceholder,
+                          _emailController,
+                          false,
+                          context),
                       SizedBox(height: 20),
                       LandingCommon.buildTextField(
-                          'Password', _passwordController, true),
+                          AppLocalizations.of(context).passwordPlaceholder,
+                          _passwordController,
+                          true,
+                          context),
                       SizedBox(height: 20),
                       Row(
                         children: [
@@ -75,14 +82,16 @@ class _LoginViewState extends State<LoginView> {
                             activeColor: LandingCommon.accentColor,
                           ),
                           Text(
-                            'Remember me',
+                            AppLocalizations.of(context).rememberMe,
                             style: TextStyle(color: LandingCommon.textColor),
                           ),
                         ],
                       ),
                       SizedBox(height: 40),
-                      LandingCommon.buildButton('Log In',
-                          _isLoading ? null : _submitForm, _isLoading),
+                      LandingCommon.buildButton(
+                          AppLocalizations.of(context).login,
+                          _isLoading ? null : _submitForm,
+                          _isLoading),
                       SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -93,7 +102,8 @@ class _LoginViewState extends State<LoginView> {
                               MaterialPageRoute(
                                   builder: (context) => ForgotPasswordView()),
                             ),
-                            child: Text('Forgot Password?',
+                            child: Text(
+                                AppLocalizations.of(context).forgotPassword,
                                 style: TextStyle(
                                     color: LandingCommon.accentColor)),
                           ),
@@ -104,7 +114,8 @@ class _LoginViewState extends State<LoginView> {
                               MaterialPageRoute(
                                   builder: (context) => SignupView()),
                             ),
-                            child: Text('Don\'t have an account?',
+                            child: Text(
+                                AppLocalizations.of(context).alreadyHaveAccount,
                                 style: TextStyle(
                                     color: LandingCommon.accentColor)),
                           ),
@@ -138,19 +149,23 @@ class _LoginViewState extends State<LoginView> {
       if (!mounted) return;
       switch (e.code) {
         case ErrorCode.INCORRECT_PASSWORD:
-          LandingCommon.showMessage(context, 'Incorrect password');
+          LandingCommon.showMessage(
+              context, AppLocalizations.of(context).incorrectPassword);
           break;
         case ErrorCode.USER_NOT_FOUND:
-          LandingCommon.showMessage(context, 'User not found');
+          LandingCommon.showMessage(
+              context, AppLocalizations.of(context).userNotFound);
           break;
         default:
-          LandingCommon.showMessage(context, 'An error occurred');
+          LandingCommon.showMessage(
+              context, AppLocalizations.of(context).anErrorOccurred);
           break;
       }
     } catch (e) {
       if (!mounted) return;
       debugPrint(e.toString());
-      LandingCommon.showMessage(context, 'An error occurred');
+      LandingCommon.showMessage(
+          context, AppLocalizations.of(context).anErrorOccurred);
     } finally {
       if (mounted) {
         setState(() {

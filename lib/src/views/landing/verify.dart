@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VerifyView extends StatelessWidget {
   const VerifyView({super.key});
@@ -39,7 +40,7 @@ class VerifyView extends StatelessWidget {
                 ),
                 SizedBox(height: 40),
                 Text(
-                  'Verify Your Email',
+                  AppLocalizations.of(context).verifyEmail,
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -50,7 +51,7 @@ class VerifyView extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40),
                   child: Text(
-                    'We\'ve sent a verification email to your inbox. Please check and follow the instructions to complete your registration.',
+                    AppLocalizations.of(context).verifyEmailText,
                     textAlign: TextAlign.center,
                     style: TextStyle(color: textColor),
                   ),
@@ -67,7 +68,7 @@ class VerifyView extends StatelessWidget {
                       borderRadius: BorderRadius.circular(25),
                     ),
                   ),
-                  child: Text('Back to Login'),
+                  child: Text(AppLocalizations.of(context).backToLogin),
                 ),
               ],
             ),

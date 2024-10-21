@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/views/landing/landing_common.dart';
 
 class ForgotPasswordView extends StatelessWidget {
@@ -35,7 +36,7 @@ class ForgotPasswordView extends StatelessWidget {
                 ),
                 SizedBox(height: 40),
                 Text(
-                  'Forgot Password?',
+                  AppLocalizations.of(context).forgotPassword,
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -46,7 +47,7 @@ class ForgotPasswordView extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40),
                   child: Text(
-                    'Please contact support@gvm.ar for assistance in resetting your password.',
+                    AppLocalizations.of(context).forgotPasswordText,
                     textAlign: TextAlign.center,
                     style: TextStyle(color: LandingCommon.textColor),
                   ),
@@ -62,7 +63,7 @@ class ForgotPasswordView extends StatelessWidget {
                       borderRadius: BorderRadius.circular(25),
                     ),
                   ),
-                  child: Text('Back to Login'),
+                  child: Text(AppLocalizations.of(context).backToLogin),
                 ),
               ],
             ),

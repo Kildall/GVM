@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/views/landing/landing_common.dart';
 import 'package:gvm_flutter/src/views/landing/login.dart';
 import 'package:gvm_flutter/src/views/landing/signup.dart';
@@ -47,7 +48,7 @@ class LandingView extends StatelessWidget {
                 ),
                 SizedBox(height: 20),
                 Text(
-                  'Welcome to GVM',
+                  AppLocalizations.of(context).landingTitle,
                   style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
@@ -56,7 +57,7 @@ class LandingView extends StatelessWidget {
                 ),
                 SizedBox(height: 40),
                 LandingCommon.buildButton(
-                  'Login',
+                  AppLocalizations.of(context).login,
                   () => Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => LoginView()),
@@ -65,7 +66,7 @@ class LandingView extends StatelessWidget {
                 ),
                 SizedBox(height: 20),
                 LandingCommon.buildButton(
-                  'Sign Up',
+                  AppLocalizations.of(context).register,
                   () => Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => SignupView()),
