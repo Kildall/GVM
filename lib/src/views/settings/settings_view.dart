@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 import 'package:gvm_flutter/src/settings/settings_controller.dart';
+import 'package:gvm_flutter/src/widgets/language_dropdown.dart';
 
 class SettingsView extends StatefulWidget {
   const SettingsView({super.key, required this.controller});
@@ -104,6 +105,8 @@ class _SettingsViewState extends State<SettingsView> {
                   )
                 ],
               ),
+              SizedBox(height: 24),
+              const LanguageDropdown(),
             ],
           ),
         ),

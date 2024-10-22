@@ -207,5 +207,9 @@
   "settingsHomeTitle": "Opciones",
   "@settingsHomeTitle": {
     "description": "Title for settings home page"
+  },
+  "changeLanguage": "Cambiar idioma",
+  "@changeLanguage": {
+    "description": "Label for change language button"
   }
 }
