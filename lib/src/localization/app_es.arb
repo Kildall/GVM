@@ -211,5 +211,9 @@
   "changeLanguage": "Cambiar idioma",
   "@changeLanguage": {
     "description": "Label for change language button"
+  },
+  "languageSettings": "Ajustes de idioma",
+  "@languageSettings": {
+    "description": "Header for language settings section"
   }
 }
