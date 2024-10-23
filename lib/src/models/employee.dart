@@ -1,10 +1,10 @@
 //***  AUTO-GENERATED FILE - DO NOT MODIFY ***//
 
+import 'delivery.dart';
+import 'employee_delivery.dart';
 import 'model_base.dart';
 import 'purchase.dart';
 import 'sale.dart';
-import 'delivery.dart';
-import 'employee_delivery.dart';
 import 'user.dart';
 
 class Employee implements ToJson, Id {
@@ -19,10 +19,6 @@ class Employee implements ToJson, Id {
   List<EmployeeDelivery>? employeeDelivery;
   User? user;
   int? userId;
-  int? $purchasesCount;
-  int? $salesCount;
-  int? $deliveriesCount;
-  int? $employeeDeliveryCount;
 
   Employee({
     this.id,
@@ -35,10 +31,6 @@ class Employee implements ToJson, Id {
     this.employeeDelivery,
     this.user,
     this.userId,
-    this.$purchasesCount,
-    this.$salesCount,
-    this.$deliveriesCount,
-    this.$employeeDeliveryCount,
   });
 
   factory Employee.fromJson(Map<String, dynamic> json) => Employee(
@@ -62,11 +54,7 @@ class Employee implements ToJson, Id {
       user: json['user'] != null
           ? User.fromJson(json['user'] as Map<String, dynamic>)
           : null,
-      userId: json['userId'] as int?,
-      $purchasesCount: json['_count']?['purchases'] as int?,
-      $salesCount: json['_count']?['sales'] as int?,
-      $deliveriesCount: json['_count']?['deliveries'] as int?,
-      $employeeDeliveryCount: json['_count']?['employeeDelivery'] as int?);
+      userId: json['userId'] as int?);
 
   Employee copyWith({
     int? id,
@@ -94,12 +82,7 @@ class Employee implements ToJson, Id {
         deliveries: deliveries ?? this.deliveries,
         employeeDelivery: employeeDelivery ?? this.employeeDelivery,
         user: user ?? this.user,
-        userId: userId ?? this.userId,
-        $purchasesCount: $purchasesCount ?? this.$purchasesCount,
-        $salesCount: $salesCount ?? this.$salesCount,
-        $deliveriesCount: $deliveriesCount ?? this.$deliveriesCount,
-        $employeeDeliveryCount:
-            $employeeDeliveryCount ?? this.$employeeDeliveryCount);
+        userId: userId ?? this.userId);
   }
 
   Employee copyWithInstance(Employee employee) {
@@ -113,12 +96,7 @@ class Employee implements ToJson, Id {
         deliveries: employee.deliveries ?? deliveries,
         employeeDelivery: employee.employeeDelivery ?? employeeDelivery,
         user: employee.user ?? user,
-        userId: employee.userId ?? userId,
-        $purchasesCount: employee.$purchasesCount ?? $purchasesCount,
-        $salesCount: employee.$salesCount ?? $salesCount,
-        $deliveriesCount: employee.$deliveriesCount ?? $deliveriesCount,
-        $employeeDeliveryCount:
-            employee.$employeeDeliveryCount ?? $employeeDeliveryCount);
+        userId: employee.userId ?? userId);
   }
 
   @override
@@ -138,17 +116,6 @@ class Employee implements ToJson, Id {
               employeeDelivery?.map((item) => item.toJson()).toList(),
         if (user != null) 'user': user,
         if (userId != null) 'userId': userId,
-        if ($purchasesCount != null ||
-            $salesCount != null ||
-            $deliveriesCount != null ||
-            $employeeDeliveryCount != null)
-          '_count': {
-            if ($purchasesCount != null) 'purchases': $purchasesCount,
-            if ($salesCount != null) 'sales': $salesCount,
-            if ($deliveriesCount != null) 'deliveries': $deliveriesCount,
-            if ($employeeDeliveryCount != null)
-              'employeeDelivery': $employeeDeliveryCount,
-          },
       });
 
   @override
@@ -165,11 +132,7 @@ class Employee implements ToJson, Id {
           areListsEqual(deliveries, other.deliveries) &&
           areListsEqual(employeeDelivery, other.employeeDelivery) &&
           user == other.user &&
-          userId == other.userId &&
-          $purchasesCount == other.$purchasesCount &&
-          $salesCount == other.$salesCount &&
-          $deliveriesCount == other.$deliveriesCount &&
-          $employeeDeliveryCount == other.$employeeDeliveryCount;
+          userId == other.userId;
 
   @override
   int get hashCode =>
@@ -182,9 +145,5 @@ class Employee implements ToJson, Id {
       deliveries.hashCode ^
       employeeDelivery.hashCode ^
       user.hashCode ^
-      userId.hashCode ^
-      $purchasesCount.hashCode ^
-      $salesCount.hashCode ^
-      $deliveriesCount.hashCode ^
-      $employeeDeliveryCount.hashCode;
+      userId.hashCode;
 }

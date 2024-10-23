@@ -1,5 +1,6 @@
 import 'dart:developer' as developer;
 
+import 'package:flutter/material.dart';
 import 'package:gvm_flutter/src/models/response/generic_responses.dart';
 import 'package:gvm_flutter/src/services/api/api_errors.dart';
 import 'package:gvm_flutter/src/services/http_service.dart';
@@ -19,6 +20,7 @@ class APIService {
   void _handleErrors(List<APIError> errors) {
     if (errors.isEmpty) return;
 
+    debugPrint('API errors: $errors');
     final error = errors.first;
     final errorCode = ErrorCode.values.firstWhere(
         (e) => e.index == error.code - 1000,
