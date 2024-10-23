@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 import 'package:gvm_flutter/src/settings/settings_controller.dart';
+import 'package:gvm_flutter/src/widgets/language_dropdown.dart';
 
 class SettingsView extends StatefulWidget {
   const SettingsView({super.key, required this.controller});
@@ -36,6 +37,35 @@ class _SettingsViewState extends State<SettingsView> {
                 Text('${AppLocalizations.of(context).name}: ${user.name}'),
                 Text('${AppLocalizations.of(context).email}: ${user.email}'),
                 SizedBox(height: 16),
+              ],
+              Text(AppLocalizations.of(context).themeSettings,
+                  style: Theme.of(context).textTheme.titleMedium),
+              SizedBox(height: 16),
+              DropdownButton<ThemeMode>(
+                value: widget.controller.themeMode,
+                onChanged: widget.controller.updateThemeMode,
+                items: [
+                  DropdownMenuItem(
+                    value: ThemeMode.system,
+                    child: Text(AppLocalizations.of(context).systemTheme),
+                  ),
+                  DropdownMenuItem(
+                    value: ThemeMode.light,
+                    child: Text(AppLocalizations.of(context).lightTheme),
+                  ),
+                  DropdownMenuItem(
+                    value: ThemeMode.dark,
+                    child: Text(AppLocalizations.of(context).darkTheme),
+                  )
+                ],
+              ),
+              SizedBox(height: 24),
+              Text(AppLocalizations.of(context).languageSettings,
+                  style: Theme.of(context).textTheme.titleMedium),
+              SizedBox(height: 16),
+              const LanguageDropdown(),
+              Divider(),
+              if (user != null) ...[
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -76,33 +106,12 @@ class _SettingsViewState extends State<SettingsView> {
                 ],
                 SizedBox(height: 24),
               ],
-              ElevatedButton(
-                onPressed: () => AuthManager.instance.logout(),
-                child: Text(AppLocalizations.of(context).logout),
-              ),
               SizedBox(height: 16),
-              Divider(),
-              SizedBox(height: 16),
-              Text(AppLocalizations.of(context).themeSettings,
-                  style: Theme.of(context).textTheme.titleMedium),
-              SizedBox(height: 16),
-              DropdownButton<ThemeMode>(
-                value: widget.controller.themeMode,
-                onChanged: widget.controller.updateThemeMode,
-                items: [
-                  DropdownMenuItem(
-                    value: ThemeMode.system,
-                    child: Text(AppLocalizations.of(context).systemTheme),
-                  ),
-                  DropdownMenuItem(
-                    value: ThemeMode.light,
-                    child: Text(AppLocalizations.of(context).lightTheme),
-                  ),
-                  DropdownMenuItem(
-                    value: ThemeMode.dark,
-                    child: Text(AppLocalizations.of(context).darkTheme),
-                  )
-                ],
+              Center(
+                child: ElevatedButton(
+                  onPressed: () => AuthManager.instance.logout(),
+                  child: Text(AppLocalizations.of(context).logout),
+                ),
               ),
             ],
           ),

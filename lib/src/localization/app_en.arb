@@ -1,0 +1,219 @@
+{
+    "@@locale": "en",
+    "appTitle": "GVM",
+    "@appTitle": {
+        "description": "Title for the application"
+    },
+    "landingTitle": "Welcome to GVM",
+    "@landingTitle": {
+        "description": "Title for the landing page"
+    },
+    "login": "Login",
+    "@login": {
+        "description": "Label for login button"
+    },
+    "register": "Register",
+    "@register": {
+        "description": "Label for register button"
+    },
+    "emailPlaceholder": "Email",
+    "@emailPlaceholder": {
+        "description": "Placeholder for email input"
+    },
+    "passwordPlaceholder": "Password",
+    "@passwordPlaceholder": {
+        "description": "Placeholder for password input"
+    },
+    "forgotPassword": "Forgot your password?",
+    "@forgotPassword": {
+        "description": "Label for forgot password"
+    },
+    "forgotPasswordText": "Please contact technical support at support@gvm.com to recover your password",
+    "@forgotPasswordText": {
+        "description": "Text for forgot password"
+    },
+    "backToLogin": "Back to login",
+    "@backToLogin": {
+        "description": "Label for back to login"
+    },
+    "rememberMe": "Remember me",
+    "@rememberMe": {
+        "description": "Label for remember me"
+    },
+    "alreadyHaveAccount": "Already have an account?",
+    "@alreadyHaveAccount": {
+        "description": "Label for already have account"
+    },
+    "namePlaceholder": "Name",
+    "@namePlaceholder": {
+        "description": "Placeholder for name input"
+    },
+    "confirmPassword": "Confirm password",
+    "@confirmPassword": {
+        "description": "Label for confirm password"
+    },
+    "incorrectPassword": "Incorrect password",
+    "@incorrectPassword": {
+        "description": "Message for incorrect password"
+    },
+    "userNotFound": "User not found",
+    "@userNotFound": {
+        "description": "Message for user not found"
+    },
+    "anErrorOccurred": "An error occurred",
+    "@anErrorOccurred": {
+        "description": "Message for an error occurred"
+    },
+    "userAlreadyExists": "User already exists",
+    "@userAlreadyExists": {
+        "description": "Message for user already exists"
+    },
+    "verifyEmail": "Verify email",
+    "@verifyEmail": {
+        "description": "Message for verify email"
+    },
+    "verifyEmailText": "We have sent a verification email to your email address. Please check and follow the instructions to complete your registration.",
+    "@verifyEmailText": {
+        "description": "Message for verify email text"
+    },
+    "fieldRequired": "This field is required",
+    "@fieldRequired": {
+        "description": "Message for field required"
+    },
+    "invalidEmail": "Please enter a valid email address",
+    "@invalidEmail": {
+        "description": "Message for invalid email"
+    },
+    "passwordsDoNotMatch": "Passwords do not match",
+    "@passwordsDoNotMatch": {
+        "description": "Message for passwords do not match"
+    },
+    "userInformation": "User Information",
+    "@userInformation": {
+        "description": "Header for user information section"
+    },
+    "name": "Name",
+    "@name": {
+        "description": "Label for user's name"
+    },
+    "email": "Email",
+    "@email": {
+        "description": "Label for user's email"
+    },
+    "permissions": "Permissions",
+    "@permissions": {
+        "description": "Label for permissions"
+    },
+    "debugMode": "Debug mode",
+    "@debugMode": {
+        "description": "Label for debug mode toggle"
+    },
+    "logout": "Logout",
+    "@logout": {
+        "description": "Label for logout button"
+    },
+    "themeSettings": "Theme Settings",
+    "@themeSettings": {
+        "description": "Header for theme settings section"
+    },
+    "systemTheme": "System theme",
+    "@systemTheme": {
+        "description": "Option for system theme"
+    },
+    "lightTheme": "Light theme",
+    "@lightTheme": {
+        "description": "Option for light theme"
+    },
+    "darkTheme": "Dark theme",
+    "@darkTheme": {
+        "description": "Option for dark theme"
+    },
+    "activeSales": "Active Sales",
+    "@activeSales": {
+        "description": "Label for active sales"
+    },
+    "activeDeliveries": "Active Deliveries",
+    "@activeDeliveries": {
+        "description": "Label for active deliveries"
+    },
+    "totalSales": "Total Sales",
+    "@totalSales": {
+        "description": "Label for total sales"
+    },
+    "latestSales": "Latest Sales",
+    "@latestSales": {
+        "description": "Header for latest sales section"
+    },
+    "date": "Date",
+    "@date": {
+        "description": "Label for date"
+    },
+    "total": "Total",
+    "@total": {
+        "description": "Label for total amount"
+    },
+    "products": "Products",
+    "@products": {
+        "description": "Label for products"
+    },
+    "ongoingDeliveries": "Ongoing Deliveries",
+    "@ongoingDeliveries": {
+        "description": "Header for ongoing deliveries section"
+    },
+    "start": "Start",
+    "@start": {
+        "description": "Label for start time"
+    },
+    "address": "Address",
+    "@address": {
+        "description": "Label for address"
+    },
+    "started": "STARTED",
+    "@started": {
+        "description": "Status label for started sales"
+    },
+    "completed": "COMPLETED",
+    "@completed": {
+        "description": "Status label for completed sales"
+    },
+    "delivered": "DELIVERED",
+    "@delivered": {
+        "description": "Delivery status label for delivered items"
+    },
+    "pendingAssignment": "PENDING ASSIGNMENT",
+    "@pendingAssignment": {
+        "description": "Delivery status label for pending assignment"
+    },
+    "employeesHomeTitle": "Employees",
+    "@employeesHomeTitle": {
+        "description": "Title for employees home page"
+    },
+    "productsHomeTitle": "Products",
+    "@productsHomeTitle": {
+        "description": "Title for products home page"
+    },
+    "salesHomeTitle": "Sales",
+    "@salesHomeTitle": {
+        "description": "Title for sales home page"
+    },
+    "deliveriesHomeTitle": "Deliveries",
+    "@deliveriesHomeTitle": {
+        "description": "Title for deliveries home page"
+    },
+    "dashboardHomeTitle": "Home",
+    "@dashboardHomeTitle": {
+        "description": "Title for dashboard home page"
+    },
+    "settingsHomeTitle": "Settings",
+    "@settingsHomeTitle": {
+        "description": "Title for settings home page"
+    },
+    "changeLanguage": "Change Language",
+    "@changeLanguage": {
+        "description": "Label for change language button"
+    },
+    "languageSettings": "Language Settings",
+    "@languageSettings": {
+        "description": "Header for language settings section"
+    }
+}

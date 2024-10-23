@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:gvm_flutter/src/providers/locale_provider.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
+import 'package:provider/provider.dart';
 
 import 'src/app.dart';
-import 'src/settings/settings_controller.dart';
 import 'src/services/settings_service.dart';
+import 'src/settings/settings_controller.dart';
 
 void main() async {
   await dotenv.load(fileName: '.env');
@@ -23,5 +25,8 @@ void main() async {
   // Run the app and pass in the SettingsController. The app listens to the
   // SettingsController for changes, then passes it further down to the
   // SettingsView.
-  runApp(GVMApp(settingsController: settingsController));
+  runApp(ChangeNotifierProvider(
+    create: (context) => LocaleProvider(),
+    child: GVMApp(settingsController: settingsController),
+  ));
 }

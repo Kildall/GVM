@@ -1,0 +1,219 @@
+{
+    "@@locale": "pt",
+    "appTitle": "GVM",
+    "@appTitle": {
+        "description": "Title for the application"
+    },
+    "landingTitle": "Bem-vindo ao GVM",
+    "@landingTitle": {
+        "description": "Title for the landing page"
+    },
+    "login": "Entrar",
+    "@login": {
+        "description": "Label for login button"
+    },
+    "register": "Cadastrar",
+    "@register": {
+        "description": "Label for register button"
+    },
+    "emailPlaceholder": "E-mail",
+    "@emailPlaceholder": {
+        "description": "Placeholder for email input"
+    },
+    "passwordPlaceholder": "Senha",
+    "@passwordPlaceholder": {
+        "description": "Placeholder for password input"
+    },
+    "forgotPassword": "Esqueceu sua senha?",
+    "@forgotPassword": {
+        "description": "Label for forgot password"
+    },
+    "forgotPasswordText": "Por favor, entre em contato com o suporte técnico em support@gvm.com para recuperar sua senha",
+    "@forgotPasswordText": {
+        "description": "Text for forgot password"
+    },
+    "backToLogin": "Voltar ao login",
+    "@backToLogin": {
+        "description": "Label for back to login"
+    },
+    "rememberMe": "Lembrar-me",
+    "@rememberMe": {
+        "description": "Label for remember me"
+    },
+    "alreadyHaveAccount": "Já tem uma conta?",
+    "@alreadyHaveAccount": {
+        "description": "Label for already have account"
+    },
+    "namePlaceholder": "Nome",
+    "@namePlaceholder": {
+        "description": "Placeholder for name input"
+    },
+    "confirmPassword": "Confirmar senha",
+    "@confirmPassword": {
+        "description": "Label for confirm password"
+    },
+    "incorrectPassword": "Senha incorreta",
+    "@incorrectPassword": {
+        "description": "Message for incorrect password"
+    },
+    "userNotFound": "Usuário não encontrado",
+    "@userNotFound": {
+        "description": "Message for user not found"
+    },
+    "anErrorOccurred": "Ocorreu um erro",
+    "@anErrorOccurred": {
+        "description": "Message for an error occurred"
+    },
+    "userAlreadyExists": "O usuário já existe",
+    "@userAlreadyExists": {
+        "description": "Message for user already exists"
+    },
+    "verifyEmail": "Verificar e-mail",
+    "@verifyEmail": {
+        "description": "Message for verify email"
+    },
+    "verifyEmailText": "Enviamos um e-mail de verificação para seu endereço. Por favor, verifique e siga as instruções para completar seu cadastro.",
+    "@verifyEmailText": {
+        "description": "Message for verify email text"
+    },
+    "fieldRequired": "Este campo é obrigatório",
+    "@fieldRequired": {
+        "description": "Message for field required"
+    },
+    "invalidEmail": "Por favor, insira um endereço de e-mail válido",
+    "@invalidEmail": {
+        "description": "Message for invalid email"
+    },
+    "passwordsDoNotMatch": "As senhas não coincidem",
+    "@passwordsDoNotMatch": {
+        "description": "Message for passwords do not match"
+    },
+    "userInformation": "Informações do Usuário",
+    "@userInformation": {
+        "description": "Header for user information section"
+    },
+    "name": "Nome",
+    "@name": {
+        "description": "Label for user's name"
+    },
+    "email": "E-mail",
+    "@email": {
+        "description": "Label for user's email"
+    },
+    "permissions": "Permissões",
+    "@permissions": {
+        "description": "Label for permissions"
+    },
+    "debugMode": "Modo de depuração",
+    "@debugMode": {
+        "description": "Label for debug mode toggle"
+    },
+    "logout": "Sair",
+    "@logout": {
+        "description": "Label for logout button"
+    },
+    "themeSettings": "Configurações de tema",
+    "@themeSettings": {
+        "description": "Header for theme settings section"
+    },
+    "systemTheme": "Tema do sistema",
+    "@systemTheme": {
+        "description": "Option for system theme"
+    },
+    "lightTheme": "Tema claro",
+    "@lightTheme": {
+        "description": "Option for light theme"
+    },
+    "darkTheme": "Tema escuro",
+    "@darkTheme": {
+        "description": "Option for dark theme"
+    },
+    "activeSales": "Vendas Ativas",
+    "@activeSales": {
+        "description": "Label for active sales"
+    },
+    "activeDeliveries": "Entregas Ativas",
+    "@activeDeliveries": {
+        "description": "Label for active deliveries"
+    },
+    "totalSales": "Vendas Totais",
+    "@totalSales": {
+        "description": "Label for total sales"
+    },
+    "latestSales": "Últimas Vendas",
+    "@latestSales": {
+        "description": "Header for latest sales section"
+    },
+    "date": "Data",
+    "@date": {
+        "description": "Label for date"
+    },
+    "total": "Total",
+    "@total": {
+        "description": "Label for total amount"
+    },
+    "products": "Produtos",
+    "@products": {
+        "description": "Label for products"
+    },
+    "ongoingDeliveries": "Entregas em Andamento",
+    "@ongoingDeliveries": {
+        "description": "Header for ongoing deliveries section"
+    },
+    "start": "Início",
+    "@start": {
+        "description": "Label for start time"
+    },
+    "address": "Endereço",
+    "@address": {
+        "description": "Label for address"
+    },
+    "started": "INICIADO",
+    "@started": {
+        "description": "Status label for started sales"
+    },
+    "completed": "CONCLUÍDO",
+    "@completed": {
+        "description": "Status label for completed sales"
+    },
+    "delivered": "ENTREGUE",
+    "@delivered": {
+        "description": "Delivery status label for delivered items"
+    },
+    "pendingAssignment": "AGUARDANDO ATRIBUIÇÃO",
+    "@pendingAssignment": {
+        "description": "Delivery status label for pending assignment"
+    },
+    "employeesHomeTitle": "Funcionários",
+    "@employeesHomeTitle": {
+        "description": "Title for employees home page"
+    },
+    "productsHomeTitle": "Produtos",
+    "@productsHomeTitle": {
+        "description": "Title for products home page"
+    },
+    "salesHomeTitle": "Vendas",
+    "@salesHomeTitle": {
+        "description": "Title for sales home page"
+    },
+    "deliveriesHomeTitle": "Entregas",
+    "@deliveriesHomeTitle": {
+        "description": "Title for deliveries home page"
+    },
+    "dashboardHomeTitle": "Início",
+    "@dashboardHomeTitle": {
+        "description": "Title for dashboard home page"
+    },
+    "settingsHomeTitle": "Opções",
+    "@settingsHomeTitle": {
+        "description": "Title for settings home page"
+    },
+    "changeLanguage": "Mudar idioma",
+    "@changeLanguage": {
+        "description": "Label for change language button"
+    },
+    "languageSettings": "Ajustes de idioma",
+    "@languageSettings": {
+        "description": "Header for language settings section"
+    }
+}
