@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/response/entity_responses.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 import 'package:gvm_flutter/src/views/employees/entities/entity_add.dart';
 import 'package:gvm_flutter/src/views/employees/entities/entity_read.dart';
+import 'package:gvm_flutter/src/views/employees/entities/utils.dart';
 
 class EntitiesBrowse extends StatefulWidget {
   const EntitiesBrowse({super.key});
@@ -22,6 +24,17 @@ class _EntitiesBrowseState extends State<EntitiesBrowse> {
   void initState() {
     super.initState();
     _loadEntities();
+  }
+
+  String _mapEntityTypeToName(EntityType type) {
+    switch (type) {
+      case EntityType.Role:
+        return AppLocalizations.of(context).role;
+      case EntityType.Permission:
+        return AppLocalizations.of(context).permission;
+      default:
+        return AppLocalizations.of(context).unknownType;
+    }
   }
 
   Future<void> _loadEntities() async {
@@ -60,7 +73,7 @@ class _EntitiesBrowseState extends State<EntitiesBrowse> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Entities'),
+        title: Text(AppLocalizations.of(context).entities),
       ),
       body: Column(
         children: [
@@ -71,7 +84,7 @@ class _EntitiesBrowseState extends State<EntitiesBrowse> {
                 Expanded(
                   child: TextField(
                     decoration: InputDecoration(
-                      hintText: 'Search entities...',
+                      hintText: AppLocalizations.of(context).searchEntities,
                       prefixIcon: const Icon(Icons.search),
                       border: const OutlineInputBorder(),
                     ),
@@ -81,15 +94,15 @@ class _EntitiesBrowseState extends State<EntitiesBrowse> {
                 const SizedBox(width: 16),
                 DropdownButton<EntityType?>(
                   value: selectedType,
-                  hint: Text('Filter by type'),
+                  hint: Text(AppLocalizations.of(context).filterByType),
                   items: [
                     DropdownMenuItem(
                       value: null,
-                      child: Text('All'),
+                      child: Text(AppLocalizations.of(context).all),
                     ),
                     ...EntityType.values.map((type) => DropdownMenuItem(
                           value: type,
-                          child: Text(type.name),
+                          child: Text(mapEntityTypeToName(type, context)),
                         )),
                   ],
                   onChanged: (value) => setState(() => selectedType = value),
@@ -103,7 +116,7 @@ class _EntitiesBrowseState extends State<EntitiesBrowse> {
                 : entities.isEmpty
                     ? Center(
                         child: Text(
-                          'No entities found',
+                          AppLocalizations.of(context).noEntitiesFound,
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       )
@@ -160,8 +173,8 @@ class _EntityListItem extends StatelessWidget {
             color: Theme.of(context).colorScheme.primary,
           ),
         ),
-        title: Text(entity.name ?? 'Unnamed Entity'),
-        subtitle: Text(entity.type?.name ?? 'Unknown Type'),
+        title: Text(entity.name ?? AppLocalizations.of(context).unnamedEntity),
+        subtitle: Text(mapEntityTypeToName(entity.type, context)),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

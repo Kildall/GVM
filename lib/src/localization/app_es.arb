@@ -215,5 +215,130 @@
   "languageSettings": "Ajustes de idioma",
   "@languageSettings": {
     "description": "Header for language settings section"
+  },
+  "statistics": "Estadísticas",
+  "@statistics": {
+    "description": "Label for statistics"
+  },
+  "employees": "Empleados",
+  "@employees": {
+    "description": "Label for employees"
+  },
+  "entities": "Entidades",
+  "@entities": {
+    "description": "Label for entities"
+  },
+  "modules": "Módulos",
+  "@modules": {
+    "description": "Label for modules"
+  },
+  "employeeManagement": "Gestión de Empleados",
+  "@employeeManagement": {
+    "description": "Label for employee management"
+  },
+  "securityManagement": "Gestión de Seguridad",
+  "@securityManagement": {
+    "description": "Label for security management"
+  },
+  "employeeManagementDescription": "Administra tus empleados",
+  "@employeeManagementDescription": {
+    "description": "Description for employee management"
+  },
+  "securityManagementDescription": "Administra roles y permisos",
+  "@securityManagementDescription": {
+    "description": "Description for security management"
+  },
+  "unknownType": "Desconocido",
+  "@unknownType": {
+    "description": "Label for unknown type"
+  },
+  "unnamedEntity": "Entidad sin nombre",
+  "@unnamedEntity": {
+    "description": "Label for unnamed entity"
+  },
+  "searchEntities": "Buscar entidades...",
+  "@searchEntities": {
+    "description": "Placeholder for search entities"
+  },
+  "filterByType": "Filtrar por tipo",
+  "@filterByType": {
+    "description": "Label for filter by type"
+  },
+  "all": "Todos",
+  "@all": {
+    "description": "Label for all"
+  },
+  "noEntitiesFound": "No se encontraron entidades",
+  "@noEntitiesFound": {
+    "description": "Message for no entities found"
+  },
+  "role": "Rol",
+  "@role": {
+    "description": "Label for role"
+  },
+  "permission": "Permiso",
+  "@permission": {
+    "description": "Label for permission"
+  },
+  "users": "Usuarios",
+  "@users": {
+    "description": "Label for users"
+  },
+  "roles": "Roles",
+  "@roles": {
+    "description": "Label for roles"
+  },
+  "addUser": "Agregar usuario",
+  "@addUser": {
+    "description": "Label for add user"
+  },
+  "addRole": "Agregar rol",
+  "@addRole": {
+    "description": "Label for add role"
+  },
+  "addPermission": "Agregar permiso",
+  "@addPermission": {
+    "description": "Label for add permission"
+  },
+  "noUsersAssigned": "No se han asignado usuarios",
+  "@noUsersAssigned": {
+    "description": "Message for no users assigned"
+  },
+  "noRolesAssigned": "No se han asignado roles",
+  "@noRolesAssigned": {
+    "description": "Message for no roles assigned"
+  },
+  "noPermissionsAssigned": "No se han asignado permisos",
+  "@noPermissionsAssigned": {
+    "description": "Message for no permissions assigned"
+  },
+  "usersCount": "Usuarios",
+  "@usersCount": {
+    "description": "Label for users count"
+  },
+  "permissionsCount": "Permisos",
+  "@permissionsCount": {
+    "description": "Label for permissions count"
+  },
+  "rolesCount": "Roles",
+  "@rolesCount": {
+    "description": "Label for roles count"
+  },
+  "addEntity": "Agregar entidad",
+  "@addEntity": {
+    "description": "Label for add entity"
+  },
+  "entityDetails": "Detalles de la entidad",
+  "@entityDetails": {
+    "description": "Label for entity details"
+  },
+  "entityDetailsTitle": "Entidad {name}",
+  "@entityDetailsTitle": {
+    "description": "Title for entity details",
+    "placeholders": {
+      "name": {
+        "description": "Placeholder for entity name"
+      }
+    }
   }
 }

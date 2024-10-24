@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/models/response/employee_responses.dart';
 import 'package:gvm_flutter/src/models/response/entity_responses.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
@@ -54,7 +55,7 @@ class _EmployeesHomeState extends State<EmployeesHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dashboard'),
+        title: Text(AppLocalizations.of(context).employeesHomeTitle),
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -65,7 +66,7 @@ class _EmployeesHomeState extends State<EmployeesHome> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Statistics',
+                      AppLocalizations.of(context).statistics,
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
                     const SizedBox(height: 16),
@@ -74,7 +75,7 @@ class _EmployeesHomeState extends State<EmployeesHome> {
                         Expanded(
                           child: _StatisticCard(
                             icon: Icons.people,
-                            title: 'Employees',
+                            title: AppLocalizations.of(context).employees,
                             value: employeeCount.toString(),
                             color: Colors.blue,
                           ),
@@ -83,7 +84,7 @@ class _EmployeesHomeState extends State<EmployeesHome> {
                         Expanded(
                           child: _StatisticCard(
                             icon: Icons.security,
-                            title: 'Entities',
+                            title: AppLocalizations.of(context).entities,
                             value: entityCount.toString(),
                             color: Colors.green,
                           ),
@@ -92,23 +93,27 @@ class _EmployeesHomeState extends State<EmployeesHome> {
                     ),
                     const SizedBox(height: 32),
                     Text(
-                      'Modules',
+                      AppLocalizations.of(context).modules,
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
                     const SizedBox(height: 16),
                     Column(
                       children: [
                         _NavigationCard(
-                          title: 'Employee Management',
+                          title:
+                              AppLocalizations.of(context).employeeManagement,
                           icon: Icons.people_outline,
-                          description: 'Manage your employees',
+                          description: AppLocalizations.of(context)
+                              .employeeManagementDescription,
                           onTap: _navigateToEmployees,
                         ),
                         const SizedBox(width: 16),
                         _NavigationCard(
-                          title: 'Security Management',
+                          title:
+                              AppLocalizations.of(context).securityManagement,
                           icon: Icons.security_outlined,
-                          description: 'Manage roles and permissions',
+                          description: AppLocalizations.of(context)
+                              .securityManagementDescription,
                           onTap: _navigateToEntities,
                         ),
                       ],

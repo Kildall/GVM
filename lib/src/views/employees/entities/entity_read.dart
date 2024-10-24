@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/response/entity_responses.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 import 'package:gvm_flutter/src/views/employees/entities/entity_edit.dart';
+import 'package:gvm_flutter/src/views/employees/entities/utils.dart';
 
 class EntityRead extends StatefulWidget {
   final Entity entity;
@@ -65,7 +67,8 @@ class _EntityReadState extends State<EntityRead> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(entity.name ?? 'Entity Detail'),
+        title: Text(
+            AppLocalizations.of(context).entityDetailsTitle(entity.name ?? '')),
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
@@ -120,11 +123,12 @@ class _EntityReadState extends State<EntityRead> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        entity.name ?? 'Unnamed Entity',
+                        entity.name ??
+                            AppLocalizations.of(context).unnamedEntity,
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
                       Text(
-                        entity.type?.name ?? 'Unknown Type',
+                        mapEntityTypeToName(entity.type, context),
                         style: Theme.of(context)
                             .textTheme
                             .titleMedium
@@ -143,19 +147,19 @@ class _EntityReadState extends State<EntityRead> {
               children: [
                 _StatisticItem(
                   icon: Icons.people,
-                  label: 'Users',
+                  label: AppLocalizations.of(context).users,
                   value: entity.$usersCount?.toString() ?? '0',
                 ),
                 if (entity.type == EntityType.Role)
                   _StatisticItem(
                     icon: Icons.key,
-                    label: 'Permissions',
+                    label: AppLocalizations.of(context).permissions,
                     value: entity.$permissionsCount?.toString() ?? '0',
                   ),
                 if (entity.type == EntityType.Permission)
                   _StatisticItem(
                     icon: Icons.badge,
-                    label: 'Roles',
+                    label: AppLocalizations.of(context).roles,
                     value: entity.$rolesCount?.toString() ?? '0',
                   ),
               ],
@@ -174,13 +178,13 @@ class _EntityReadState extends State<EntityRead> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Users',
+              AppLocalizations.of(context).users,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             TextButton.icon(
               onPressed: _navigateToEntityEdit,
               icon: const Icon(Icons.add),
-              label: Text('Add User'),
+              label: Text(AppLocalizations.of(context).addUser),
             ),
           ],
         ),
@@ -190,7 +194,7 @@ class _EntityReadState extends State<EntityRead> {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                'No users assigned',
+                AppLocalizations.of(context).noUsersAssigned,
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
             ),
@@ -235,13 +239,13 @@ class _EntityReadState extends State<EntityRead> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Roles',
+              AppLocalizations.of(context).roles,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             TextButton.icon(
               onPressed: _navigateToEntityEdit,
               icon: const Icon(Icons.add),
-              label: Text('Add Role'),
+              label: Text(AppLocalizations.of(context).addRole),
             ),
           ],
         ),
@@ -251,7 +255,7 @@ class _EntityReadState extends State<EntityRead> {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                'No roles assigned',
+                AppLocalizations.of(context).noRolesAssigned,
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
             ),
@@ -275,7 +279,8 @@ class _EntityReadState extends State<EntityRead> {
                     leading: const CircleAvatar(
                       child: Icon(Icons.badge),
                     ),
-                    title: Text(role.name ?? 'Unnamed Role'),
+                    title: Text(role.name ??
+                        AppLocalizations.of(context).unnamedEntity),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => _navigateToEntity(role),
                   ),
@@ -295,13 +300,13 @@ class _EntityReadState extends State<EntityRead> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Permissions',
+              AppLocalizations.of(context).permissions,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             TextButton.icon(
               onPressed: _navigateToEntityEdit,
               icon: const Icon(Icons.add),
-              label: Text('Add Permission'),
+              label: Text(AppLocalizations.of(context).addPermission),
             ),
           ],
         ),
@@ -310,7 +315,7 @@ class _EntityReadState extends State<EntityRead> {
           Center(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Text('No permissions assigned'),
+              child: Text(AppLocalizations.of(context).noPermissionsAssigned),
             ),
           )
         else
@@ -329,7 +334,8 @@ class _EntityReadState extends State<EntityRead> {
                 final permission = entity.permissions![index];
                 return Card(
                   child: ListTile(
-                    title: Text(permission.name ?? 'Unnamed Permission'),
+                    title: Text(permission.name ??
+                        AppLocalizations.of(context).unnamedEntity),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => _navigateToEntity(permission),
                   ),
