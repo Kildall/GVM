@@ -1,219 +1,436 @@
 {
-    "@@locale": "pt",
-    "appTitle": "GVM",
-    "@appTitle": {
-        "description": "Title for the application"
-    },
-    "landingTitle": "Bem-vindo ao GVM",
-    "@landingTitle": {
-        "description": "Title for the landing page"
-    },
-    "login": "Entrar",
-    "@login": {
-        "description": "Label for login button"
-    },
-    "register": "Cadastrar",
-    "@register": {
-        "description": "Label for register button"
-    },
-    "emailPlaceholder": "E-mail",
-    "@emailPlaceholder": {
-        "description": "Placeholder for email input"
-    },
-    "passwordPlaceholder": "Senha",
-    "@passwordPlaceholder": {
-        "description": "Placeholder for password input"
-    },
-    "forgotPassword": "Esqueceu sua senha?",
-    "@forgotPassword": {
-        "description": "Label for forgot password"
-    },
-    "forgotPasswordText": "Por favor, entre em contato com o suporte técnico em support@gvm.com para recuperar sua senha",
-    "@forgotPasswordText": {
-        "description": "Text for forgot password"
-    },
-    "backToLogin": "Voltar ao login",
-    "@backToLogin": {
-        "description": "Label for back to login"
-    },
-    "rememberMe": "Lembrar-me",
-    "@rememberMe": {
-        "description": "Label for remember me"
-    },
-    "alreadyHaveAccount": "Já tem uma conta?",
-    "@alreadyHaveAccount": {
-        "description": "Label for already have account"
-    },
-    "namePlaceholder": "Nome",
-    "@namePlaceholder": {
-        "description": "Placeholder for name input"
-    },
-    "confirmPassword": "Confirmar senha",
-    "@confirmPassword": {
-        "description": "Label for confirm password"
-    },
-    "incorrectPassword": "Senha incorreta",
-    "@incorrectPassword": {
-        "description": "Message for incorrect password"
-    },
-    "userNotFound": "Usuário não encontrado",
-    "@userNotFound": {
-        "description": "Message for user not found"
-    },
-    "anErrorOccurred": "Ocorreu um erro",
-    "@anErrorOccurred": {
-        "description": "Message for an error occurred"
-    },
-    "userAlreadyExists": "O usuário já existe",
-    "@userAlreadyExists": {
-        "description": "Message for user already exists"
-    },
-    "verifyEmail": "Verificar e-mail",
-    "@verifyEmail": {
-        "description": "Message for verify email"
-    },
-    "verifyEmailText": "Enviamos um e-mail de verificação para seu endereço. Por favor, verifique e siga as instruções para completar seu cadastro.",
-    "@verifyEmailText": {
-        "description": "Message for verify email text"
-    },
-    "fieldRequired": "Este campo é obrigatório",
-    "@fieldRequired": {
-        "description": "Message for field required"
-    },
-    "invalidEmail": "Por favor, insira um endereço de e-mail válido",
-    "@invalidEmail": {
-        "description": "Message for invalid email"
-    },
-    "passwordsDoNotMatch": "As senhas não coincidem",
-    "@passwordsDoNotMatch": {
-        "description": "Message for passwords do not match"
-    },
-    "userInformation": "Informações do Usuário",
-    "@userInformation": {
-        "description": "Header for user information section"
-    },
-    "name": "Nome",
-    "@name": {
-        "description": "Label for user's name"
-    },
-    "email": "E-mail",
-    "@email": {
-        "description": "Label for user's email"
-    },
-    "permissions": "Permissões",
-    "@permissions": {
-        "description": "Label for permissions"
-    },
-    "debugMode": "Modo de depuração",
-    "@debugMode": {
-        "description": "Label for debug mode toggle"
-    },
-    "logout": "Sair",
-    "@logout": {
-        "description": "Label for logout button"
-    },
-    "themeSettings": "Configurações de tema",
-    "@themeSettings": {
-        "description": "Header for theme settings section"
-    },
-    "systemTheme": "Tema do sistema",
-    "@systemTheme": {
-        "description": "Option for system theme"
-    },
-    "lightTheme": "Tema claro",
-    "@lightTheme": {
-        "description": "Option for light theme"
-    },
-    "darkTheme": "Tema escuro",
-    "@darkTheme": {
-        "description": "Option for dark theme"
-    },
-    "activeSales": "Vendas Ativas",
-    "@activeSales": {
-        "description": "Label for active sales"
-    },
-    "activeDeliveries": "Entregas Ativas",
-    "@activeDeliveries": {
-        "description": "Label for active deliveries"
-    },
-    "totalSales": "Vendas Totais",
-    "@totalSales": {
-        "description": "Label for total sales"
-    },
-    "latestSales": "Últimas Vendas",
-    "@latestSales": {
-        "description": "Header for latest sales section"
-    },
-    "date": "Data",
-    "@date": {
-        "description": "Label for date"
-    },
-    "total": "Total",
-    "@total": {
-        "description": "Label for total amount"
-    },
-    "products": "Produtos",
-    "@products": {
-        "description": "Label for products"
-    },
-    "ongoingDeliveries": "Entregas em Andamento",
-    "@ongoingDeliveries": {
-        "description": "Header for ongoing deliveries section"
-    },
-    "start": "Início",
-    "@start": {
-        "description": "Label for start time"
-    },
-    "address": "Endereço",
-    "@address": {
-        "description": "Label for address"
-    },
-    "started": "INICIADO",
-    "@started": {
-        "description": "Status label for started sales"
-    },
-    "completed": "CONCLUÍDO",
-    "@completed": {
-        "description": "Status label for completed sales"
-    },
-    "delivered": "ENTREGUE",
-    "@delivered": {
-        "description": "Delivery status label for delivered items"
-    },
-    "pendingAssignment": "AGUARDANDO ATRIBUIÇÃO",
-    "@pendingAssignment": {
-        "description": "Delivery status label for pending assignment"
-    },
-    "employeesHomeTitle": "Funcionários",
-    "@employeesHomeTitle": {
-        "description": "Title for employees home page"
-    },
-    "productsHomeTitle": "Produtos",
-    "@productsHomeTitle": {
-        "description": "Title for products home page"
-    },
-    "salesHomeTitle": "Vendas",
-    "@salesHomeTitle": {
-        "description": "Title for sales home page"
-    },
-    "deliveriesHomeTitle": "Entregas",
-    "@deliveriesHomeTitle": {
-        "description": "Title for deliveries home page"
-    },
-    "dashboardHomeTitle": "Início",
-    "@dashboardHomeTitle": {
-        "description": "Title for dashboard home page"
-    },
-    "settingsHomeTitle": "Opções",
-    "@settingsHomeTitle": {
-        "description": "Title for settings home page"
-    },
-    "changeLanguage": "Mudar idioma",
-    "@changeLanguage": {
-        "description": "Label for change language button"
-    },
-    "languageSettings": "Ajustes de idioma",
-    "@languageSettings": {
-        "description": "Header for language settings section"
+  "@@locale": "pt",
+  "appTitle": "GVM",
+  "@appTitle": {
+    "description": "Title for the application"
+  },
+  "landingTitle": "Bem-vindo ao GVM",
+  "@landingTitle": {
+    "description": "Title for the landing page"
+  },
+  "login": "Entrar",
+  "@login": {
+    "description": "Label for login button"
+  },
+  "register": "Cadastrar",
+  "@register": {
+    "description": "Label for register button"
+  },
+  "emailPlaceholder": "E-mail",
+  "@emailPlaceholder": {
+    "description": "Placeholder for email input"
+  },
+  "passwordPlaceholder": "Senha",
+  "@passwordPlaceholder": {
+    "description": "Placeholder for password input"
+  },
+  "forgotPassword": "Esqueceu sua senha?",
+  "@forgotPassword": {
+    "description": "Label for forgot password"
+  },
+  "forgotPasswordText": "Por favor, entre em contato com o suporte técnico em support@gvm.com para recuperar sua senha",
+  "@forgotPasswordText": {
+    "description": "Text for forgot password"
+  },
+  "backToLogin": "Voltar ao login",
+  "@backToLogin": {
+    "description": "Label for back to login"
+  },
+  "rememberMe": "Lembrar-me",
+  "@rememberMe": {
+    "description": "Label for remember me"
+  },
+  "alreadyHaveAccount": "Já tem uma conta?",
+  "@alreadyHaveAccount": {
+    "description": "Label for already have account"
+  },
+  "namePlaceholder": "Nome",
+  "@namePlaceholder": {
+    "description": "Placeholder for name input"
+  },
+  "confirmPassword": "Confirmar senha",
+  "@confirmPassword": {
+    "description": "Label for confirm password"
+  },
+  "incorrectPassword": "Senha incorreta",
+  "@incorrectPassword": {
+    "description": "Message for incorrect password"
+  },
+  "userNotFound": "Usuário não encontrado",
+  "@userNotFound": {
+    "description": "Message for user not found"
+  },
+  "anErrorOccurred": "Ocorreu um erro",
+  "@anErrorOccurred": {
+    "description": "Message for an error occurred"
+  },
+  "userAlreadyExists": "O usuário já existe",
+  "@userAlreadyExists": {
+    "description": "Message for user already exists"
+  },
+  "verifyEmail": "Verificar e-mail",
+  "@verifyEmail": {
+    "description": "Message for verify email"
+  },
+  "verifyEmailText": "Enviamos um e-mail de verificação para seu endereço. Por favor, verifique e siga as instruções para completar seu cadastro.",
+  "@verifyEmailText": {
+    "description": "Message for verify email text"
+  },
+  "fieldRequired": "Este campo é obrigatório",
+  "@fieldRequired": {
+    "description": "Message for field required"
+  },
+  "invalidEmail": "Por favor, insira um endereço de e-mail válido",
+  "@invalidEmail": {
+    "description": "Message for invalid email"
+  },
+  "passwordsDoNotMatch": "As senhas não coincidem",
+  "@passwordsDoNotMatch": {
+    "description": "Message for passwords do not match"
+  },
+  "userInformation": "Informações do Usuário",
+  "@userInformation": {
+    "description": "Header for user information section"
+  },
+  "name": "Nome",
+  "@name": {
+    "description": "Label for user's name"
+  },
+  "email": "E-mail",
+  "@email": {
+    "description": "Label for user's email"
+  },
+  "permissions": "Permissões",
+  "@permissions": {
+    "description": "Label for permissions"
+  },
+  "debugMode": "Modo de depuração",
+  "@debugMode": {
+    "description": "Label for debug mode toggle"
+  },
+  "logout": "Sair",
+  "@logout": {
+    "description": "Label for logout button"
+  },
+  "themeSettings": "Configurações de tema",
+  "@themeSettings": {
+    "description": "Header for theme settings section"
+  },
+  "systemTheme": "Tema do sistema",
+  "@systemTheme": {
+    "description": "Option for system theme"
+  },
+  "lightTheme": "Tema claro",
+  "@lightTheme": {
+    "description": "Option for light theme"
+  },
+  "darkTheme": "Tema escuro",
+  "@darkTheme": {
+    "description": "Option for dark theme"
+  },
+  "activeSales": "Vendas Ativas",
+  "@activeSales": {
+    "description": "Label for active sales"
+  },
+  "activeDeliveries": "Entregas Ativas",
+  "@activeDeliveries": {
+    "description": "Label for active deliveries"
+  },
+  "totalSales": "Vendas Totais",
+  "@totalSales": {
+    "description": "Label for total sales"
+  },
+  "latestSales": "Últimas Vendas",
+  "@latestSales": {
+    "description": "Header for latest sales section"
+  },
+  "date": "Data",
+  "@date": {
+    "description": "Label for date"
+  },
+  "total": "Total",
+  "@total": {
+    "description": "Label for total amount"
+  },
+  "products": "Produtos",
+  "@products": {
+    "description": "Label for products"
+  },
+  "ongoingDeliveries": "Entregas em Andamento",
+  "@ongoingDeliveries": {
+    "description": "Header for ongoing deliveries section"
+  },
+  "start": "Início",
+  "@start": {
+    "description": "Label for start time"
+  },
+  "address": "Endereço",
+  "@address": {
+    "description": "Label for address"
+  },
+  "started": "INICIADO",
+  "@started": {
+    "description": "Status label for started sales"
+  },
+  "completed": "CONCLUÍDO",
+  "@completed": {
+    "description": "Status label for completed sales"
+  },
+  "delivered": "ENTREGUE",
+  "@delivered": {
+    "description": "Delivery status label for delivered items"
+  },
+  "pendingAssignment": "AGUARDANDO ATRIBUIÇÃO",
+  "@pendingAssignment": {
+    "description": "Delivery status label for pending assignment"
+  },
+  "employeesHomeTitle": "Funcionários",
+  "@employeesHomeTitle": {
+    "description": "Title for employees home page"
+  },
+  "productsHomeTitle": "Produtos",
+  "@productsHomeTitle": {
+    "description": "Title for products home page"
+  },
+  "salesHomeTitle": "Vendas",
+  "@salesHomeTitle": {
+    "description": "Title for sales home page"
+  },
+  "deliveriesHomeTitle": "Entregas",
+  "@deliveriesHomeTitle": {
+    "description": "Title for deliveries home page"
+  },
+  "dashboardHomeTitle": "Início",
+  "@dashboardHomeTitle": {
+    "description": "Title for dashboard home page"
+  },
+  "settingsHomeTitle": "Opções",
+  "@settingsHomeTitle": {
+    "description": "Title for settings home page"
+  },
+  "changeLanguage": "Mudar idioma",
+  "@changeLanguage": {
+    "description": "Label for change language button"
+  },
+  "languageSettings": "Ajustes de idioma",
+  "@languageSettings": {
+    "description": "Header for language settings section"
+  },
+  "unnamedUser": "Usuário sem nome",
+  "@unnamedUser": {
+    "description": "Label for unnamed user"
+  },
+  "unnamedPermission": "Permissão sem nome",
+  "@unnamedPermission": {
+    "description": "Label for unnamed permission"
+  },
+  "unnamedRole": "Papel sem nome",
+  "@unnamedRole": {
+    "description": "Label for unnamed role"
+  },
+  "search": "Buscar...",
+  "@search": {
+    "description": "Placeholder for search"
+  },
+  "add": "Adicionar",
+  "@add": {
+    "description": "Label for add"
+  },
+  "noUsersAssigned": "Nenhum usuário atribuído",
+  "@noUsersAssigned": {
+    "description": "Message for no users assigned"
+  },
+  "permissionWillBeTransformed": "A permissão será transformada em papel",
+  "@permissionWillBeTransformed": {
+    "description": "Message for permission will be transformed"
+  },
+  "editRole": "Editar papel",
+  "@editRole": {
+    "description": "Label for edit role"
+  },
+  "permissionTransformed": "A permissão foi transformada em papel",
+  "@permissionTransformed": {
+    "description": "Message for permission transformed"
+  },
+  "addUsers": "Adicionar usuários",
+  "@addUsers": {
+    "description": "Label for add users"
+  },
+  "addPermissions": "Adicionar permissões",
+  "@addPermissions": {
+    "description": "Label for add permissions"
+  },
+  "addRoles": "Adicionar papéis",
+  "@addRoles": {
+    "description": "Label for add roles"
+  },
+  "addUsersToEntity": "Adicionar usuários à entidade",
+  "@addUsersToEntity": {
+    "description": "Label for add users to entity"
+  },
+  "addPermissionsToEntity": "Adicionar permissões à entidade",
+  "@addPermissionsToEntity": {
+    "description": "Label for add permissions to entity"
+  },
+  "addRolesToEntity": "Adicionar papéis à entidade",
+  "@addRolesToEntity": {
+    "description": "Label for add roles to entity"
+  },
+  "errorSavingEntity": "Erro ao salvar a entidade",
+  "@errorSavingEntity": {
+    "description": "Message for error saving entity"
+  },
+  "statistics": "Estatísticas",
+  "@statistics": {
+    "description": "Label for statistics"
+  },
+  "employees": "Funcionários",
+  "@employees": {
+    "description": "Label for employees"
+  },
+  "entities": "Entidades",
+  "@entities": {
+    "description": "Label for entities"
+  },
+  "modules": "Módulos",
+  "@modules": {
+    "description": "Label for modules"
+  },
+  "roles": "Papéis",
+  "@roles": {
+    "description": "Label for roles"
+  },
+  "iUnderstand": "Entendo",
+  "@iUnderstand": {
+    "description": "Label for i understand"
+  },
+  "employeeManagement": "Gestão de Funcionários",
+  "@employeeManagement": {
+    "description": "Label for employee management"
+  },
+  "securityManagement": "Gestão de Segurança",
+  "@securityManagement": {
+    "description": "Label for security management"
+  },
+  "employeeManagementDescription": "Gerencie os funcionários da sua empresa",
+  "@employeeManagementDescription": {
+    "description": "Description for employee management"
+  },
+  "securityManagementDescription": "Gerencie a segurança da sua empresa",
+  "@securityManagementDescription": {
+    "description": "Description for security management"
+  },
+  "unknownType": "Tipo desconhecido",
+  "@unknownType": {
+    "description": "Message for unknown type"
+  },
+  "unnamedEntity": "Entidade sem nome",
+  "@unnamedEntity": {
+    "description": "Label for unnamed entity"
+  },
+  "searchEntities": "Buscar entidades",
+  "@searchEntities": {
+    "description": "Label for search entities"
+  },
+  "filterByType": "Filtrar por tipo",
+  "@filterByType": {
+    "description": "Label for filter by type"
+  },
+  "all": "Todos",
+  "@all": {
+    "description": "Label for all"
+  },
+  "noEntitiesFound": "Nenhuma entidade encontrada",
+  "@noEntitiesFound": {
+    "description": "Message for no entities found"
+  },
+  "role": "Papel",
+  "@role": {
+    "description": "Label for role"
+  },
+  "permission": "Permissão",
+  "@permission": {
+    "description": "Label for permission"
+  },
+  "users": "Usuários",
+  "@users": {
+    "description": "Label for users"
+  },
+  "addUser": "Adicionar usuário",
+  "@addUser": {
+    "description": "Label for add user"
+  },
+  "addRole": "Adicionar papel",
+  "@addRole": {
+    "description": "Label for add role"
+  },
+  "addPermission": "Adicionar permissão",
+  "@addPermission": {
+    "description": "Label for add permission"
+  },
+  "noRolesAssigned": "Nenhum papel atribuído",
+  "@noRolesAssigned": {
+    "description": "Message for no roles assigned"
+  },
+  "noPermissionsAssigned": "Nenhuma permissão atribuída",
+  "@noPermissionsAssigned": {
+    "description": "Message for no permissions assigned"
+  },
+  "usersCount": "Usuários",
+  "@usersCount": {
+    "description": "Label for users count"
+  },
+  "permissionsCount": "Permissões",
+  "@permissionsCount": {
+    "description": "Label for permissions count"
+  },
+  "rolesCount": "Papéis",
+  "@rolesCount": {
+    "description": "Label for roles count"
+  },
+  "addEntity": "Adicionar entidade",
+  "@addEntity": {
+    "description": "Label for add entity"
+  },
+  "entityDetails": "Detalhes da entidade",
+  "@entityDetails": {
+    "description": "Label for entity details"
+  },
+  "entityDetailsTitle": "Entidade {name}",
+  "@entityDetailsTitle": {
+    "description": "Title for entity details",
+    "placeholders": {
+      "name": {
+        "description": "Placeholder for entity name"
+      }
     }
+  },
+  "permissionTransformedToRole": "A permissão foi transformada em papel",
+  "@permissionTransformedToRole": {
+    "description": "Message for permission transformed to role"
+  },
+  "thisCannotBeUndone": "Esta ação não pode ser desfeita",
+  "@thisCannotBeUndone": {
+    "description": "Message for this cannot be undone"
+  },
+  "editEntity": "Editar entidade",
+  "@editEntity": {
+    "description": "Label for edit entity"
+  },
+  "save": "Salvar",
+  "@save": {
+    "description": "Label for save"
+  },
+  "cancel": "Cancelar",
+  "@cancel": {
+    "description": "Label for cancel"
+  },
+  "entitySaved": "Entidade salva",
+  "@entitySaved": {
+    "description": "Message for entity saved"
+  },
+  "noItemsFound": "Nenhum item encontrado",
+  "@noItemsFound": {
+    "description": "Message for no items found"
+  }
 }

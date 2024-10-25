@@ -85,7 +85,7 @@ class Entity implements ToJson, Id {
   Map<String, dynamic> toJson() => ({
         if (id != null) 'id': id,
         if (name != null) 'name': name,
-        if (type != null) 'type': type,
+        if (type != null) 'type': type!.name,
         if (users != null)
           'users': users?.map((item) => item.toJson()).toList(),
         if (permissions != null)

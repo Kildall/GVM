@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/request/entity_requests.dart';
 import 'package:gvm_flutter/src/models/response/entity_responses.dart';
@@ -131,8 +132,8 @@ class _EntityEditState extends State<EntityEdit> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(willTransformToRole
-                ? 'Permission transformed to role and saved successfully'
-                : 'Entity saved successfully'),
+                ? AppLocalizations.of(context).permissionTransformedToRole
+                : AppLocalizations.of(context).entitySaved),
             backgroundColor: Colors.green,
           ),
         );
@@ -151,7 +152,7 @@ class _EntityEditState extends State<EntityEdit> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error saving entity'),
+            content: Text(AppLocalizations.of(context).errorSavingEntity),
             backgroundColor: Colors.red,
           ),
         );
@@ -168,9 +169,9 @@ class _EntityEditState extends State<EntityEdit> {
       context: context,
       builder: (context) => _AddItemsDialog(
         title: switch (addType) {
-          AddType.Users => 'Add Users',
-          AddType.Permissions => 'Add Permissions',
-          AddType.Roles => 'Add Roles',
+          AddType.Users => AppLocalizations.of(context).addUsers,
+          AddType.Permissions => AppLocalizations.of(context).addPermissions,
+          AddType.Roles => AppLocalizations.of(context).addRoles,
         },
         selectedItems: switch (addType) {
           AddType.Users => selectedUsers,
@@ -187,7 +188,7 @@ class _EntityEditState extends State<EntityEdit> {
           AddType.Permissions =>
             _buildPermissionListItem(item as Entity, onDelete: onDelete),
           AddType.Roles =>
-            _buildRoleListItem(item as Entity, onDelete: onDelete),
+            _buildRoleListItem(item as Entity, context, onDelete: onDelete),
         },
         onConfirm: (selectedItems) {
           setState(() {
@@ -236,13 +237,12 @@ class _EntityEditState extends State<EntityEdit> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Permission will be transformed'),
-        content: Text(
-            'Adding permissions to a permission will transform it into a role. This cannot be undone.'),
+        title: Text(AppLocalizations.of(context).permissionTransformed),
+        content: Text(AppLocalizations.of(context).thisCannotBeUndone),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('I understand'),
+            child: Text(AppLocalizations.of(context).iUnderstand),
           ),
         ],
       ),
@@ -253,13 +253,15 @@ class _EntityEditState extends State<EntityEdit> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(willTransformToRole ? 'Edit Role' : 'Edit Entity'),
+        title: Text(willTransformToRole
+            ? AppLocalizations.of(context).editRole
+            : AppLocalizations.of(context).editEntity),
         actions: [
           if (!isLoading)
             TextButton.icon(
               onPressed: _saveEntity,
               icon: const Icon(Icons.save),
-              label: Text('Save'),
+              label: Text(AppLocalizations.of(context).save),
             ),
         ],
       ),
@@ -305,7 +307,7 @@ class _EntityEditState extends State<EntityEdit> {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  'Name',
+                  AppLocalizations.of(context).name,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ],
@@ -318,7 +320,7 @@ class _EntityEditState extends State<EntityEdit> {
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'This field is required';
+                  return AppLocalizations.of(context).fieldRequired;
                 }
                 return null;
               },
@@ -340,13 +342,13 @@ class _EntityEditState extends State<EntityEdit> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Users',
+                  AppLocalizations.of(context).users,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 TextButton.icon(
                   onPressed: () => _showAddItemDialog(addType: AddType.Users),
                   icon: const Icon(Icons.add),
-                  label: Text('Add'),
+                  label: Text(AppLocalizations.of(context).add),
                 ),
               ],
             ),
@@ -356,7 +358,7 @@ class _EntityEditState extends State<EntityEdit> {
             else if (selectedUsers.isEmpty)
               Center(
                 child: Text(
-                  'No users assigned',
+                  AppLocalizations.of(context).noUsersAssigned,
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               )
@@ -395,14 +397,14 @@ class _EntityEditState extends State<EntityEdit> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Permissions',
+                  AppLocalizations.of(context).permissions,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 TextButton.icon(
                   onPressed: () =>
                       _showAddItemDialog(addType: AddType.Permissions),
                   icon: const Icon(Icons.add),
-                  label: Text('Add'),
+                  label: Text(AppLocalizations.of(context).add),
                 ),
               ],
             ),
@@ -412,7 +414,7 @@ class _EntityEditState extends State<EntityEdit> {
             else if (selectedPermissions.isEmpty)
               Center(
                 child: Text(
-                  'No permissions assigned',
+                  AppLocalizations.of(context).noPermissionsAssigned,
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               )
@@ -456,13 +458,13 @@ class _EntityEditState extends State<EntityEdit> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Roles',
+                  AppLocalizations.of(context).roles,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 TextButton.icon(
                   onPressed: () => _showAddItemDialog(addType: AddType.Roles),
                   icon: const Icon(Icons.add),
-                  label: Text('Add'),
+                  label: Text(AppLocalizations.of(context).add),
                 ),
               ],
             ),
@@ -472,7 +474,7 @@ class _EntityEditState extends State<EntityEdit> {
             else if (selectedRoles.isEmpty)
               Center(
                 child: Text(
-                  'No roles assigned',
+                  AppLocalizations.of(context).noRolesAssigned,
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               )
@@ -484,6 +486,7 @@ class _EntityEditState extends State<EntityEdit> {
                 itemBuilder: (context, index) {
                   return _buildRoleListItem(
                     selectedRoles[index],
+                    context,
                     onDelete: () {
                       setState(() {
                         final role = selectedRoles[index];
@@ -512,7 +515,8 @@ class _EntityEditState extends State<EntityEdit> {
       leading: CircleAvatar(
         child: Text(user.employee?.name?[0].toUpperCase() ?? '?'),
       ),
-      title: Text(user.employee?.name ?? 'Unnamed User'),
+      title:
+          Text(user.employee?.name ?? AppLocalizations.of(context).unnamedUser),
       subtitle:
           Text(user.email ?? '', style: Theme.of(context).textTheme.bodySmall),
       trailing: onDelete != null
@@ -530,7 +534,8 @@ class _EntityEditState extends State<EntityEdit> {
       leading: const CircleAvatar(
         child: Icon(Icons.key),
       ),
-      title: Text(permission.name ?? 'Unnamed Permission'),
+      title: Text(
+          permission.name ?? AppLocalizations.of(context).unnamedPermission),
       trailing: onDelete != null
           ? IconButton(
               icon: const Icon(Icons.remove_circle_outline),
@@ -542,10 +547,11 @@ class _EntityEditState extends State<EntityEdit> {
   }
 }
 
-Widget _buildRoleListItem(Entity role, {VoidCallback? onDelete}) {
+Widget _buildRoleListItem(Entity role, BuildContext context,
+    {VoidCallback? onDelete}) {
   return ListTile(
     leading: const CircleAvatar(child: Icon(Icons.badge)),
-    title: Text(role.name ?? 'Unnamed Role'),
+    title: Text(role.name ?? AppLocalizations.of(context).unnamedRole),
     trailing: onDelete != null
         ? IconButton(
             icon: const Icon(Icons.remove_circle_outline),
@@ -598,7 +604,7 @@ class _AddItemsDialogState extends State<_AddItemsDialog> {
           children: [
             TextField(
               decoration: InputDecoration(
-                hintText: 'Search...',
+                hintText: AppLocalizations.of(context).search,
                 prefixIcon: const Icon(Icons.search),
                 border: const OutlineInputBorder(),
               ),
@@ -608,7 +614,7 @@ class _AddItemsDialogState extends State<_AddItemsDialog> {
             if (filteredItems.isEmpty)
               Center(
                 child: Text(
-                  'No items found',
+                  AppLocalizations.of(context).noItemsFound,
                 ),
               )
             else
@@ -641,14 +647,14 @@ class _AddItemsDialogState extends State<_AddItemsDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text('Cancel'),
+          child: Text(AppLocalizations.of(context).cancel),
         ),
         TextButton(
           onPressed: () {
             widget.onConfirm(selectedItems);
             Navigator.pop(context);
           },
-          child: Text('Save'),
+          child: Text(AppLocalizations.of(context).save),
         ),
       ],
     );

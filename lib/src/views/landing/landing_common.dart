@@ -35,6 +35,7 @@ class LandingCommon {
           borderSide: BorderSide(color: accentColor, width: 2),
         ),
       ),
+      style: TextStyle(color: textColor),
       obscureText: isPassword,
       validator: (value) {
         if (value == null || value.isEmpty) {
@@ -57,7 +58,7 @@ class LandingCommon {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: accentColor,
-        foregroundColor: Colors.white,
+        foregroundColor: textColor,
         minimumSize: Size(250, 50),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(25),

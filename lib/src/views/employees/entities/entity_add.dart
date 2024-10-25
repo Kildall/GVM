@@ -18,10 +18,11 @@ class _EntityAddState extends State<EntityAdd> {
   String? name;
   EntityType selectedType = EntityType.Role;
   List<Entity> selectedPermissions = [];
+  List<Entity> selectedRoles = [];
 
   // For permission selection when creating a role
-  bool isLoadingPermissions = true;
   List<Entity> availablePermissions = [];
+  List<Entity> availableRoles = [];
 
   @override
   void initState() {
@@ -32,7 +33,7 @@ class _EntityAddState extends State<EntityAdd> {
   }
 
   Future<void> _loadPermissions() async {
-    setState(() => isLoadingPermissions = true);
+    setState(() => isLoading = true);
     try {
       final entitiesResponse = await AuthManager.instance.apiService
           .get<GetEntitiesResponse>('/api/admin/entities',
@@ -41,8 +42,12 @@ class _EntityAddState extends State<EntityAdd> {
               .where((entity) => entity.type == EntityType.Permission)
               .toList() ??
           [];
+      availableRoles = entitiesResponse.data?.entities
+              .where((entity) => entity.type == EntityType.Role)
+              .toList() ??
+          [];
     } finally {
-      setState(() => isLoadingPermissions = false);
+      setState(() => isLoading = false);
     }
   }
 
@@ -58,21 +63,28 @@ class _EntityAddState extends State<EntityAdd> {
         type: selectedType,
         permissions:
             selectedType == EntityType.Role ? selectedPermissions : null,
+        roles: selectedRoles,
       );
 
-      // TODO: Implement saving entity
-      // await yourService.createEntity(newEntity);
+      final response = await AuthManager.instance.apiService.post(
+          '/api/admin/entities',
+          body: newEntity.toJson(),
+          fromJson: GetEntityResponse.fromJson);
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Entity created successfully'),
-            backgroundColor: Colors.green,
-          ),
-        );
-        Navigator.pop(context);
+        if (response.data != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Entity created successfully'),
+              backgroundColor: Colors.green,
+            ),
+          );
+
+          Navigator.pop(context);
+        }
       }
     } catch (e) {
+      debugPrint(e.toString());
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -109,6 +121,8 @@ class _EntityAddState extends State<EntityAdd> {
                 _buildPermissionsSection(),
                 const SizedBox(height: 24),
               ],
+              _buildRolesSection(),
+              const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: isLoading ? null : _saveEntity,
                 style: ElevatedButton.styleFrom(
@@ -218,11 +232,11 @@ class _EntityAddState extends State<EntityAdd> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Permissions',
+              'Assign permissions',
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 16),
-            if (isLoadingPermissions)
+            if (isLoading)
               const Center(child: CircularProgressIndicator())
             else if (availablePermissions.isEmpty)
               Center(
@@ -232,26 +246,81 @@ class _EntityAddState extends State<EntityAdd> {
                 ),
               )
             else
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: availablePermissions.length,
-                itemBuilder: (context, index) {
-                  final permission = availablePermissions[index];
-                  return CheckboxListTile(
-                    title: Text(permission.name ?? 'Unnamed Permission'),
-                    value: selectedPermissions.contains(permission),
-                    onChanged: (bool? value) {
-                      setState(() {
-                        if (value == true) {
-                          selectedPermissions.add(permission);
-                        } else {
-                          selectedPermissions.remove(permission);
-                        }
-                      });
-                    },
-                  );
-                },
+              SizedBox(
+                height: 200,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: const ScrollPhysics(),
+                  itemCount: availablePermissions.length,
+                  itemBuilder: (context, index) {
+                    final permission = availablePermissions[index];
+                    return CheckboxListTile(
+                      title: Text(permission.name ?? 'Unnamed Permission'),
+                      value: selectedPermissions.contains(permission),
+                      onChanged: (bool? value) {
+                        setState(() {
+                          if (value == true) {
+                            selectedPermissions.add(permission);
+                          } else {
+                            selectedPermissions.remove(permission);
+                          }
+                        });
+                      },
+                    );
+                  },
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRolesSection() {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Assign to roles',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: 16),
+            if (isLoading)
+              const Center(child: CircularProgressIndicator())
+            else if (availableRoles.isEmpty)
+              Center(
+                child: Text(
+                  'No roles available',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              )
+            else
+              SizedBox(
+                height: 200,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: const ScrollPhysics(),
+                  itemCount: availableRoles.length,
+                  itemBuilder: (context, index) {
+                    final role = availableRoles[index];
+                    return CheckboxListTile(
+                      title: Text(role.name ?? 'Unnamed Role'),
+                      value: selectedRoles.contains(role),
+                      onChanged: (bool? value) {
+                        setState(() {
+                          if (value == true) {
+                            selectedRoles.add(role);
+                          } else {
+                            selectedRoles.remove(role);
+                          }
+                        });
+                      },
+                    );
+                  },
+                ),
               ),
           ],
         ),

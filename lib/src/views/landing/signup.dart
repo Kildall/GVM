@@ -4,6 +4,7 @@ import 'package:gvm_flutter/src/services/api/api_errors.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 import 'package:gvm_flutter/src/views/landing/landing_common.dart';
 import 'package:gvm_flutter/src/views/landing/login.dart';
+import 'package:gvm_flutter/src/widgets/layout/landing_layout.dart';
 
 class SignupView extends StatefulWidget {
   const SignupView({super.key});
@@ -22,86 +23,64 @@ class _SignupViewState extends State<SignupView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: LandingCommon.textColor),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          color: LandingCommon.backgroundColor,
-          image: DecorationImage(
-            image: AssetImage('assets/images/background_pattern.png'),
-            repeat: ImageRepeat.repeat,
-          ),
-        ),
-        child: SafeArea(
-          child: Center(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        AppLocalizations.of(context).register,
-                        style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          color: LandingCommon.textColor,
-                        ),
-                      ),
-                      SizedBox(height: 40),
-                      LandingCommon.buildTextField(
-                          AppLocalizations.of(context).namePlaceholder,
-                          _nameController,
-                          false,
-                          context),
-                      SizedBox(height: 20),
-                      LandingCommon.buildTextField(
-                          AppLocalizations.of(context).emailPlaceholder,
-                          _emailController,
-                          false,
-                          context),
-                      SizedBox(height: 20),
-                      LandingCommon.buildTextField(
-                          AppLocalizations.of(context).passwordPlaceholder,
-                          _passwordController,
-                          true,
-                          context),
-                      SizedBox(height: 20),
-                      LandingCommon.buildTextField(
-                          AppLocalizations.of(context).confirmPassword,
-                          _confirmPasswordController,
-                          true,
-                          context),
-                      SizedBox(height: 40),
-                      LandingCommon.buildButton(
-                          AppLocalizations.of(context).register,
-                          _isLoading ? null : _submitForm,
-                          _isLoading),
-                      SizedBox(height: 20),
-                      TextButton(
-                        onPressed: () => Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => LoginView()),
-                        ),
-                        child: Text(
-                            AppLocalizations.of(context).alreadyHaveAccount,
-                            style: TextStyle(color: LandingCommon.accentColor)),
-                      ),
-                    ],
-                  ),
-                ),
+    return LandingLayout(
+      child: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              AppLocalizations.of(context).register,
+              style: TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+                color: LandingCommon.textColor,
               ),
             ),
-          ),
+            SizedBox(height: 40),
+            LandingCommon.buildTextField(
+                AppLocalizations.of(context).namePlaceholder,
+                _nameController,
+                false,
+                context),
+            SizedBox(height: 20),
+            LandingCommon.buildTextField(
+                AppLocalizations.of(context).emailPlaceholder,
+                _emailController,
+                false,
+                context),
+            SizedBox(height: 20),
+            LandingCommon.buildTextField(
+                AppLocalizations.of(context).passwordPlaceholder,
+                _passwordController,
+                true,
+                context),
+            SizedBox(height: 20),
+            LandingCommon.buildTextField(
+                AppLocalizations.of(context).confirmPassword,
+                _confirmPasswordController,
+                true,
+                context),
+            SizedBox(height: 40),
+            LandingCommon.buildButton(AppLocalizations.of(context).register,
+                _isLoading ? null : _submitForm, _isLoading),
+            SizedBox(height: 20),
+            TextButton(
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                backgroundColor: LandingCommon.backgroundColor.withOpacity(0.8),
+              ),
+              onPressed: () => Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => LoginView()),
+              ),
+              child: Text(AppLocalizations.of(context).alreadyHaveAccount,
+                  style: TextStyle(color: LandingCommon.accentColor)),
+            ),
+          ],
         ),
       ),
     );

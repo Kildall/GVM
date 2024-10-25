@@ -11,8 +11,6 @@ class ProductsHome extends StatefulWidget {
 class _ProductsHomeState extends State<ProductsHome> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text(AppLocalizations.of(context).productsHomeTitle),
-    );
+    return Text(AppLocalizations.of(context).productsHomeTitle);
   }
 }

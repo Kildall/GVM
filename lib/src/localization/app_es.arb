@@ -340,5 +340,93 @@
         "description": "Placeholder for entity name"
       }
     }
+  },
+  "permissionTransformedToRole": "El permiso se ha transformado en rol",
+  "@permissionTransformedToRole": {
+    "description": "Message for permission transformed to role"
+  },
+  "iUnderstand": "Entiendo",
+  "@iUnderstand": {
+    "description": "Label for i understand"
+  },
+  "thisCannotBeUndone": "Esta acción no se puede deshacer",
+  "@thisCannotBeUndone": {
+    "description": "Message for this cannot be undone"
+  },
+  "editEntity": "Editar entidad",
+  "@editEntity": {
+    "description": "Label for edit entity"
+  },
+  "save": "Guardar",
+  "@save": {
+    "description": "Label for save"
+  },
+  "cancel": "Cancelar",
+  "@cancel": {
+    "description": "Label for cancel"
+  },
+  "entitySaved": "Entidad guardada",
+  "@entitySaved": {
+    "description": "Message for entity saved"
+  },
+  "noItemsFound": "No se encontraron elementos",
+  "@noItemsFound": {
+    "description": "Message for no items found"
+  },
+  "unnamedUser": "Usuario sin nombre",
+  "@unnamedUser": {
+    "description": "Label for unnamed user"
+  },
+  "unnamedPermission": "Permiso sin nombre",
+  "@unnamedPermission": {
+    "description": "Label for unnamed permission"
+  },
+  "unnamedRole": "Rol sin nombre",
+  "@unnamedRole": {
+    "description": "Label for unnamed role"
+  },
+  "search": "Buscar...",
+  "@search": {
+    "description": "Placeholder for search"
+  },
+  "add": "Agregar",
+  "@add": {
+    "description": "Label for add"
+  },
+  "addUsers": "Agregar usuarios",
+  "@addUsers": {
+    "description": "Label for add users"
+  },
+  "addPermissions": "Agregar permisos",
+  "@addPermissions": {
+    "description": "Label for add permissions"
+  },
+  "addRoles": "Agregar roles",
+  "@addRoles": {
+    "description": "Label for add roles"
+  },
+  "addUsersToEntity": "Agregar usuarios a la entidad",
+  "@addUsersToEntity": {
+    "description": "Label for add users to entity"
+  },
+  "addPermissionsToEntity": "Agregar permisos a la entidad",
+  "@addPermissionsToEntity": {
+    "description": "Label for add permissions to entity"
+  },
+  "addRolesToEntity": "Agregar roles a la entidad",
+  "@addRolesToEntity": {
+    "description": "Label for add roles to entity"
+  },
+  "errorSavingEntity": "Error al guardar la entidad",
+  "@errorSavingEntity": {
+    "description": "Message for error saving entity"
+  },
+  "permissionTransformed": "El permiso se ha transformado en rol",
+  "@permissionTransformed": {
+    "description": "Message for permission transformed"
+  },
+  "editRole": "Editar rol",
+  "@editRole": {
+    "description": "Label for edit role"
   }
 }
