@@ -44,6 +44,10 @@
   "@alreadyHaveAccount": {
     "description": "Label for already have account"
   },
+  "dontHaveAccount": "Não tem uma conta?",
+  "@dontHaveAccount": {
+    "description": "Label for don't have account"
+  },
   "namePlaceholder": "Nome",
   "@namePlaceholder": {
     "description": "Placeholder for name input"

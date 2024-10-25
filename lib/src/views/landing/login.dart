@@ -74,13 +74,13 @@ class _LoginViewState extends State<LoginView> {
             SizedBox(height: 20),
             LayoutBuilder(
               builder: (context, constraints) {
-                // Calculate total width needed for horizontal layout
-                final textScaler = MediaQuery.of(context).textScaler;
-                final estimatedButtonWidth = 150.0 * textScaler.scale(1);
-                final totalWidthNeeded = (estimatedButtonWidth * 2) + 20;
+                // Get text scale factor for accessibility
+                final textScaleFactor = MediaQuery.textScalerOf(context)
+                    .scale(Theme.of(context).textTheme.bodySmall!.fontSize!);
 
+                // Create the buttons first so we can measure them
                 final buttonStyle = TextButton.styleFrom(
-                  padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25),
                   ),
@@ -108,17 +108,49 @@ class _LoginViewState extends State<LoginView> {
                     MaterialPageRoute(builder: (context) => SignupView()),
                   ),
                   child: Text(
-                    AppLocalizations.of(context).alreadyHaveAccount,
+                    AppLocalizations.of(context).dontHaveAccount,
                     style: TextStyle(color: LandingCommon.accentColor),
                   ),
                 );
 
+                // Calculate minimum width needed for each button
+                final forgotPasswordText =
+                    AppLocalizations.of(context).forgotPassword;
+                final signupText = AppLocalizations.of(context).dontHaveAccount;
+
+                // Use TextPainter to get accurate measurements
+                final textPainter = TextPainter(
+                  textDirection: TextDirection.ltr,
+                  textScaleFactor: textScaleFactor,
+                );
+
+                textPainter.text = TextSpan(
+                  text: forgotPasswordText,
+                  style: TextStyle(color: LandingCommon.accentColor),
+                );
+                textPainter.layout();
+                final forgotPasswordWidth = textPainter.width;
+
+                textPainter.text = TextSpan(
+                  text: signupText,
+                  style: TextStyle(color: LandingCommon.accentColor),
+                );
+                textPainter.layout();
+                final signupWidth = textPainter.width;
+
+                // Calculate total width needed including padding and spacing
+                final totalWidthNeeded = (forgotPasswordWidth + signupWidth) *
+                        1.4 + // Button padding
+                    (32 * 2 * 2) + // Horizontal padding for both buttons
+                    20; // Space between buttons
+
+                // Determine layout based on available width
                 if (constraints.maxWidth >= totalWidthNeeded) {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       forgotPasswordButton,
-                      SizedBox(width: 20),
+                      const SizedBox(width: 20),
                       signupButton,
                     ],
                   );
@@ -127,13 +159,13 @@ class _LoginViewState extends State<LoginView> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       forgotPasswordButton,
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       signupButton,
                     ],
                   );
                 }
               },
-            ),
+            )
           ],
         ),
       ),
