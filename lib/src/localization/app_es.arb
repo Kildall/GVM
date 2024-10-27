@@ -432,5 +432,33 @@
   "editRole": "Editar rol",
   "@editRole": {
     "description": "Label for edit role"
+  },
+  "filterByPosition": "Filtrar por posición",
+  "@filterByPosition": {
+    "description": "Label for filter by position"
+  },
+  "searchEmployees": "Buscar empleados...",
+  "@searchEmployees": {
+    "description": "Placeholder for search employees"
+  },
+  "allPositions": "Todas las posiciones",
+  "@allPositions": {
+    "description": "Label for all positions"
+  },
+  "noEmployeesFound": "No se encontraron empleados",
+  "@noEmployeesFound": {
+    "description": "Message for no employees found"
+  },
+  "employeeDetails": "Detalles del empleado",
+  "@employeeDetails": {
+    "description": "Label for employee details"
+  },
+  "unnamedEmployee": "Empleado sin nombre",
+  "@unnamedEmployee": {
+    "description": "Label for unnamed employee"
+  },
+  "noPosition": "Sin posición",
+  "@noPosition": {
+    "description": "Label for no position"
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/models/response/employee_responses.dart';
 import 'package:gvm_flutter/src/models/response/entity_responses.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
+import 'package:gvm_flutter/src/views/employees/employees/employees_browse.dart';
 import 'package:gvm_flutter/src/views/employees/entities/entitites_browse.dart';
 
 class EmployeesHome extends StatefulWidget {
@@ -40,9 +41,9 @@ class _EmployeesHomeState extends State<EmployeesHome> {
   }
 
   void _navigateToEmployees() {
-    // Navigator.of(context).push(MaterialPageRoute(
-    //   builder: (context) => const EmployeesBrowse(),
-    // ));
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => const EmployeesBrowse(),
+    ));
   }
 
   void _navigateToEntities() {
