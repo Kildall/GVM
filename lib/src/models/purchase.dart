@@ -1,9 +1,9 @@
 //***  AUTO-GENERATED FILE - DO NOT MODIFY ***//
 
-import 'model_base.dart';
 import 'employee.dart';
-import 'supplier.dart';
+import 'model_base.dart';
 import 'purchase_product.dart';
+import 'supplier.dart';
 
 class Purchase implements ToJson, Id {
   @override
@@ -36,7 +36,11 @@ class Purchase implements ToJson, Id {
       employeeId: json['employeeId'] as int?,
       supplierId: json['supplierId'] as int?,
       date: json['date'] != null ? DateTime.parse(json['date']) : null,
-      amount: json['amount'] as double?,
+      amount: json['amount'] != null
+          ? (json['amount'] is int
+              ? (json['amount'] as int).toDouble()
+              : json['amount'] as double)
+          : null,
       description: json['description'] as String?,
       employee: json['employee'] != null
           ? Employee.fromJson(json['employee'] as Map<String, dynamic>)

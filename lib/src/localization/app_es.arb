@@ -493,5 +493,209 @@
   "noPurchasesRecorded": "No se han registrado compras",
   "@noPurchasesRecorded": {
     "description": "Message for no purchases recorded"
+  },
+  "purchasesManagement": "Gestión de Compras",
+  "@purchasesManagement": {
+    "description": "Label for purchases management"
+  },
+  "purchasesManagementDescription": "Administra tus compras",
+  "@purchasesManagementDescription": {
+    "description": "Description for purchases management"
+  },
+  "productManagement": "Gestión de Productos",
+  "@productManagement": {
+    "description": "Label for product management"
+  },
+  "productManagementDescription": "Administra tus productos",
+  "@productManagementDescription": {
+    "description": "Description for product management"
+  },
+  "lowStock": "Stock bajo",
+  "@lowStock": {
+    "description": "Label for low stock"
+  },
+  "searchProducts": "Buscar productos...",
+  "@searchProducts": {
+    "description": "Placeholder for search products"
+  },
+  "filterByBrand": "Filtrar por marca",
+  "@filterByBrand": {
+    "description": "Label for filter by brand"
+  },
+  "allStock": "Todos los stock",
+  "@allStock": {
+    "description": "Label for all stock"
+  },
+  "inStock": "En stock",
+  "@inStock": {
+    "description": "Label for in stock"
+  },
+  "outOfStock": "Fuera de stock",
+  "@outOfStock": {
+    "description": "Label for out of stock"
+  },
+  "filterByStock": "Filtrar por stock",
+  "@filterByStock": {
+    "description": "Label for filter by stock"
+  },
+  "noProductsFound": "No se encontraron productos",
+  "@noProductsFound": {
+    "description": "Message for no products found"
+  },
+  "unnamedProduct": "Producto sin nombre",
+  "@unnamedProduct": {
+    "description": "Label for unnamed product"
+  },
+  "quantity": "Cantidad",
+  "@quantity": {
+    "description": "Label for quantity"
+  },
+  "measure": "Medida",
+  "@measure": {
+    "description": "Label for measure"
+  },
+  "brand": "Marca",
+  "@brand": {
+    "description": "Label for brand"
+  },
+  "price": "Precio",
+  "@price": {
+    "description": "Label for price"
+  },
+  "productDetailsTitle": "Detalles de {name}",
+  "@productDetailsTitle": {
+    "description": "Title for product details",
+    "placeholders": {
+      "name": {
+        "description": "Placeholder for product name"
+      }
+    }
+  },
+  "stock": "Stock",
+  "@stock": {
+    "description": "Label for stock"
+  },
+  "inventoryDetails": "Detalles de inventario",
+  "@inventoryDetails": {
+    "description": "Label for inventory details"
+  },
+  "status": "Estado",
+  "@status": {
+    "description": "Label for status"
+  },
+  "enabled": "Habilitado",
+  "@enabled": {
+    "description": "Label for enabled"
+  },
+  "disabled": "Deshabilitado",
+  "@disabled": {
+    "description": "Label for disabled"
+  },
+  "searchPurchases": "Buscar compras...",
+  "@searchPurchases": {
+    "description": "Placeholder for search purchases"
+  },
+  "supplier": "Proveedor",
+  "@supplier": {
+    "description": "Label for supplier"
+  },
+  "purchaseDetails": "Detalles de la compra",
+  "@purchaseDetails": {
+    "description": "Label for purchase details"
+  },
+  "purchaseDetailsTitle": "Detalles de {name}",
+  "@purchaseDetailsTitle": {
+    "description": "Title for purchase details",
+    "placeholders": {
+      "name": {
+        "description": "Placeholder for purchase name"
+      }
+    }
+  },
+  "clearFilters": "Limpiar filtros",
+  "@clearFilters": {
+    "description": "Label for clear filters"
+  },
+  "noPurchasesFound": "No se encontraron compras",
+  "@noPurchasesFound": {
+    "description": "Message for no purchases found"
+  },
+  "unknownSupplier": "Proveedor desconocido",
+  "@unknownSupplier": {
+    "description": "Label for unknown supplier"
+  },
+  "fromDate": "Desde {date}",
+  "@fromDate": {
+    "description": "Label for from date",
+    "placeholders": {
+      "date": {
+        "description": "Placeholder for date"
+      }
+    }
+  },
+  "toDate": "Hasta {date}",
+  "@toDate": {
+    "description": "Label for to date",
+    "placeholders": {
+      "date": {
+        "description": "Placeholder for date"
+      }
+    }
+  },
+  "startDate": "Fecha de inicio",
+  "@startDate": {
+    "description": "Label for start date"
+  },
+  "endDate": "Fecha de fin",
+  "@endDate": {
+    "description": "Label for end date"
+  },
+  "sale": "Venta",
+  "@sale": {
+    "description": "Label for sale"
+  },
+  "purchase": "Compra",
+  "@purchase": {
+    "description": "Label for purchase"
+  },
+  "noDate": "Sin fecha",
+  "@noDate": {
+    "description": "Label for no date"
+  },
+  "totalAmount": "Total",
+  "@totalAmount": {
+    "description": "Label for total amount"
+  },
+  "details": "Detalles",
+  "@details": {
+    "description": "Label for details"
+  },
+  "description": "Descripción",
+  "@description": {
+    "description": "Label for description"
+  },
+  "amount": "Cantidad",
+  "@amount": {
+    "description": "Label for amount"
+  },
+  "participants": "Participantes",
+  "@participants": {
+    "description": "Label for participants"
+  },
+  "unknownEmployee": "Empleado desconocido",
+  "@unknownEmployee": {
+    "description": "Label for unknown employee"
+  },
+  "employee": "Empleado",
+  "@employee": {
+    "description": "Label for employee"
+  },
+  "purchasedProducts": "Productos de la compra",
+  "@purchasedProducts": {
+    "description": "Label for purchased products"
+  },
+  "noProductsInPurchase": "No se encontraron productos en la compra",
+  "@noProductsInPurchase": {
+    "description": "Message for no products in purchase"
   }
 }

@@ -30,17 +30,22 @@ class _EmployeeReadState extends State<EmployeeRead> {
     try {
       final response = await AuthManager.instance.apiService.get<Employee>(
           '/api/employees/${employee.id}',
-          fromJson: (json) => Employee.fromJson(json['data']));
+          fromJson: Employee.fromJson);
 
-      setState(() {
-        employee = response.data!;
-        isLoading = false;
-      });
+      if (response.data != null) {
+        setState(() {
+          employee = response.data!;
+          isLoading = false;
+        });
+      }
     } catch (e) {
       setState(() {
         isLoading = false;
       });
-      // Handle error appropriately
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(AppLocalizations.of(context).anErrorOccurred)));
+      }
     }
   }
 
@@ -315,8 +320,9 @@ class _EmployeeReadState extends State<EmployeeRead> {
                     leading: const CircleAvatar(
                       child: Icon(Icons.shopping_bag),
                     ),
-                    title: Text('Purchase #${purchase.id}'),
-                    subtitle: Text(purchase.date?.toString() ?? ''),
+                    title: Text(
+                        '${AppLocalizations.of(context).purchase} #${purchase.id}'),
+                    subtitle: Text(purchase.date?.toLocal().toString() ?? ''),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => _navigateToPurchase(purchase),
                   ),
