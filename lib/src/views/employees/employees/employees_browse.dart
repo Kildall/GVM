@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/response/employee_responses.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
+import 'package:gvm_flutter/src/views/employees/employees/employee_read.dart';
 
 class EmployeesBrowse extends StatefulWidget {
   const EmployeesBrowse({super.key});
@@ -50,7 +51,12 @@ class _EmployeesBrowseState extends State<EmployeesBrowse> {
     }
   }
 
-  void _navigateToEmployeeDetail(Employee employee) {}
+  void _navigateToEmployeeDetail(Employee employee) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => EmployeeRead(employee: employee)),
+    );
+  }
 
   void _navigateToEmployeeAdd() {}
 

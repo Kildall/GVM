@@ -460,5 +460,38 @@
   "noPosition": "Sin posición",
   "@noPosition": {
     "description": "Label for no position"
+  },
+  "employeeDetailsTitle": "Detalles de {name}",
+  "@employeeDetailsTitle": {
+    "description": "Title for employee details",
+    "placeholders": {
+      "name": {
+        "description": "Placeholder for employee name"
+      }
+    }
+  },
+  "sales": "Ventas",
+  "@sales": {
+    "description": "Label for sales"
+  },
+  "deliveries": "Entregas",
+  "@deliveries": {
+    "description": "Label for deliveries"
+  },
+  "purchases": "Compras",
+  "@purchases": {
+    "description": "Label for purchases"
+  },
+  "noSalesRecorded": "No se han registrado ventas",
+  "@noSalesRecorded": {
+    "description": "Message for no sales recorded"
+  },
+  "noDeliveriesRecorded": "No se han registrado entregas",
+  "@noDeliveriesRecorded": {
+    "description": "Message for no deliveries recorded"
+  },
+  "noPurchasesRecorded": "No se han registrado compras",
+  "@noPurchasesRecorded": {
+    "description": "Message for no purchases recorded"
   }
 }
