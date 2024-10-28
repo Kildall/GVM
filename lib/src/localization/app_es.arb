@@ -741,5 +741,25 @@
   "loading": "Cargando...",
   "@loading": {
     "description": "Label for loading"
+  },
+  "create": "Crear",
+  "@create": {
+    "description": "Label for create"
+  },
+  "update": "Actualizar",
+  "@update": {
+    "description": "Label for update"
+  },
+  "basicInformation": "Información básica",
+  "@basicInformation": {
+    "description": "Label for basic information"
+  },
+  "editSupplier": "Editar proveedor",
+  "@editSupplier": {
+    "description": "Label for edit supplier"
+  },
+  "addSupplier": "Agregar proveedor",
+  "@addSupplier": {
+    "description": "Label for add supplier"
   }
 }

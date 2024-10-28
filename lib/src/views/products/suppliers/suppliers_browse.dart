@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/response/supplier_responses.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
+import 'package:gvm_flutter/src/views/products/suppliers/supplier_add.dart';
 import 'package:gvm_flutter/src/views/products/suppliers/supplier_read.dart';
 
 class SuppliersBrowse extends StatefulWidget {
@@ -57,9 +58,9 @@ class _SuppliersBrowseState extends State<SuppliersBrowse> {
   }
 
   void _navigateToSupplierAdd() {
-    // Navigator.of(context).push(MaterialPageRoute(
-    //   builder: (context) => const SupplierAdd(),
-    // ));
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => const SupplierAdd(),
+    ));
   }
 
   void _clearFilters() {

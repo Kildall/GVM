@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 import 'package:gvm_flutter/src/views/products/purchases/purchase_read.dart';
+import 'package:gvm_flutter/src/views/products/suppliers/supplier_edit.dart';
 
 class SupplierRead extends StatefulWidget {
   final int supplierId;
@@ -50,10 +51,13 @@ class _SupplierReadState extends State<SupplierRead> {
   }
 
   void _navigateToSupplierEdit() {
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => SupplierEdit(supplier: supplier)),
-    // );
+    if (supplier != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => SupplierEdit(supplier: supplier!)),
+      );
+    }
   }
 
   void _navigateToPurchase(Purchase purchase) {
