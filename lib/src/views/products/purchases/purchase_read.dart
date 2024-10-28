@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
+import 'package:gvm_flutter/src/views/employees/employees/employee_read.dart';
+import 'package:gvm_flutter/src/views/products/products/product_read.dart';
+import 'package:gvm_flutter/src/views/products/suppliers/supplier_read.dart';
 
 class PurchaseRead extends StatefulWidget {
-  final Purchase purchase;
+  final int purchaseId;
 
   const PurchaseRead({
     super.key,
-    required this.purchase,
+    required this.purchaseId,
   });
 
   @override
@@ -17,24 +20,23 @@ class PurchaseRead extends StatefulWidget {
 
 class _PurchaseReadState extends State<PurchaseRead> {
   bool isLoading = true;
-  late Purchase purchase;
+  Purchase? purchase;
 
   @override
   void initState() {
     super.initState();
-    purchase = widget.purchase;
     _loadPurchaseDetails();
   }
 
   Future<void> _loadPurchaseDetails() async {
     try {
       final response = await AuthManager.instance.apiService.get<Purchase>(
-          '/api/purchases/${purchase.id}',
+          '/api/purchases/${widget.purchaseId}',
           fromJson: Purchase.fromJson);
 
       if (response.data != null) {
         setState(() {
-          purchase = response.data!;
+          purchase = response.data;
           isLoading = false;
         });
       }
@@ -52,28 +54,57 @@ class _PurchaseReadState extends State<PurchaseRead> {
   void _navigateToPurchaseEdit() {
     // Navigator.push(
     //   context,
-    //   MaterialPageRoute(builder: (context) => PurchaseEdit(purchase: purchase)),
+    //   MaterialPageRoute(builder: (context) => PurchaseEdit(purchaseId: widget.purchaseId)),
     // );
   }
 
   void _navigateToProduct(Product product) {
-    Navigator.pushNamed(context, '/products/detail', arguments: product);
+    if (product.id != null) {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => ProductRead(productId: product.id!),
+      ));
+    }
   }
 
   void _navigateToSupplier(Supplier supplier) {
-    Navigator.pushNamed(context, '/suppliers/detail', arguments: supplier);
+    if (supplier.id != null) {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => SupplierRead(supplierId: supplier.id!),
+      ));
+    }
   }
 
   void _navigateToEmployee(Employee employee) {
-    Navigator.pushNamed(context, '/employees/detail', arguments: employee);
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => EmployeeRead(employee: employee),
+    ));
   }
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(AppLocalizations.of(context).purchaseDetailsTitle),
+        ),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (purchase == null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(AppLocalizations.of(context).purchaseDetailsTitle),
+        ),
+        body: Center(
+          child: Text(AppLocalizations.of(context).noPurchasesFound),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)
-            .purchaseDetailsTitle('${purchase.id}')),
+        title: Text(AppLocalizations.of(context).purchaseDetailsTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
@@ -81,25 +112,23 @@ class _PurchaseReadState extends State<PurchaseRead> {
           ),
         ],
       ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildHeaderSection(),
-                    const SizedBox(height: 24),
-                    _buildDetailsSection(),
-                    const SizedBox(height: 24),
-                    _buildParticipantsSection(),
-                    const SizedBox(height: 24),
-                    _buildProductsSection(),
-                  ],
-                ),
-              ),
-            ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildHeaderSection(),
+              const SizedBox(height: 24),
+              _buildDetailsSection(),
+              const SizedBox(height: 24),
+              _buildParticipantsSection(),
+              const SizedBox(height: 24),
+              _buildProductsSection(),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -128,11 +157,11 @@ class _PurchaseReadState extends State<PurchaseRead> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Purchase #${purchase.id}',
+                        '${AppLocalizations.of(context).purchase} #${purchase!.id}',
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
                       Text(
-                        purchase.date?.toLocal().toString().split(' ')[0] ??
+                        purchase!.date?.toLocal().toString().split(' ')[0] ??
                             AppLocalizations.of(context).noDate,
                         style: Theme.of(context)
                             .textTheme
@@ -153,12 +182,12 @@ class _PurchaseReadState extends State<PurchaseRead> {
                 _StatisticItem(
                   icon: Icons.attach_money,
                   label: AppLocalizations.of(context).totalAmount,
-                  value: '\$${purchase.amount?.toStringAsFixed(2) ?? '0.00'}',
+                  value: purchase!.amount?.toStringAsFixed(2) ?? '0.00',
                 ),
                 _StatisticItem(
                   icon: Icons.inventory_2,
                   label: AppLocalizations.of(context).products,
-                  value: purchase.$productsCount?.toString() ?? '0',
+                  value: purchase!.$productsCount?.toString() ?? '0',
                 ),
               ],
             ),
@@ -180,20 +209,20 @@ class _PurchaseReadState extends State<PurchaseRead> {
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 16),
-            if (purchase.description != null &&
-                purchase.description!.isNotEmpty)
+            if (purchase!.description != null &&
+                purchase!.description!.isNotEmpty)
               _buildDetailRow(
                 AppLocalizations.of(context).description,
-                purchase.description!,
+                purchase!.description!,
               ),
             _buildDetailRow(
               AppLocalizations.of(context).date,
-              purchase.date?.toLocal().toString().split(' ')[0] ??
+              purchase!.date?.toLocal().toString().split(' ')[0] ??
                   AppLocalizations.of(context).noDate,
             ),
             _buildDetailRow(
               AppLocalizations.of(context).amount,
-              '\$${purchase.amount?.toStringAsFixed(2) ?? '0.00'}',
+              '\$${purchase!.amount?.toStringAsFixed(2) ?? '0.00'}',
               color: Theme.of(context).colorScheme.primary,
             ),
           ],
@@ -214,33 +243,33 @@ class _PurchaseReadState extends State<PurchaseRead> {
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 16),
-            if (purchase.supplier != null)
+            if (purchase!.supplier != null)
               ListTile(
                 leading: const CircleAvatar(
                   child: Icon(Icons.business),
                 ),
-                title: Text(purchase.supplier?.name ??
+                title: Text(purchase!.supplier?.name ??
                     AppLocalizations.of(context).unknownSupplier),
                 subtitle: Text(AppLocalizations.of(context).supplier),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () {
-                  if (purchase.supplier != null) {
-                    _navigateToSupplier(purchase.supplier!);
+                  if (purchase!.supplier != null) {
+                    _navigateToSupplier(purchase!.supplier!);
                   }
                 },
               ),
-            if (purchase.employee != null)
+            if (purchase!.employee != null)
               ListTile(
                 leading: const CircleAvatar(
                   child: Icon(Icons.person),
                 ),
-                title: Text(purchase.employee?.name ??
+                title: Text(purchase!.employee?.name ??
                     AppLocalizations.of(context).unknownEmployee),
                 subtitle: Text(AppLocalizations.of(context).employee),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () {
-                  if (purchase.employee != null) {
-                    _navigateToEmployee(purchase.employee!);
+                  if (purchase!.employee != null) {
+                    _navigateToEmployee(purchase!.employee!);
                   }
                 },
               ),
@@ -259,7 +288,7 @@ class _PurchaseReadState extends State<PurchaseRead> {
           style: Theme.of(context).textTheme.titleLarge,
         ),
         const SizedBox(height: 8),
-        if (purchase.products?.isEmpty ?? true)
+        if (purchase!.products?.isEmpty ?? true)
           Center(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -278,9 +307,9 @@ class _PurchaseReadState extends State<PurchaseRead> {
             child: ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: purchase.products?.length ?? 0,
+              itemCount: purchase!.products?.length ?? 0,
               itemBuilder: (context, index) {
-                final purchaseProduct = purchase.products![index];
+                final purchaseProduct = purchase!.products![index];
                 final product = purchaseProduct.product;
                 if (product == null) return const SizedBox.shrink();
 

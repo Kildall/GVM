@@ -44,9 +44,11 @@ class _ProductsBrowseState extends State<ProductsBrowse> {
   }
 
   void _navigateToProductDetail(Product product) {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => ProductRead(product: product),
-    ));
+    if (product.id != null) {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => ProductRead(productId: product.id!),
+      ));
+    }
   }
 
   void _navigateToProductAdd() {

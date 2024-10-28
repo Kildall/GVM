@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
+import 'package:gvm_flutter/src/views/products/purchases/purchase_read.dart';
 
 class ProductRead extends StatefulWidget {
-  final Product product;
+  final int productId;
 
   const ProductRead({
     super.key,
-    required this.product,
+    required this.productId,
   });
 
   @override
@@ -17,19 +18,18 @@ class ProductRead extends StatefulWidget {
 
 class _ProductReadState extends State<ProductRead> {
   bool isLoading = true;
-  late Product product;
+  late Product? product;
 
   @override
   void initState() {
     super.initState();
-    product = widget.product;
     _loadProductDetails();
   }
 
   Future<void> _loadProductDetails() async {
     try {
       final response = await AuthManager.instance.apiService.get<Product>(
-          '/api/products/${product.id}',
+          '/api/products/${widget.productId}',
           fromJson: Product.fromJson);
 
       if (response.data != null) {
@@ -59,16 +59,28 @@ class _ProductReadState extends State<ProductRead> {
   void _navigateToSale(ProductSale sale) {}
 
   void _navigateToPurchase(PurchaseProduct purchase) {
-    // Navigator.pushNamed(context, '/purchases/detail',
-    //     arguments: purchase.purchase);
+    if (purchase.purchaseId != null) {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => PurchaseRead(purchaseId: purchase.purchaseId!),
+      ));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(AppLocalizations.of(context).loading),
+        ),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)
-            .productDetailsTitle(product.name ?? '')),
+            .productDetailsTitle(product!.name ?? '')),
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
@@ -99,8 +111,8 @@ class _ProductReadState extends State<ProductRead> {
   }
 
   Widget _buildHeaderSection() {
-    final bool isLowStock = (product.quantity ?? 0) < 10;
-    final bool isOutOfStock = (product.quantity ?? 0) == 0;
+    final bool isLowStock = (product!.quantity ?? 0) < 10;
+    final bool isOutOfStock = (product!.quantity ?? 0) == 0;
 
     return Card(
       child: Padding(
@@ -126,13 +138,13 @@ class _ProductReadState extends State<ProductRead> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        product.name ??
+                        product!.name ??
                             AppLocalizations.of(context).unnamedProduct,
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
-                      if (product.brand != null)
+                      if (product!.brand != null)
                         Text(
-                          product.brand!,
+                          product!.brand!,
                           style: Theme.of(context)
                               .textTheme
                               .titleMedium
@@ -144,8 +156,8 @@ class _ProductReadState extends State<ProductRead> {
                   ),
                 ),
                 Icon(
-                  product.enabled ?? true ? Icons.check_circle : Icons.cancel,
-                  color: (product.enabled ?? true)
+                  product!.enabled ?? true ? Icons.check_circle : Icons.cancel,
+                  color: (product!.enabled ?? true)
                       ? Colors.green
                       : Theme.of(context).colorScheme.error,
                 ),
@@ -158,17 +170,17 @@ class _ProductReadState extends State<ProductRead> {
                 _StatisticItem(
                   icon: Icons.shopping_cart,
                   label: AppLocalizations.of(context).sales,
-                  value: (product.$salesCount ?? 0).toString(),
+                  value: (product!.$salesCount ?? 0).toString(),
                 ),
                 _StatisticItem(
                   icon: Icons.shopping_bag,
                   label: AppLocalizations.of(context).purchases,
-                  value: (product.$purchasesCount ?? 0).toString(),
+                  value: (product!.$purchasesCount ?? 0).toString(),
                 ),
                 _StatisticItem(
                   icon: Icons.inventory_2,
                   label: AppLocalizations.of(context).stock,
-                  value: (product.quantity ?? 0).toString(),
+                  value: (product!.quantity ?? 0).toString(),
                   color: isOutOfStock
                       ? Colors.red
                       : isLowStock
@@ -197,17 +209,17 @@ class _ProductReadState extends State<ProductRead> {
             const SizedBox(height: 16),
             _buildDetailRow(
               AppLocalizations.of(context).price,
-              '\$${product.price?.toStringAsFixed(2) ?? '0.00'}',
+              '\$${product!.price?.toStringAsFixed(2) ?? '0.00'}',
             ),
             _buildDetailRow(
               AppLocalizations.of(context).quantity,
-              '${product.quantity ?? 0}',
+              '${product!.quantity ?? 0}',
               color: _getStockColor(),
             ),
-            if (product.measure != null)
+            if (product!.measure != null)
               _buildDetailRow(
                 AppLocalizations.of(context).measure,
-                '${product.measure} ml',
+                '${product!.measure} ml',
               ),
           ],
         ),
@@ -216,7 +228,7 @@ class _ProductReadState extends State<ProductRead> {
   }
 
   Color _getStockColor() {
-    final quantity = product.quantity ?? 0;
+    final quantity = product!.quantity ?? 0;
     if (quantity == 0) return Colors.red;
     if (quantity < 10) return Colors.orange;
     return Colors.green;
@@ -231,7 +243,7 @@ class _ProductReadState extends State<ProductRead> {
           style: Theme.of(context).textTheme.titleLarge,
         ),
         const SizedBox(height: 8),
-        if (product.sales?.isEmpty ?? true)
+        if (product!.sales?.isEmpty ?? true)
           Center(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -252,9 +264,9 @@ class _ProductReadState extends State<ProductRead> {
               shrinkWrap: true,
               padding: const EdgeInsets.all(8),
               physics: const ScrollPhysics(),
-              itemCount: product.sales?.length ?? 0,
+              itemCount: product!.sales?.length ?? 0,
               itemBuilder: (context, index) {
-                final sale = product.sales![index];
+                final sale = product!.sales![index];
                 return Card(
                   child: ListTile(
                     leading: const CircleAvatar(
@@ -290,7 +302,7 @@ class _ProductReadState extends State<ProductRead> {
           style: Theme.of(context).textTheme.titleLarge,
         ),
         const SizedBox(height: 8),
-        if (product.purchases?.isEmpty ?? true)
+        if (product!.purchases?.isEmpty ?? true)
           Center(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -311,9 +323,9 @@ class _ProductReadState extends State<ProductRead> {
               shrinkWrap: true,
               padding: const EdgeInsets.all(8),
               physics: const ScrollPhysics(),
-              itemCount: product.purchases?.length ?? 0,
+              itemCount: product!.purchases?.length ?? 0,
               itemBuilder: (context, index) {
-                final purchase = product.purchases![index];
+                final purchase = product!.purchases![index];
                 return Card(
                   child: ListTile(
                     leading: const CircleAvatar(

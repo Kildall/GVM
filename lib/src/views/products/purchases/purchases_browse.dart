@@ -49,9 +49,11 @@ class _PurchasesBrowseState extends State<PurchasesBrowse> {
   }
 
   void _navigateToPurchaseDetail(Purchase purchase) {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => PurchaseRead(purchase: purchase),
-    ));
+    if (purchase.id != null) {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => PurchaseRead(purchaseId: purchase.id!),
+      ));
+    }
   }
 
   void _navigateToPurchaseAdd() {

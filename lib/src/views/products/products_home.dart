@@ -4,6 +4,7 @@ import 'package:gvm_flutter/src/models/response/product_responses.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 import 'package:gvm_flutter/src/views/products/products/products_browse.dart';
 import 'package:gvm_flutter/src/views/products/purchases/purchases_browse.dart';
+import 'package:gvm_flutter/src/views/products/suppliers/suppliers_browse.dart';
 
 class ProductsHome extends StatefulWidget {
   const ProductsHome({super.key});
@@ -54,6 +55,12 @@ class _ProductsHomeState extends State<ProductsHome> {
   void _navigateToPurchases() {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => const PurchasesBrowse(),
+    ));
+  }
+
+  void _navigateToSuppliers() {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => const SuppliersBrowse(),
     ));
   }
 
@@ -120,6 +127,14 @@ class _ProductsHomeState extends State<ProductsHome> {
                           description: AppLocalizations.of(context)
                               .purchasesManagementDescription,
                           onTap: _navigateToPurchases,
+                        ),
+                        const SizedBox(height: 16),
+                        _NavigationCard(
+                          title: AppLocalizations.of(context).suppliers,
+                          icon: Icons.store_outlined,
+                          description:
+                              AppLocalizations.of(context).suppliersDescription,
+                          onTap: _navigateToSuppliers,
                         ),
                       ],
                     ),

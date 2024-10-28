@@ -236,11 +236,11 @@
   "@modules": {
     "description": "Label for modules"
   },
-  "employeeManagement": "Gestión de Empleados",
+  "employeeManagement": "Empleados",
   "@employeeManagement": {
     "description": "Label for employee management"
   },
-  "securityManagement": "Gestión de Seguridad",
+  "securityManagement": "Seguridad",
   "@securityManagement": {
     "description": "Label for security management"
   },
@@ -494,7 +494,7 @@
   "@noPurchasesRecorded": {
     "description": "Message for no purchases recorded"
   },
-  "purchasesManagement": "Gestión de Compras",
+  "purchasesManagement": "Compras",
   "@purchasesManagement": {
     "description": "Label for purchases management"
   },
@@ -502,7 +502,7 @@
   "@purchasesManagementDescription": {
     "description": "Description for purchases management"
   },
-  "productManagement": "Gestión de Productos",
+  "productManagement": "Productos",
   "@productManagement": {
     "description": "Label for product management"
   },
@@ -603,14 +603,9 @@
   "@purchaseDetails": {
     "description": "Label for purchase details"
   },
-  "purchaseDetailsTitle": "Detalles de {name}",
+  "purchaseDetailsTitle": "Detalles de compra",
   "@purchaseDetailsTitle": {
-    "description": "Title for purchase details",
-    "placeholders": {
-      "name": {
-        "description": "Placeholder for purchase name"
-      }
-    }
+    "description": "Title for purchase details"
   },
   "clearFilters": "Limpiar filtros",
   "@clearFilters": {
@@ -697,5 +692,54 @@
   "noProductsInPurchase": "No se encontraron productos en la compra",
   "@noProductsInPurchase": {
     "description": "Message for no products in purchase"
+  },
+  "suppliers": "Proveedores",
+  "@suppliers": {
+    "description": "Label for suppliers"
+  },
+  "suppliersDescription": "Administra tus proveedores",
+  "@suppliersDescription": {
+    "description": "Description for suppliers"
+  },
+  "searchSuppliers": "Buscar proveedores...",
+  "@searchSuppliers": {
+    "description": "Placeholder for search suppliers"
+  },
+  "noSuppliersFound": "No se encontraron proveedores",
+  "@noSuppliersFound": {
+    "description": "Message for no suppliers found"
+  },
+  "unnamedSupplier": "Proveedor sin nombre",
+  "@unnamedSupplier": {
+    "description": "Label for unnamed supplier"
+  },
+  "supplierDetailsTitle": "Detalles de {name}",
+  "@supplierDetailsTitle": {
+    "description": "Title for supplier details",
+    "placeholders": {
+      "name": {
+        "description": "Placeholder for supplier name"
+      }
+    }
+  },
+  "totalPurchases": "Total de compras",
+  "@totalPurchases": {
+    "description": "Label for total purchases"
+  },
+  "lastPurchase": "Última compra",
+  "@lastPurchase": {
+    "description": "Label for last purchase"
+  },
+  "purchaseCount": "Cantidad de compras",
+  "@purchaseCount": {
+    "description": "Label for purchase count"
+  },
+  "purchaseHistory": "Historial de compras",
+  "@purchaseHistory": {
+    "description": "Label for purchase history"
+  },
+  "loading": "Cargando...",
+  "@loading": {
+    "description": "Label for loading"
   }
 }
