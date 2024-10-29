@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
+import 'package:gvm_flutter/src/views/products/products/product_edit.dart';
 import 'package:gvm_flutter/src/views/products/purchases/purchase_read.dart';
 
 class ProductRead extends StatefulWidget {
@@ -32,7 +33,7 @@ class _ProductReadState extends State<ProductRead> {
           '/api/products/${widget.productId}',
           fromJson: Product.fromJson);
 
-      if (response.data != null) {
+      if (response.success && response.data != null) {
         setState(() {
           product = response.data!;
           isLoading = false;
@@ -50,10 +51,12 @@ class _ProductReadState extends State<ProductRead> {
   }
 
   void _navigateToProductEdit() {
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => ProductEdit(product: product)),
-    // );
+    if (product != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ProductEdit(product: product!)),
+      );
+    }
   }
 
   void _navigateToSale(ProductSale sale) {}

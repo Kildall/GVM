@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/response/product_responses.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
+import 'package:gvm_flutter/src/views/products/products/product_add.dart';
 import 'package:gvm_flutter/src/views/products/products/product_read.dart';
 
 class ProductsBrowse extends StatefulWidget {
@@ -52,9 +53,9 @@ class _ProductsBrowseState extends State<ProductsBrowse> {
   }
 
   void _navigateToProductAdd() {
-    // Navigator.of(context).push(MaterialPageRoute(
-    //   builder: (context) => const ProductAdd(),
-    // ));
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => const ProductAdd(),
+    ));
   }
 
   List<Product> get filteredProducts {

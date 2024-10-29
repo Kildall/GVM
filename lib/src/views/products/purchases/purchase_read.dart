@@ -4,6 +4,7 @@ import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 import 'package:gvm_flutter/src/views/employees/employees/employee_read.dart';
 import 'package:gvm_flutter/src/views/products/products/product_read.dart';
+import 'package:gvm_flutter/src/views/products/purchases/purchase_edit.dart';
 import 'package:gvm_flutter/src/views/products/suppliers/supplier_read.dart';
 
 class PurchaseRead extends StatefulWidget {
@@ -52,10 +53,13 @@ class _PurchaseReadState extends State<PurchaseRead> {
   }
 
   void _navigateToPurchaseEdit() {
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => PurchaseEdit(purchaseId: widget.purchaseId)),
-    // );
+    if (purchase != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => PurchaseEdit(purchase: purchase!)),
+      );
+    }
   }
 
   void _navigateToProduct(Product product) {

@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/response/purchase_response.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
+import 'package:gvm_flutter/src/views/products/purchases/purchase_add.dart';
 import 'package:gvm_flutter/src/views/products/purchases/purchase_read.dart';
 
 class PurchasesBrowse extends StatefulWidget {
@@ -57,9 +58,9 @@ class _PurchasesBrowseState extends State<PurchasesBrowse> {
   }
 
   void _navigateToPurchaseAdd() {
-    // Navigator.of(context).push(MaterialPageRoute(
-    //   builder: (context) => const PurchaseAdd(),
-    // ));
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => const PurchaseAdd(),
+    ));
   }
 
   Future<void> _selectStartDate(BuildContext context) async {
