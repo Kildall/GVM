@@ -761,5 +761,93 @@
   "addSupplier": "Agregar proveedor",
   "@addSupplier": {
     "description": "Label for add supplier"
+  },
+  "success": "Éxito",
+  "@success": {
+    "description": "Label for success"
+  },
+  "temporaryPassword": "Contraseña temporal",
+  "@temporaryPassword": {
+    "description": "Label for temporary password"
+  },
+  "pleaseStorePasswordSecurely": "Por favor, almacena esta contraseña de manera segura",
+  "@pleaseStorePasswordSecurely": {
+    "description": "Message for please store password securely"
+  },
+  "employeeCreatedSuccessfully": "Empleado creado exitosamente",
+  "@employeeCreatedSuccessfully": {
+    "description": "Message for employee created successfully"
+  },
+  "errorCreatingEmployee": "Error al crear empleado",
+  "@errorCreatingEmployee": {
+    "description": "Message for error creating employee"
+  },
+  "addEmployee": "Agregar empleado",
+  "@addEmployee": {
+    "description": "Label for add employee"
+  },
+  "position": "Cargo",
+  "@position": {
+    "description": "Label for position"
+  },
+  "userAccount": "Cuenta de usuario",
+  "@userAccount": {
+    "description": "Label for user account"
+  },
+  "passwordWillBeGenerated": "La contraseña será generada automáticamente",
+  "@passwordWillBeGenerated": {
+    "description": "Message for password will be generated"
+  },
+  "passwordReset": "Contraseña restablecida",
+  "@passwordReset": {
+    "description": "Label for password reset"
+  },
+  "newTemporaryPassword": "Nueva contraseña temporal",
+  "@newTemporaryPassword": {
+    "description": "Label for new temporary password"
+  },
+  "errorResettingPassword": "Error al restablecer la contraseña",
+  "@errorResettingPassword": {
+    "description": "Message for error resetting password"
+  },
+  "employeeUpdatedSuccessfully": "Empleado actualizado exitosamente",
+  "@employeeUpdatedSuccessfully": {
+    "description": "Message for employee updated successfully"
+  },
+  "errorUpdatingEmployee": "Error al actualizar empleado",
+  "@errorUpdatingEmployee": {
+    "description": "Message for error updating employee"
+  },
+  "editEmployee": "Editar empleado",
+  "@editEmployee": {
+    "description": "Label for edit employee"
+  },
+  "employeeEnabled": "Empleado habilitado",
+  "@employeeEnabled": {
+    "description": "Label for employee enabled"
+  },
+  "noUserAccountAssociated": "No se encontró una cuenta de usuario asociada",
+  "@noUserAccountAssociated": {
+    "description": "Message for no user account associated"
+  },
+  "reset": "Restablecer",
+  "@reset": {
+    "description": "Label for reset"
+  },
+  "resetPassword": "Restablecer contraseña",
+  "@resetPassword": {
+    "description": "Label for reset password"
+  },
+  "resetPasswordDescription": "Restablecer la contraseña del empleado",
+  "@resetPasswordDescription": {
+    "description": "Message for reset password description"
+  },
+  "userEnabled": "Usuario habilitado",
+  "@userEnabled": {
+    "description": "Label for user enabled"
+  },
+  "userVerified": "Usuario verificado",
+  "@userVerified": {
+    "description": "Label for user verified"
   }
 }

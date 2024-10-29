@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
+import 'package:gvm_flutter/src/views/employees/employees/employee_edit.dart';
+import 'package:gvm_flutter/src/views/products/purchases/purchase_read.dart';
 
 class EmployeeRead extends StatefulWidget {
   final Employee employee;
@@ -50,10 +52,10 @@ class _EmployeeReadState extends State<EmployeeRead> {
   }
 
   void _navigateToEmployeeEdit() {
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => EmployeeEdit(employee: employee)),
-    // );
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => EmployeeEdit(employee: employee)),
+    );
   }
 
   void _navigateToDelivery(Delivery delivery) {
@@ -65,7 +67,13 @@ class _EmployeeReadState extends State<EmployeeRead> {
   }
 
   void _navigateToPurchase(Purchase purchase) {
-    Navigator.pushNamed(context, '/purchases/detail', arguments: purchase);
+    if (purchase.id != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => PurchaseRead(purchaseId: purchase.id!)),
+      );
+    }
   }
 
   @override
