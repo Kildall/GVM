@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
+import 'package:gvm_flutter/src/models/request/product_requests.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
+import 'package:gvm_flutter/src/views/products/products/product_read.dart';
 
 class ProductAdd extends StatefulWidget {
   const ProductAdd({super.key});
@@ -14,7 +17,6 @@ class _ProductAddState extends State<ProductAdd> {
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
 
-  // Form fields
   String? name;
   int? quantity;
   double? measure;
@@ -28,29 +30,36 @@ class _ProductAddState extends State<ProductAdd> {
 
     setState(() => isLoading = true);
     try {
-      final newProduct = Product(
-        name: name,
-        quantity: quantity,
-        measure: measure,
-        brand: brand,
-        price: price,
-        enabled: true,
+      final request = CreateProductRequest(
+        brand: brand!,
+        measure: measure!.toInt(),
+        name: name!,
+        price: price!,
+        quantity: quantity!,
       );
 
-      await AuthManager.instance.apiService.post(
+      final response = await AuthManager.instance.apiService.post<Product>(
         '/api/products',
-        body: newProduct.toJson(),
-        fromJson: (json) => {},
+        body: request.toJson(),
+        fromJson: Product.fromJson,
       );
 
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Product created successfully'),
-            backgroundColor: Colors.green,
-          ),
-        );
-        Navigator.pop(context);
+      if (response.success && response.data != null) {
+        final createdProduct = response.data!;
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(AppLocalizations.of(context).success),
+              backgroundColor: Colors.green,
+            ),
+          );
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    ProductRead(productId: createdProduct.id!)),
+          );
+        }
       }
     } catch (e) {
       debugPrint(e.toString());

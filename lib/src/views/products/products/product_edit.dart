@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
+import 'package:gvm_flutter/src/models/request/product_requests.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 
 class ProductEdit extends StatefulWidget {
@@ -46,30 +47,33 @@ class _ProductEditState extends State<ProductEdit> {
 
     setState(() => isLoading = true);
     try {
-      final updatedProduct = widget.product.copyWith(
-        name: name,
-        quantity: quantity,
-        measure: measure,
-        brand: brand,
-        price: price,
-        enabled: enabled,
+      final request = UpdateProductRequest(
+        productId: widget.product.id!,
+        brand: brand!,
+        measure: measure!.toInt(),
+        name: name!,
+        price: price!,
+        quantity: quantity!,
       );
 
       // Assuming you have a similar API service setup
       final response = await AuthManager.instance.apiService.put(
-        '/api/products/${widget.product.id}',
-        body: updatedProduct.toJson(),
+        '/api/products',
+        body: request.toJson(),
         fromJson: Product.fromJson,
       );
 
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Product updated successfully'),
-            backgroundColor: Colors.green,
-          ),
-        );
-        Navigator.pop(context, response.data);
+      if (response.success && response.data != null) {
+        final updatedProduct = response.data!;
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Product updated successfully'),
+              backgroundColor: Colors.green,
+            ),
+          );
+          Navigator.pop(context, updatedProduct);
+        }
       }
     } catch (e) {
       debugPrint(e.toString());

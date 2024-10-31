@@ -1,8 +1,8 @@
 //***  AUTO-GENERATED FILE - DO NOT MODIFY ***//
 
 import 'model_base.dart';
-import 'purchase_product.dart';
 import 'product_sale.dart';
+import 'purchase_product.dart';
 
 class Product implements ToJson, Id {
   @override
@@ -36,9 +36,17 @@ class Product implements ToJson, Id {
       id: json['id'] as int?,
       name: json['name'] as String?,
       quantity: json['quantity'] as int?,
-      measure: json['measure'] as double?,
+      measure: json['measure'] != null
+          ? (json['measure'] is int
+              ? (json['measure'] as int).toDouble()
+              : json['measure'] as double)
+          : null,
       brand: json['brand'] as String?,
-      price: json['price'] as double?,
+      price: json['price'] != null
+          ? (json['price'] is int
+              ? (json['price'] as int).toDouble()
+              : json['price'] as double)
+          : null,
       enabled: json['enabled'] as bool?,
       purchases: json['purchases'] != null
           ? createModels<PurchaseProduct>(
