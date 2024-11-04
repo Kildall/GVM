@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
+import 'package:gvm_flutter/src/models/request/purchase_requests.dart';
 import 'package:gvm_flutter/src/models/response/employee_responses.dart';
 import 'package:gvm_flutter/src/models/response/product_responses.dart';
 import 'package:gvm_flutter/src/models/response/supplier_responses.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
+import 'package:gvm_flutter/src/views/products/purchases/purchase_read.dart';
 import 'package:intl/intl.dart';
 
 class PurchaseAdd extends StatefulWidget {
@@ -73,29 +76,45 @@ class _PurchaseAddState extends State<PurchaseAdd> {
 
     setState(() => isLoading = true);
     try {
-      final newPurchase = Purchase(
-        employeeId: employeeId,
-        supplierId: supplierId,
-        date: date,
+      if (description == null || description!.isEmpty) {
+        description = AppLocalizations.of(context).noDescription;
+      }
+      final request = CreatePurchaseRequest(
+        employeeId: employeeId!,
+        supplierId: supplierId!,
+        date: date!.toIso8601String(),
         amount: calculatedAmount,
-        description: description,
-        products: selectedProducts,
+        description: description!,
+        products: selectedProducts
+            .map((product) => PurchaseProductItem(
+                  productId: product.productId!,
+                  quantity: product.quantity!,
+                ))
+            .toList(),
       );
 
-      await AuthManager.instance.apiService.post(
+      final response = await AuthManager.instance.apiService.post<Purchase>(
         '/api/purchases',
-        body: newPurchase.toJson(),
-        fromJson: (json) => Purchase.fromJson(json['data']),
+        body: request.toJson(),
+        fromJson: Purchase.fromJson,
       );
 
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Purchase created successfully'),
-            backgroundColor: Colors.green,
-          ),
-        );
-        Navigator.pop(context);
+      if (response.success && response.data != null) {
+        final createdPurchase = response.data!;
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(AppLocalizations.of(context).success),
+              backgroundColor: Colors.green,
+            ),
+          );
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    PurchaseRead(purchaseId: createdPurchase.id!)),
+          );
+        }
       }
     } catch (e) {
       debugPrint(e.toString());

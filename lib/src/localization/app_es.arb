@@ -849,5 +849,9 @@
   "userVerified": "Usuario verificado",
   "@userVerified": {
     "description": "Label for user verified"
+  },
+  "noDescription": "Sin descripción",
+  "@noDescription": {
+    "description": "Label for no description"
   }
 }

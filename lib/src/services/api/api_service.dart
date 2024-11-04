@@ -34,28 +34,28 @@ class APIService {
       case ErrorCode.MISSING_AUTH:
       case ErrorCode.AUTHENTICATED:
       case ErrorCode.USER_NOT_FOUND:
-        throw AuthException(errorCode, error.message);
+        throw AuthException(errorCode, error.message, error.code);
 
       case ErrorCode.USER_ERROR:
       case ErrorCode.INCORRECT_PASSWORD:
       case ErrorCode.USER_ALREADY_EXISTS:
       case ErrorCode.USER_NOT_ENABLED:
-        throw UserException(errorCode, error.message);
+        throw UserException(errorCode, error.message, error.code);
 
       case ErrorCode.RESOURCE_ERROR:
       case ErrorCode.RESOURCE_NOT_FOUND:
       case ErrorCode.RESOURCE_ALREADY_EXISTS:
       case ErrorCode.RESOURCE_UPDATE_FAILED:
-        throw ResourceException(errorCode, error.message);
+        throw ResourceException(errorCode, error.message, error.code);
 
       case ErrorCode.VALIDATION_ERROR:
       case ErrorCode.INVALID_PARAMS:
       case ErrorCode.INSUFFICIENT_INVENTORY:
-        throw ValidationException(errorCode, error.message);
+        throw ValidationException(errorCode, error.message, error.code);
 
       case ErrorCode.SERVER_ERROR:
       case ErrorCode.DATABASE_ERROR:
-        throw ServerException(errorCode, error.message);
+        throw ServerException(errorCode, error.message, error.code);
 
       default:
         // Log unexpected error code to console
@@ -65,7 +65,7 @@ class APIService {
           name: 'APIService',
         );
         throw ServerException(
-            ErrorCode.SERVER_ERROR, 'An unexpected error occurred');
+            ErrorCode.SERVER_ERROR, 'An unexpected error occurred', error.code);
     }
   }
 
@@ -96,7 +96,7 @@ class APIService {
         error: e.toString(),
         name: 'APIService',
       );
-      throw ServerException(ErrorCode.SERVER_ERROR, e.toString());
+      throw ServerException(ErrorCode.SERVER_ERROR, e.toString(), 0);
     }
   }
 

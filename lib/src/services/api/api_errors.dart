@@ -33,29 +33,30 @@ enum ErrorCode {
 class APIException implements Exception {
   final ErrorCode code;
   final String message;
+  final int errorCode;
 
-  APIException(this.code, this.message);
+  APIException(this.code, this.message, this.errorCode);
 
   @override
   String toString() => 'APIException: [$code] $message';
 }
 
 class AuthException extends APIException {
-  AuthException(super.code, super.message);
+  AuthException(super.code, super.message, super.errorCode);
 }
 
 class UserException extends APIException {
-  UserException(super.code, super.message);
+  UserException(super.code, super.message, super.errorCode);
 }
 
 class ResourceException extends APIException {
-  ResourceException(super.code, super.message);
+  ResourceException(super.code, super.message, super.errorCode);
 }
 
 class ValidationException extends APIException {
-  ValidationException(super.code, super.message);
+  ValidationException(super.code, super.message, super.errorCode);
 }
 
 class ServerException extends APIException {
-  ServerException(super.code, super.message);
+  ServerException(super.code, super.message, super.errorCode);
 }

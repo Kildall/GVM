@@ -1,4 +1,6 @@
 import 'dart:convert';
+
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class HTTPService {
@@ -14,7 +16,8 @@ class HTTPService {
     dynamic body,
     Map<String, dynamic>? queryParameters,
   }) async {
-    final uri = Uri.parse('$baseUrl$endpoint').replace(queryParameters: queryParameters);
+    final uri = Uri.parse('$baseUrl$endpoint')
+        .replace(queryParameters: queryParameters);
     final requestHeaders = {
       'Content-Type': 'application/json',
       ...?headers,
@@ -27,10 +30,12 @@ class HTTPService {
         response = await _httpClient.get(uri, headers: requestHeaders);
         break;
       case 'POST':
-        response = await _httpClient.post(uri, headers: requestHeaders, body: jsonEncode(body));
+        response = await _httpClient.post(uri,
+            headers: requestHeaders, body: jsonEncode(body));
         break;
       case 'PUT':
-        response = await _httpClient.put(uri, headers: requestHeaders, body: jsonEncode(body));
+        response = await _httpClient.put(uri,
+            headers: requestHeaders, body: jsonEncode(body));
         break;
       case 'DELETE':
         response = await _httpClient.delete(uri, headers: requestHeaders);
@@ -43,7 +48,9 @@ class HTTPService {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       return responseData;
     } else {
-      throw HTTPException(response.statusCode, responseData['message'] ?? 'Request failed');
+      debugPrint('HTTP response: ${response.body}');
+      throw HTTPException(
+          response.statusCode, responseData['message'] ?? 'Request failed');
     }
   }
 }
