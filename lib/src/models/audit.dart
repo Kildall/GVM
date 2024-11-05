@@ -1,7 +1,9 @@
 //***  AUTO-GENERATED FILE - DO NOT MODIFY ***//
 
-import 'model_base.dart';
+import 'package:gvm_flutter/src/models/exceptions/model_parse_exception.dart';
+
 import 'audit_action.dart';
+import 'model_base.dart';
 import 'user.dart';
 
 class Audit implements ToJson, Id {
@@ -26,18 +28,25 @@ class Audit implements ToJson, Id {
     this.description,
   });
 
-  factory Audit.fromJson(Map<String, dynamic> json) => Audit(
-      id: json['id'] as int?,
-      timestamp:
-          json['timestamp'] != null ? DateTime.parse(json['timestamp']) : null,
-      action: AuditAction.values.byName(json['action']),
-      entityType: json['entityType'] as String?,
-      userId: json['userId'] as int?,
-      user: json['user'] != null
-          ? User.fromJson(json['user'] as Map<String, dynamic>)
-          : null,
-      data: json['data'] as Map<String, dynamic>?,
-      description: json['description'] as String?);
+  factory Audit.fromJson(Map<String, dynamic> json) {
+    try {
+      return Audit(
+          id: json['id'] as int?,
+          timestamp: json['timestamp'] != null
+              ? DateTime.parse(json['timestamp'])
+              : null,
+          action: AuditAction.values.byName(json['action']),
+          entityType: json['entityType'] as String?,
+          userId: json['userId'] as int?,
+          user: json['user'] != null
+              ? User.fromJson(json['user'] as Map<String, dynamic>)
+              : null,
+          data: json['data'] as Map<String, dynamic>?,
+          description: json['description'] as String?);
+    } catch (e) {
+      throw ModelParseException('Audit', e.toString(), json, e);
+    }
+  }
 
   Audit copyWith({
     int? id,

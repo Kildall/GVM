@@ -1,8 +1,10 @@
 //***  AUTO-GENERATED FILE - DO NOT MODIFY ***//
 
-import 'model_base.dart';
+import 'package:gvm_flutter/src/models/exceptions/model_parse_exception.dart';
+
 import 'customer.dart';
 import 'delivery.dart';
+import 'model_base.dart';
 
 class Address implements ToJson, Id {
   @override
@@ -36,24 +38,30 @@ class Address implements ToJson, Id {
     this.$deliveriesCount,
   });
 
-  factory Address.fromJson(Map<String, dynamic> json) => Address(
-      id: json['id'] as int?,
-      name: json['name'] as String?,
-      customerId: json['customerId'] as int?,
-      street1: json['street1'] as String?,
-      street2: json['street2'] as String?,
-      postalCode: json['postalCode'] as String?,
-      state: json['state'] as String?,
-      city: json['city'] as String?,
-      details: json['details'] as String?,
-      enabled: json['enabled'] as bool?,
-      customer: json['customer'] != null
-          ? Customer.fromJson(json['customer'] as Map<String, dynamic>)
-          : null,
-      deliveries: json['deliveries'] != null
-          ? createModels<Delivery>(json['deliveries'], Delivery.fromJson)
-          : null,
-      $deliveriesCount: json['_count']?['deliveries'] as int?);
+  factory Address.fromJson(Map<String, dynamic> json) {
+    try {
+      return Address(
+          id: json['id'] as int?,
+          name: json['name'] as String?,
+          customerId: json['customerId'] as int?,
+          street1: json['street1'] as String?,
+          street2: json['street2'] as String?,
+          postalCode: json['postalCode'] as String?,
+          state: json['state'] as String?,
+          city: json['city'] as String?,
+          details: json['details'] as String?,
+          enabled: json['enabled'] as bool?,
+          customer: json['customer'] != null
+              ? Customer.fromJson(json['customer'] as Map<String, dynamic>)
+              : null,
+          deliveries: json['deliveries'] != null
+              ? createModels<Delivery>(json['deliveries'], Delivery.fromJson)
+              : null,
+          $deliveriesCount: json['_count']?['deliveries'] as int?);
+    } catch (e) {
+      throw ModelParseException('Address', e.toString(), json, e);
+    }
+  }
 
   Address copyWith({
     int? id,

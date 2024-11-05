@@ -1,13 +1,15 @@
 //***  AUTO-GENERATED FILE - DO NOT MODIFY ***//
 
+import 'package:gvm_flutter/src/models/exceptions/model_parse_exception.dart';
+
+import 'address.dart';
+import 'business_status_enum.dart';
+import 'delivery_status_enum.dart';
+import 'driver_status_enum.dart';
+import 'employee.dart';
+import 'employee_delivery.dart';
 import 'model_base.dart';
 import 'sale.dart';
-import 'employee.dart';
-import 'address.dart';
-import 'delivery_status_enum.dart';
-import 'business_status_enum.dart';
-import 'driver_status_enum.dart';
-import 'employee_delivery.dart';
 
 class Delivery implements ToJson, Id {
   @override
@@ -41,32 +43,45 @@ class Delivery implements ToJson, Id {
     this.employeeDelivery,
   });
 
-  factory Delivery.fromJson(Map<String, dynamic> json) => Delivery(
-      id: json['id'] as int?,
-      saleId: json['saleId'] as int?,
-      employeeId: json['employeeId'] as int?,
-      addressId: json['addressId'] as int?,
-      startDate:
-          json['startDate'] != null ? DateTime.parse(json['startDate']) : null,
-      lastUpdateDate: json['lastUpdateDate'] != null
-          ? DateTime.parse(json['lastUpdateDate'])
-          : null,
-      sale: json['sale'] != null
-          ? Sale.fromJson(json['sale'] as Map<String, dynamic>)
-          : null,
-      employee: json['employee'] != null
-          ? Employee.fromJson(json['employee'] as Map<String, dynamic>)
-          : null,
-      address: json['address'] != null
-          ? Address.fromJson(json['address'] as Map<String, dynamic>)
-          : null,
-      status: DeliveryStatusEnum.values.byName(json['status']),
-      businessStatus: BusinessStatusEnum.values.byName(json['businessStatus']),
-      driverStatus: DriverStatusEnum.values.byName(json['driverStatus']),
-      employeeDelivery: json['employeeDelivery'] != null
-          ? EmployeeDelivery.fromJson(
-              json['employeeDelivery'] as Map<String, dynamic>)
-          : null);
+  factory Delivery.fromJson(Map<String, dynamic> json) {
+    try {
+      return Delivery(
+          id: json['id'] as int?,
+          saleId: json['saleId'] as int?,
+          employeeId: json['employeeId'] as int?,
+          addressId: json['addressId'] as int?,
+          startDate: json['startDate'] != null
+              ? DateTime.parse(json['startDate'])
+              : null,
+          lastUpdateDate: json['lastUpdateDate'] != null
+              ? DateTime.parse(json['lastUpdateDate'])
+              : null,
+          sale: json['sale'] != null
+              ? Sale.fromJson(json['sale'] as Map<String, dynamic>)
+              : null,
+          employee: json['employee'] != null
+              ? Employee.fromJson(json['employee'] as Map<String, dynamic>)
+              : null,
+          address: json['address'] != null
+              ? Address.fromJson(json['address'] as Map<String, dynamic>)
+              : null,
+          status: json['status'] != null
+              ? DeliveryStatusEnum.values.byName(json['status'])
+              : null,
+          businessStatus: json['businessStatus'] != null
+              ? BusinessStatusEnum.values.byName(json['businessStatus'])
+              : null,
+          driverStatus: json['driverStatus'] != null
+              ? DriverStatusEnum.values.byName(json['driverStatus'])
+              : null,
+          employeeDelivery: json['employeeDelivery'] != null
+              ? EmployeeDelivery.fromJson(
+                  json['employeeDelivery'] as Map<String, dynamic>)
+              : null);
+    } catch (e) {
+      throw ModelParseException('Delivery', e.toString(), json, e);
+    }
+  }
 
   Delivery copyWith({
     int? id,

@@ -139,67 +139,57 @@ class _PurchaseAddState extends State<PurchaseAdd> {
       builder: (BuildContext context) {
         Product? selectedProduct;
         int quantity = 1;
-        double price = 0;
-
         return AlertDialog(
-          title: Text('Add Product'),
-          content: StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  DropdownButtonFormField<Product>(
-                    decoration: const InputDecoration(
-                      labelText: 'Product',
-                      border: OutlineInputBorder(),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          insetPadding:
+              const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+          title: Text(AppLocalizations.of(context).addProduct),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    DropdownButtonFormField<Product>(
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).product,
+                        border: OutlineInputBorder(),
+                      ),
+                      value: selectedProduct,
+                      items: availableProducts
+                          .map((product) => DropdownMenuItem(
+                                value: product,
+                                child: Text(product.name ??
+                                    AppLocalizations.of(context)
+                                        .unnamedProduct),
+                              ))
+                          .toList(),
+                      onChanged: (Product? value) {
+                        setState(() {
+                          selectedProduct = value;
+                        });
+                      },
                     ),
-                    value: selectedProduct,
-                    items: availableProducts
-                        .map((product) => DropdownMenuItem(
-                              value: product,
-                              child: Text(product.name ?? 'Unnamed Product'),
-                            ))
-                        .toList(),
-                    onChanged: (Product? value) {
-                      setState(() {
-                        selectedProduct = value;
-                        if (value?.price != null) {
-                          price = value!.price!;
-                        }
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Quantity',
-                      border: OutlineInputBorder(),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).quantity,
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.number,
+                      initialValue: '1',
+                      onChanged: (value) {
+                        setState(() {
+                          quantity = int.tryParse(value) ?? 1;
+                        });
+                      },
                     ),
-                    keyboardType: TextInputType.number,
-                    initialValue: '1',
-                    onChanged: (value) {
-                      setState(() {
-                        quantity = int.tryParse(value) ?? 1;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Price',
-                      border: OutlineInputBorder(),
-                    ),
-                    keyboardType: TextInputType.number,
-                    initialValue: price.toString(),
-                    onChanged: (value) {
-                      setState(() {
-                        price = double.tryParse(value) ?? 0;
-                      });
-                    },
-                  ),
-                ],
-              );
-            },
+                  ],
+                );
+              },
+            ),
           ),
           actions: [
             TextButton(
@@ -367,13 +357,13 @@ class _PurchaseAddState extends State<PurchaseAdd> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Products',
+                  AppLocalizations.of(context).products,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 TextButton.icon(
                   onPressed: _addProduct,
                   icon: const Icon(Icons.add),
-                  label: const Text('Add Product'),
+                  label: Text(AppLocalizations.of(context).add),
                 ),
               ],
             ),
@@ -381,7 +371,7 @@ class _PurchaseAddState extends State<PurchaseAdd> {
             if (selectedProducts.isEmpty)
               Center(
                 child: Text(
-                  'No products added',
+                  AppLocalizations.of(context).noProducts,
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               )
@@ -393,9 +383,10 @@ class _PurchaseAddState extends State<PurchaseAdd> {
                 itemBuilder: (context, index) {
                   final item = selectedProducts[index];
                   return ListTile(
-                    title: Text(item.product?.name ?? 'Unnamed Product'),
+                    title: Text(item.product?.name ??
+                        AppLocalizations.of(context).unnamedProduct),
                     subtitle: Text(
-                        'Quantity: ${item.quantity} × \$${item.product?.price?.toStringAsFixed(2)}'),
+                        '${AppLocalizations.of(context).quantity}: ${item.quantity} × \$${item.product?.price?.toStringAsFixed(2)}'),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete),
                       onPressed: () {
@@ -412,7 +403,7 @@ class _PurchaseAddState extends State<PurchaseAdd> {
               Align(
                 alignment: Alignment.centerRight,
                 child: Text(
-                  'Total: \$${selectedProducts.fold<double>(0, (sum, item) => sum + (item.product?.price ?? 0) * (item.quantity ?? 0)).toStringAsFixed(2)}',
+                  '${AppLocalizations.of(context).total}: \$${selectedProducts.fold<double>(0, (sum, item) => sum + (item.product?.price ?? 0) * (item.quantity ?? 0)).toStringAsFixed(2)}',
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ),
@@ -431,13 +422,13 @@ class _PurchaseAddState extends State<PurchaseAdd> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Additional Information',
+              AppLocalizations.of(context).additionalInformation,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 16),
             TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'Description',
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context).description,
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.description),
               ),

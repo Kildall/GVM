@@ -166,12 +166,14 @@ class AuthManager {
     await _clearAuthData();
   }
 
-  Future<bool> signup(String email, String password, String name) async {
+  Future<bool> signup(
+      String email, String password, String name, String position) async {
     await _apiService.post<GenericMessageResponse>('/api/auth/signup',
         body: {
           'email': email,
           'password': password,
           'name': name,
+          'position': position,
         },
         fromJson: GenericMessageResponse.fromJson);
 

@@ -1,5 +1,7 @@
 //***  AUTO-GENERATED FILE - DO NOT MODIFY ***//
 
+import 'package:gvm_flutter/src/models/exceptions/model_parse_exception.dart';
+
 import 'model_base.dart';
 import 'user.dart';
 
@@ -25,19 +27,27 @@ class Session implements ToJson, IdString {
     this.userId,
   });
 
-  factory Session.fromJson(Map<String, dynamic> json) => Session(
-      id: json['id'] as String?,
-      ip: json['ip'] as String?,
-      userAgent: json['userAgent'] as String?,
-      active: json['active'] as bool?,
-      createdAt:
-          json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
-      expiresAt:
-          json['expiresAt'] != null ? DateTime.parse(json['expiresAt']) : null,
-      user: json['user'] != null
-          ? User.fromJson(json['user'] as Map<String, dynamic>)
-          : null,
-      userId: json['userId'] as int?);
+  factory Session.fromJson(Map<String, dynamic> json) {
+    try {
+      return Session(
+          id: json['id'] as String?,
+          ip: json['ip'] as String?,
+          userAgent: json['userAgent'] as String?,
+          active: json['active'] as bool?,
+          createdAt: json['createdAt'] != null
+              ? DateTime.parse(json['createdAt'])
+              : null,
+          expiresAt: json['expiresAt'] != null
+              ? DateTime.parse(json['expiresAt'])
+              : null,
+          user: json['user'] != null
+              ? User.fromJson(json['user'] as Map<String, dynamic>)
+              : null,
+          userId: json['userId'] as int?);
+    } catch (e) {
+      throw ModelParseException('Session', e.toString(), json, e);
+    }
+  }
 
   Session copyWith({
     String? id,

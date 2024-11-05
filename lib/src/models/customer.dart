@@ -1,7 +1,9 @@
 //***  AUTO-GENERATED FILE - DO NOT MODIFY ***//
 
-import 'model_base.dart';
+import 'package:gvm_flutter/src/models/exceptions/model_parse_exception.dart';
+
 import 'address.dart';
+import 'model_base.dart';
 import 'sale.dart';
 
 class Customer implements ToJson, Id {
@@ -28,22 +30,28 @@ class Customer implements ToJson, Id {
     this.$salesCount,
   });
 
-  factory Customer.fromJson(Map<String, dynamic> json) => Customer(
-      id: json['id'] as int?,
-      name: json['name'] as String?,
-      phone: json['phone'] as String?,
-      registrationDate: json['registrationDate'] != null
-          ? DateTime.parse(json['registrationDate'])
-          : null,
-      enabled: json['enabled'] as bool?,
-      addresses: json['addresses'] != null
-          ? createModels<Address>(json['addresses'], Address.fromJson)
-          : null,
-      sales: json['sales'] != null
-          ? createModels<Sale>(json['sales'], Sale.fromJson)
-          : null,
-      $addressesCount: json['_count']?['addresses'] as int?,
-      $salesCount: json['_count']?['sales'] as int?);
+  factory Customer.fromJson(Map<String, dynamic> json) {
+    try {
+      return Customer(
+          id: json['id'] as int?,
+          name: json['name'] as String?,
+          phone: json['phone'] as String?,
+          registrationDate: json['registrationDate'] != null
+              ? DateTime.parse(json['registrationDate'])
+              : null,
+          enabled: json['enabled'] as bool?,
+          addresses: json['addresses'] != null
+              ? createModels<Address>(json['addresses'], Address.fromJson)
+              : null,
+          sales: json['sales'] != null
+              ? createModels<Sale>(json['sales'], Sale.fromJson)
+              : null,
+          $addressesCount: json['_count']?['addresses'] as int?,
+          $salesCount: json['_count']?['sales'] as int?);
+    } catch (e) {
+      throw ModelParseException('Customer', e.toString(), json, e);
+    }
+  }
 
   Customer copyWith({
     int? id,

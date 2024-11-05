@@ -1,8 +1,10 @@
 //***  AUTO-GENERATED FILE - DO NOT MODIFY ***//
 
+import 'package:gvm_flutter/src/models/exceptions/model_parse_exception.dart';
+
 import 'model_base.dart';
-import 'sale.dart';
 import 'product.dart';
+import 'sale.dart';
 
 class ProductSale implements ToJson {
   int? saleId;
@@ -19,16 +21,22 @@ class ProductSale implements ToJson {
     this.product,
   });
 
-  factory ProductSale.fromJson(Map<String, dynamic> json) => ProductSale(
-      saleId: json['saleId'] as int?,
-      productId: json['productId'] as int?,
-      quantity: json['quantity'] as int?,
-      sale: json['sale'] != null
-          ? Sale.fromJson(json['sale'] as Map<String, dynamic>)
-          : null,
-      product: json['product'] != null
-          ? Product.fromJson(json['product'] as Map<String, dynamic>)
-          : null);
+  factory ProductSale.fromJson(Map<String, dynamic> json) {
+    try {
+      return ProductSale(
+          saleId: json['saleId'] as int?,
+          productId: json['productId'] as int?,
+          quantity: json['quantity'] as int?,
+          sale: json['sale'] != null
+              ? Sale.fromJson(json['sale'] as Map<String, dynamic>)
+              : null,
+          product: json['product'] != null
+              ? Product.fromJson(json['product'] as Map<String, dynamic>)
+              : null);
+    } catch (e) {
+      throw ModelParseException('ProductSale', e.toString(), json, e);
+    }
+  }
 
   ProductSale copyWith({
     int? saleId,

@@ -853,5 +853,25 @@
   "noDescription": "Sin descripción",
   "@noDescription": {
     "description": "Label for no description"
+  },
+  "addProduct": "Agregar producto",
+  "@addProduct": {
+    "description": "Label for add product"
+  },
+  "additionalInformation": "Información adicional",
+  "@additionalInformation": {
+    "description": "Label for additional information"
+  },
+  "product": "Producto",
+  "@product": {
+    "description": "Label for product"
+  },
+  "noProducts": "No se encontraron productos",
+  "@noProducts": {
+    "description": "Message for no products"
+  },
+  "delivery": "Envío",
+  "@delivery": {
+    "description": "Label for delivery"
   }
 }

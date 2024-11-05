@@ -1,11 +1,13 @@
 //***  AUTO-GENERATED FILE - DO NOT MODIFY ***//
 
-import 'model_base.dart';
+import 'package:gvm_flutter/src/models/exceptions/model_parse_exception.dart';
+
 import 'customer.dart';
-import 'employee.dart';
-import 'sale_status_enum.dart';
-import 'product_sale.dart';
 import 'delivery.dart';
+import 'employee.dart';
+import 'model_base.dart';
+import 'product_sale.dart';
+import 'sale_status_enum.dart';
 
 class Sale implements ToJson, Id {
   @override
@@ -37,30 +39,38 @@ class Sale implements ToJson, Id {
     this.$deliveriesCount,
   });
 
-  factory Sale.fromJson(Map<String, dynamic> json) => Sale(
-      id: json['id'] as int?,
-      customerId: json['customerId'] as int?,
-      employeeId: json['employeeId'] as int?,
-      startDate:
-          json['startDate'] != null ? DateTime.parse(json['startDate']) : null,
-      lastUpdateDate: json['lastUpdateDate'] != null
-          ? DateTime.parse(json['lastUpdateDate'])
-          : null,
-      customer: json['customer'] != null
-          ? Customer.fromJson(json['customer'] as Map<String, dynamic>)
-          : null,
-      employee: json['employee'] != null
-          ? Employee.fromJson(json['employee'] as Map<String, dynamic>)
-          : null,
-      status: SaleStatusEnum.values.byName(json['status']),
-      products: json['products'] != null
-          ? createModels<ProductSale>(json['products'], ProductSale.fromJson)
-          : null,
-      deliveries: json['deliveries'] != null
-          ? createModels<Delivery>(json['deliveries'], Delivery.fromJson)
-          : null,
-      $productsCount: json['_count']?['products'] as int?,
-      $deliveriesCount: json['_count']?['deliveries'] as int?);
+  factory Sale.fromJson(Map<String, dynamic> json) {
+    try {
+      return Sale(
+          id: json['id'] as int?,
+          customerId: json['customerId'] as int?,
+          employeeId: json['employeeId'] as int?,
+          startDate: json['startDate'] != null
+              ? DateTime.parse(json['startDate'])
+              : null,
+          lastUpdateDate: json['lastUpdateDate'] != null
+              ? DateTime.parse(json['lastUpdateDate'])
+              : null,
+          customer: json['customer'] != null
+              ? Customer.fromJson(json['customer'] as Map<String, dynamic>)
+              : null,
+          employee: json['employee'] != null
+              ? Employee.fromJson(json['employee'] as Map<String, dynamic>)
+              : null,
+          status: SaleStatusEnum.values.byName(json['status']),
+          products: json['products'] != null
+              ? createModels<ProductSale>(
+                  json['products'], ProductSale.fromJson)
+              : null,
+          deliveries: json['deliveries'] != null
+              ? createModels<Delivery>(json['deliveries'], Delivery.fromJson)
+              : null,
+          $productsCount: json['_count']?['products'] as int?,
+          $deliveriesCount: json['_count']?['deliveries'] as int?);
+    } catch (e) {
+      throw ModelParseException('Sale', e.toString(), json, e);
+    }
+  }
 
   Sale copyWith({
     int? id,

@@ -1,5 +1,7 @@
 //***  AUTO-GENERATED FILE - DO NOT MODIFY ***//
 
+import 'package:gvm_flutter/src/models/exceptions/model_parse_exception.dart';
+
 import 'model_base.dart';
 import 'purchase.dart';
 
@@ -19,14 +21,20 @@ class Supplier implements ToJson, Id {
     this.$purchasesCount,
   });
 
-  factory Supplier.fromJson(Map<String, dynamic> json) => Supplier(
-      id: json['id'] as int?,
-      name: json['name'] as String?,
-      enabled: json['enabled'] as bool?,
-      purchases: json['purchases'] != null
-          ? createModels<Purchase>(json['purchases'], Purchase.fromJson)
-          : null,
-      $purchasesCount: json['_count']?['purchases'] as int?);
+  factory Supplier.fromJson(Map<String, dynamic> json) {
+    try {
+      return Supplier(
+          id: json['id'] as int?,
+          name: json['name'] as String?,
+          enabled: json['enabled'] as bool?,
+          purchases: json['purchases'] != null
+              ? createModels<Purchase>(json['purchases'], Purchase.fromJson)
+              : null,
+          $purchasesCount: json['_count']?['purchases'] as int?);
+    } catch (e) {
+      throw ModelParseException('Supplier', e.toString(), json, e);
+    }
+  }
 
   Supplier copyWith({
     int? id,

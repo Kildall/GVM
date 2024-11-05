@@ -2,6 +2,7 @@
 
 import 'delivery.dart';
 import 'employee_delivery.dart';
+import 'exceptions/model_parse_exception.dart';
 import 'model_base.dart';
 import 'purchase.dart';
 import 'sale.dart';
@@ -33,28 +34,34 @@ class Employee implements ToJson, Id {
     this.userId,
   });
 
-  factory Employee.fromJson(Map<String, dynamic> json) => Employee(
-      id: json['id'] as int?,
-      name: json['name'] as String?,
-      position: json['position'] as String?,
-      enabled: json['enabled'] as bool?,
-      purchases: json['purchases'] != null
-          ? createModels<Purchase>(json['purchases'], Purchase.fromJson)
-          : null,
-      sales: json['sales'] != null
-          ? createModels<Sale>(json['sales'], Sale.fromJson)
-          : null,
-      deliveries: json['deliveries'] != null
-          ? createModels<Delivery>(json['deliveries'], Delivery.fromJson)
-          : null,
-      employeeDelivery: json['employeeDelivery'] != null
-          ? createModels<EmployeeDelivery>(
-              json['employeeDelivery'], EmployeeDelivery.fromJson)
-          : null,
-      user: json['user'] != null
-          ? User.fromJson(json['user'] as Map<String, dynamic>)
-          : null,
-      userId: json['userId'] as int?);
+  factory Employee.fromJson(Map<String, dynamic> json) {
+    try {
+      return Employee(
+          id: json['id'] as int?,
+          name: json['name'] as String?,
+          position: json['position'] as String?,
+          enabled: json['enabled'] as bool?,
+          purchases: json['purchases'] != null
+              ? createModels<Purchase>(json['purchases'], Purchase.fromJson)
+              : null,
+          sales: json['sales'] != null
+              ? createModels<Sale>(json['sales'], Sale.fromJson)
+              : null,
+          deliveries: json['deliveries'] != null
+              ? createModels<Delivery>(json['deliveries'], Delivery.fromJson)
+              : null,
+          employeeDelivery: json['employeeDelivery'] != null
+              ? createModels<EmployeeDelivery>(
+                  json['employeeDelivery'], EmployeeDelivery.fromJson)
+              : null,
+          user: json['user'] != null
+              ? User.fromJson(json['user'] as Map<String, dynamic>)
+              : null,
+          userId: json['userId'] as int?);
+    } catch (e) {
+      throw ModelParseException('Employee', e.toString(), json, e);
+    }
+  }
 
   Employee copyWith({
     int? id,

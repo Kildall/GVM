@@ -254,7 +254,8 @@ class _SupplierReadState extends State<SupplierRead> {
                       color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
-                  title: Text('Purchase #${purchase.id}'),
+                  title: Text(
+                      '${AppLocalizations.of(context).purchase} #${purchase.id}'),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -263,6 +264,9 @@ class _SupplierReadState extends State<SupplierRead> {
                       if (purchase.$productsCount != null)
                         Text(
                             '${purchase.$productsCount} ${AppLocalizations.of(context).products}'),
+                      if (purchase.description != null &&
+                          purchase.description!.isNotEmpty)
+                        Text(purchase.description!),
                     ],
                   ),
                   trailing: Row(

@@ -4,6 +4,7 @@ import 'package:gvm_flutter/src/services/api/api_errors.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 import 'package:gvm_flutter/src/views/landing/landing_common.dart';
 import 'package:gvm_flutter/src/views/landing/login.dart';
+import 'package:gvm_flutter/src/views/landing/verify.dart';
 import 'package:gvm_flutter/src/widgets/layout/landing_layout.dart';
 
 class SignupView extends StatefulWidget {
@@ -19,6 +20,7 @@ class _SignupViewState extends State<SignupView> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _nameController = TextEditingController();
+  final _positionController = TextEditingController();
   bool _isLoading = false;
 
   @override
@@ -61,6 +63,9 @@ class _SignupViewState extends State<SignupView> {
                 _confirmPasswordController,
                 true,
                 context),
+            SizedBox(height: 20),
+            LandingCommon.buildTextField(AppLocalizations.of(context).position,
+                _positionController, false, context),
             SizedBox(height: 40),
             LandingCommon.buildButton(AppLocalizations.of(context).register,
                 _isLoading ? null : _submitForm, _isLoading),
@@ -92,11 +97,19 @@ class _SignupViewState extends State<SignupView> {
       _isLoading = true;
     });
     try {
+      debugPrint('email ${_emailController.text}');
       await AuthManager.instance.signup(
-        _nameController.text,
         _emailController.text,
         _passwordController.text,
+        _nameController.text,
+        _positionController.text,
       );
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => VerifyView()),
+        );
+      }
     } on AuthException catch (e) {
       if (!mounted) return;
       switch (e.code) {

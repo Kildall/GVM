@@ -1,9 +1,11 @@
 //***  AUTO-GENERATED FILE - DO NOT MODIFY ***//
 
-import 'model_base.dart';
+import 'package:gvm_flutter/src/models/exceptions/model_parse_exception.dart';
+
+import 'delivery.dart';
 import 'delivery_status_enum.dart';
 import 'employee.dart';
-import 'delivery.dart';
+import 'model_base.dart';
 
 class EmployeeDelivery implements ToJson {
   int? employeeId;
@@ -20,17 +22,24 @@ class EmployeeDelivery implements ToJson {
     this.delivery,
   });
 
-  factory EmployeeDelivery.fromJson(Map<String, dynamic> json) =>
-      EmployeeDelivery(
+  factory EmployeeDelivery.fromJson(Map<String, dynamic> json) {
+    try {
+      return EmployeeDelivery(
           employeeId: json['employeeId'] as int?,
           deliveryId: json['deliveryId'] as int?,
-          status: DeliveryStatusEnum.values.byName(json['status']),
+          status: json['status'] != null
+              ? DeliveryStatusEnum.values.byName(json['status'])
+              : null,
           employee: json['employee'] != null
               ? Employee.fromJson(json['employee'] as Map<String, dynamic>)
               : null,
           delivery: json['delivery'] != null
               ? Delivery.fromJson(json['delivery'] as Map<String, dynamic>)
               : null);
+    } catch (e) {
+      throw ModelParseException('EmployeeDelivery', e.toString(), json, e);
+    }
+  }
 
   EmployeeDelivery copyWith({
     int? employeeId,

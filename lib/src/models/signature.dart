@@ -1,7 +1,9 @@
 //***  AUTO-GENERATED FILE - DO NOT MODIFY ***//
 
-import 'model_base.dart';
+import 'package:gvm_flutter/src/models/exceptions/model_parse_exception.dart';
+
 import 'account_action.dart';
+import 'model_base.dart';
 import 'user.dart';
 
 class Signature implements ToJson, IdString {
@@ -26,19 +28,27 @@ class Signature implements ToJson, IdString {
     this.userId,
   });
 
-  factory Signature.fromJson(Map<String, dynamic> json) => Signature(
-      id: json['id'] as String?,
-      action: AccountAction.values.byName(json['action']),
-      userAgent: json['userAgent'] as String?,
-      ip: json['ip'] as String?,
-      createdAt:
-          json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
-      expiresAt:
-          json['expiresAt'] != null ? DateTime.parse(json['expiresAt']) : null,
-      user: json['user'] != null
-          ? User.fromJson(json['user'] as Map<String, dynamic>)
-          : null,
-      userId: json['userId'] as int?);
+  factory Signature.fromJson(Map<String, dynamic> json) {
+    try {
+      return Signature(
+          id: json['id'] as String?,
+          action: AccountAction.values.byName(json['action']),
+          userAgent: json['userAgent'] as String?,
+          ip: json['ip'] as String?,
+          createdAt: json['createdAt'] != null
+              ? DateTime.parse(json['createdAt'])
+              : null,
+          expiresAt: json['expiresAt'] != null
+              ? DateTime.parse(json['expiresAt'])
+              : null,
+          user: json['user'] != null
+              ? User.fromJson(json['user'] as Map<String, dynamic>)
+              : null,
+          userId: json['userId'] as int?);
+    } catch (e) {
+      throw ModelParseException('Signature', e.toString(), json, e);
+    }
+  }
 
   Signature copyWith({
     String? id,

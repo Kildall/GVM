@@ -1,8 +1,10 @@
 //***  AUTO-GENERATED FILE - DO NOT MODIFY ***//
 
+import 'package:gvm_flutter/src/models/exceptions/model_parse_exception.dart';
+
 import 'model_base.dart';
-import 'purchase.dart';
 import 'product.dart';
+import 'purchase.dart';
 
 class PurchaseProduct implements ToJson {
   int? purchaseId;
@@ -19,8 +21,9 @@ class PurchaseProduct implements ToJson {
     this.product,
   });
 
-  factory PurchaseProduct.fromJson(Map<String, dynamic> json) =>
-      PurchaseProduct(
+  factory PurchaseProduct.fromJson(Map<String, dynamic> json) {
+    try {
+      return PurchaseProduct(
           purchaseId: json['purchaseId'] as int?,
           productId: json['productId'] as int?,
           quantity: json['quantity'] as int?,
@@ -30,6 +33,10 @@ class PurchaseProduct implements ToJson {
           product: json['product'] != null
               ? Product.fromJson(json['product'] as Map<String, dynamic>)
               : null);
+    } catch (e) {
+      throw ModelParseException('PurchaseProduct', e.toString(), json, e);
+    }
+  }
 
   PurchaseProduct copyWith({
     int? purchaseId,

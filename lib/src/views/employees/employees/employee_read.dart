@@ -44,6 +44,7 @@ class _EmployeeReadState extends State<EmployeeRead> {
       setState(() {
         isLoading = false;
       });
+      debugPrint(e.toString());
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(AppLocalizations.of(context).anErrorOccurred)));
@@ -226,8 +227,9 @@ class _EmployeeReadState extends State<EmployeeRead> {
                     leading: const CircleAvatar(
                       child: Icon(Icons.shopping_cart),
                     ),
-                    title: Text('Sale #${sale.id}'),
-                    subtitle: Text(sale.startDate?.toString() ?? ''),
+                    title: Text(
+                        '${AppLocalizations.of(context).sale} #${sale.id}'),
+                    subtitle: Text(sale.startDate?.toLocal().toString() ?? ''),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => _navigateToSale(sale),
                   ),
@@ -277,8 +279,10 @@ class _EmployeeReadState extends State<EmployeeRead> {
                     leading: const CircleAvatar(
                       child: Icon(Icons.local_shipping),
                     ),
-                    title: Text('Delivery #${delivery.id}'),
-                    subtitle: Text(delivery.startDate?.toString() ?? ''),
+                    title: Text(
+                        '${AppLocalizations.of(context).delivery} #${delivery.id}'),
+                    subtitle:
+                        Text(delivery.startDate?.toLocal().toString() ?? ''),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => _navigateToDelivery(delivery),
                   ),

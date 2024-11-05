@@ -1,11 +1,12 @@
 //***  AUTO-GENERATED FILE - DO NOT MODIFY ***//
 
-import 'model_base.dart';
-import 'session.dart';
-import 'entity.dart';
-import 'signature.dart';
 import 'audit.dart';
 import 'employee.dart';
+import 'entity.dart';
+import 'exceptions/model_parse_exception.dart';
+import 'model_base.dart';
+import 'session.dart';
+import 'signature.dart';
 
 class User implements ToJson, Id {
   @override
@@ -43,32 +44,38 @@ class User implements ToJson, Id {
     this.$auditsCount,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
-      id: json['id'] as int?,
-      email: json['email'] as String?,
-      password: json['password'] as String?,
-      enabled: json['enabled'] as bool?,
-      verified: json['verified'] as bool?,
-      sessions: json['sessions'] != null
-          ? createModels<Session>(json['sessions'], Session.fromJson)
-          : null,
-      permissions: json['permissions'] != null
-          ? createModels<Entity>(json['permissions'], Entity.fromJson)
-          : null,
-      signatures: json['signatures'] != null
-          ? createModels<Signature>(json['signatures'], Signature.fromJson)
-          : null,
-      audits: json['audits'] != null
-          ? createModels<Audit>(json['audits'], Audit.fromJson)
-          : null,
-      employee: json['employee'] != null
-          ? Employee.fromJson(json['employee'] as Map<String, dynamic>)
-          : null,
-      employeeId: json['employeeId'] as int?,
-      $sessionsCount: json['_count']?['sessions'] as int?,
-      $permissionsCount: json['_count']?['permissions'] as int?,
-      $signaturesCount: json['_count']?['signatures'] as int?,
-      $auditsCount: json['_count']?['audits'] as int?);
+  factory User.fromJson(Map<String, dynamic> json) {
+    try {
+      return User(
+          id: json['id'] as int?,
+          email: json['email'] as String?,
+          password: json['password'] as String?,
+          enabled: json['enabled'] as bool?,
+          verified: json['verified'] as bool?,
+          sessions: json['sessions'] != null
+              ? createModels<Session>(json['sessions'], Session.fromJson)
+              : null,
+          permissions: json['permissions'] != null
+              ? createModels<Entity>(json['permissions'], Entity.fromJson)
+              : null,
+          signatures: json['signatures'] != null
+              ? createModels<Signature>(json['signatures'], Signature.fromJson)
+              : null,
+          audits: json['audits'] != null
+              ? createModels<Audit>(json['audits'], Audit.fromJson)
+              : null,
+          employee: json['employee'] != null
+              ? Employee.fromJson(json['employee'] as Map<String, dynamic>)
+              : null,
+          employeeId: json['employeeId'] as int?,
+          $sessionsCount: json['_count']?['sessions'] as int?,
+          $permissionsCount: json['_count']?['permissions'] as int?,
+          $signaturesCount: json['_count']?['signatures'] as int?,
+          $auditsCount: json['_count']?['audits'] as int?);
+    } catch (e) {
+      throw ModelParseException('User', e.toString(), json, e);
+    }
+  }
 
   User copyWith({
     int? id,

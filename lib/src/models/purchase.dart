@@ -1,5 +1,7 @@
 //***  AUTO-GENERATED FILE - DO NOT MODIFY ***//
 
+import 'package:gvm_flutter/src/models/exceptions/model_parse_exception.dart';
+
 import 'employee.dart';
 import 'model_base.dart';
 import 'purchase_product.dart';
@@ -31,28 +33,34 @@ class Purchase implements ToJson, Id {
     this.$productsCount,
   });
 
-  factory Purchase.fromJson(Map<String, dynamic> json) => Purchase(
-      id: json['id'] as int?,
-      employeeId: json['employeeId'] as int?,
-      supplierId: json['supplierId'] as int?,
-      date: json['date'] != null ? DateTime.parse(json['date']) : null,
-      amount: json['amount'] != null
-          ? (json['amount'] is int
-              ? (json['amount'] as int).toDouble()
-              : json['amount'] as double)
-          : null,
-      description: json['description'] as String?,
-      employee: json['employee'] != null
-          ? Employee.fromJson(json['employee'] as Map<String, dynamic>)
-          : null,
-      supplier: json['supplier'] != null
-          ? Supplier.fromJson(json['supplier'] as Map<String, dynamic>)
-          : null,
-      products: json['products'] != null
-          ? createModels<PurchaseProduct>(
-              json['products'], PurchaseProduct.fromJson)
-          : null,
-      $productsCount: json['_count']?['products'] as int?);
+  factory Purchase.fromJson(Map<String, dynamic> json) {
+    try {
+      return Purchase(
+          id: json['id'] as int?,
+          employeeId: json['employeeId'] as int?,
+          supplierId: json['supplierId'] as int?,
+          date: json['date'] != null ? DateTime.parse(json['date']) : null,
+          amount: json['amount'] != null
+              ? (json['amount'] is int
+                  ? (json['amount'] as int).toDouble()
+                  : json['amount'] as double)
+              : null,
+          description: json['description'] as String?,
+          employee: json['employee'] != null
+              ? Employee.fromJson(json['employee'] as Map<String, dynamic>)
+              : null,
+          supplier: json['supplier'] != null
+              ? Supplier.fromJson(json['supplier'] as Map<String, dynamic>)
+              : null,
+          products: json['products'] != null
+              ? createModels<PurchaseProduct>(
+                  json['products'], PurchaseProduct.fromJson)
+              : null,
+          $productsCount: json['_count']?['products'] as int?);
+    } catch (e) {
+      throw ModelParseException('Purchase', e.toString(), json, e);
+    }
+  }
 
   Purchase copyWith({
     int? id,

@@ -1,5 +1,7 @@
 //***  AUTO-GENERATED FILE - DO NOT MODIFY ***//
 
+import 'package:gvm_flutter/src/models/exceptions/model_parse_exception.dart';
+
 import 'entity_type.dart';
 import 'model_base.dart';
 import 'user.dart';
@@ -28,22 +30,28 @@ class Entity implements ToJson, Id {
     this.$rolesCount,
   });
 
-  factory Entity.fromJson(Map<String, dynamic> json) => Entity(
-      id: json['id'] as int?,
-      name: json['name'] as String?,
-      type: EntityType.values.byName(json['type']),
-      users: json['users'] != null
-          ? createModels<User>(json['users'], User.fromJson)
-          : null,
-      permissions: json['permissions'] != null
-          ? createModels<Entity>(json['permissions'], Entity.fromJson)
-          : null,
-      roles: json['roles'] != null
-          ? createModels<Entity>(json['roles'], Entity.fromJson)
-          : null,
-      $usersCount: json['_count']?['users'] as int?,
-      $permissionsCount: json['_count']?['permissions'] as int?,
-      $rolesCount: json['_count']?['roles'] as int?);
+  factory Entity.fromJson(Map<String, dynamic> json) {
+    try {
+      return Entity(
+          id: json['id'] as int?,
+          name: json['name'] as String?,
+          type: EntityType.values.byName(json['type']),
+          users: json['users'] != null
+              ? createModels<User>(json['users'], User.fromJson)
+              : null,
+          permissions: json['permissions'] != null
+              ? createModels<Entity>(json['permissions'], Entity.fromJson)
+              : null,
+          roles: json['roles'] != null
+              ? createModels<Entity>(json['roles'], Entity.fromJson)
+              : null,
+          $usersCount: json['_count']?['users'] as int?,
+          $permissionsCount: json['_count']?['permissions'] as int?,
+          $rolesCount: json['_count']?['roles'] as int?);
+    } catch (e) {
+      throw ModelParseException('Entity', e.toString(), json, e);
+    }
+  }
 
   Entity copyWith({
     int? id,
