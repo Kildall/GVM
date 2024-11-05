@@ -56,50 +56,19 @@ class _EmployeeEditState extends State<EmployeeEdit> {
       final userId = widget.employee.user?.id;
       if (userId == null) throw Exception('No user ID found');
 
-      final passwordResponse = await AuthManager.instance.apiService.post(
-        '/api/admin/users/$userId/reset-password',
-        body: {},
-        fromJson: (json) => json['password'] as String,
+      await AuthManager.instance.apiService.post(
+        '/api/admin/users/reset-password',
+        body: {'email': widget.employee.user?.email},
+        fromJson: (json) => {},
       );
 
-      final password = passwordResponse.data!;
-
       if (mounted) {
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text(AppLocalizations.of(context).passwordReset),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(AppLocalizations.of(context).newTemporaryPassword),
-                  const SizedBox(height: 8),
-                  SelectableText(
-                    password,
-                    style: const TextStyle(
-                      fontFamily: 'monospace',
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    AppLocalizations.of(context).pleaseStorePasswordSecurely,
-                    style: const TextStyle(color: Colors.red),
-                  ),
-                ],
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text(AppLocalizations.of(context).update),
-                ),
-              ],
-            );
-          },
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content:
+                Text(AppLocalizations.of(context).passwordResetSuccessfully),
+            backgroundColor: Colors.green,
+          ),
         );
       }
     } catch (e) {

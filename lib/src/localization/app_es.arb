@@ -873,5 +873,9 @@
   "delivery": "Envío",
   "@delivery": {
     "description": "Label for delivery"
+  },
+  "passwordResetSuccessfully": "Contraseña restablecida exitosamente",
+  "@passwordResetSuccessfully": {
+    "description": "Message for password reset successfully"
   }
 }
