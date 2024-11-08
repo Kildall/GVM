@@ -101,7 +101,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Purchase updated successfully'),
+            content: Text('Purchase updated successfully'), // TODO: Translate
             backgroundColor: Colors.green,
           ),
         );
@@ -112,7 +112,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error updating purchase'),
+            content: Text('Error updating purchase'), // TODO: Translate
             backgroundColor: Colors.red,
           ),
         );
@@ -141,7 +141,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
                 children: [
                   DropdownButtonFormField<Product>(
                     decoration: const InputDecoration(
-                      labelText: 'Product',
+                      labelText: 'Product', // TODO: Translate
                       border: OutlineInputBorder(),
                     ),
                     value: selectedProduct,
@@ -163,7 +163,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
                   const SizedBox(height: 16),
                   TextFormField(
                     decoration: const InputDecoration(
-                      labelText: 'Quantity',
+                      labelText: 'Quantity', // TODO: Translate
                       border: OutlineInputBorder(),
                     ),
                     keyboardType: TextInputType.number,
@@ -177,7 +177,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
                   const SizedBox(height: 16),
                   TextFormField(
                     decoration: const InputDecoration(
-                      labelText: 'Price',
+                      labelText: 'Price', // TODO: Translate
                       border: OutlineInputBorder(),
                     ),
                     keyboardType: TextInputType.number,
@@ -195,7 +195,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Cancel'),
+              child: Text('Cancel'), // TODO: Translate
             ),
             TextButton(
               onPressed: () {
@@ -210,7 +210,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
                   Navigator.pop(context);
                 }
               },
-              child: Text('Add'),
+              child: Text('Add'), // TODO: Translate
             ),
           ],
         );
@@ -227,20 +227,21 @@ class _PurchaseEditState extends State<PurchaseEdit> {
         double price = product.product?.price ?? 0;
 
         return AlertDialog(
-          title: Text('Edit Product'),
+          title: Text('Edit Product'), // TODO: Translate
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    product.product?.name ?? 'Unnamed Product',
+                    product.product?.name ??
+                        'Unnamed Product', // TODO: Translate
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
                     decoration: const InputDecoration(
-                      labelText: 'Quantity',
+                      labelText: 'Quantity', // TODO: Translate
                       border: OutlineInputBorder(),
                     ),
                     keyboardType: TextInputType.number,
@@ -254,7 +255,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
                   const SizedBox(height: 16),
                   TextFormField(
                     decoration: const InputDecoration(
-                      labelText: 'Price',
+                      labelText: 'Price', // TODO: Translate
                       border: OutlineInputBorder(),
                     ),
                     keyboardType: TextInputType.number,
@@ -272,7 +273,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Cancel'),
+              child: Text('Cancel'), // TODO: Translate
             ),
             TextButton(
               onPressed: () {
@@ -283,7 +284,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
                 });
                 Navigator.pop(context);
               },
-              child: Text('Save'),
+              child: Text('Save'), // TODO: Translate
             ),
           ],
         );
@@ -296,17 +297,17 @@ class _PurchaseEditState extends State<PurchaseEdit> {
       return await showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              title: Text('Discard Changes?'),
+              title: Text('Discard Changes?'), // TODO: Translate
               content: Text(
-                  'You have unsaved changes. Do you want to discard them?'),
+                  'You have unsaved changes. Do you want to discard them?'), // TODO: Translate
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context, false),
-                  child: Text('Cancel'),
+                  child: Text('Cancel'), // TODO: Translate
                 ),
                 TextButton(
                   onPressed: () => Navigator.pop(context, true),
-                  child: Text('Discard'),
+                  child: Text('Discard'), // TODO: Translate
                 ),
               ],
             ),
@@ -343,7 +344,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
       onWillPop: _onWillPop,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Edit Purchase'),
+          title: Text('Edit Purchase'), // TODO: Translate
           actions: [
             IconButton(
               icon: Icon(Icons.save),
@@ -377,7 +378,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
                         : Text(
-                            'Save Changes',
+                            'Save Changes', // TODO: Translate
                             style: const TextStyle(fontSize: 16),
                           ),
                   ),
@@ -398,7 +399,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Basic Information',
+              'Basic Information', // TODO: Translate
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 16),
@@ -417,7 +418,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
                   .toList(),
               validator: (value) {
                 if (value == null) {
-                  return 'Please select an employee';
+                  return 'Please select an employee'; // TODO: Translate
                 }
                 return null;
               },
@@ -439,7 +440,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
                   .toList(),
               validator: (value) {
                 if (value == null) {
-                  return 'Please select a supplier';
+                  return 'Please select a supplier'; // TODO: Translate
                 }
                 return null;
               },
@@ -467,7 +468,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
                 child: Text(
                   date != null
                       ? DateFormat('yyyy-MM-dd').format(date!)
-                      : 'Select date',
+                      : 'Select date', // TODO: Translate
                 ),
               ),
             ),
@@ -488,13 +489,13 @@ class _PurchaseEditState extends State<PurchaseEdit> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Products',
+                  'Products', // TODO: Translate
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 TextButton.icon(
                   onPressed: _addProduct,
                   icon: const Icon(Icons.add),
-                  label: const Text('Add Product'),
+                  label: const Text('Add Product'), // TODO: Translate
                 ),
               ],
             ),
@@ -502,7 +503,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
             if (selectedProducts.isEmpty)
               Center(
                 child: Text(
-                  'No products added',
+                  'No products added', // TODO: Translate
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               )
@@ -548,7 +549,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Total',
+                    'Total', // TODO: Translate
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   Text(
@@ -564,7 +565,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
               if (_hasProductChanges()) ...[
                 const Divider(height: 32),
                 Text(
-                  'Changes Summary:',
+                  'Changes Summary:', // TODO: Translate
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
                 const SizedBox(height: 8),
@@ -609,7 +610,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (addedProducts.isNotEmpty) ...[
-          Text('Added:',
+          Text('Added:', // TODO: Translate
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium
@@ -619,7 +620,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
         ],
         if (removedProducts.isNotEmpty) ...[
           const SizedBox(height: 8),
-          Text('Removed:',
+          Text('Removed:', // TODO: Translate
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium
@@ -629,7 +630,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
         ],
         if (modifiedProducts.isNotEmpty) ...[
           const SizedBox(height: 8),
-          Text('Modified:',
+          Text('Modified:', // TODO: Translate
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium
@@ -653,16 +654,17 @@ class _PurchaseEditState extends State<PurchaseEdit> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Additional Information',
+              'Additional Information', // TODO: Translate
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 16),
             TextFormField(
               decoration: const InputDecoration(
-                labelText: 'Description',
+                labelText: 'Description', // TODO: Translate
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.description),
-                hintText: 'Enter any additional notes or comments',
+                hintText:
+                    'Enter any additional notes or comments', // TODO: Translate
               ),
               initialValue: description,
               maxLines: 3,

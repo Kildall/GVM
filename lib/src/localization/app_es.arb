@@ -933,5 +933,61 @@
   "salesDescription": "Administra tus ventas",
   "@salesDescription": {
     "description": "Description for sales"
+  },
+  "soldProducts": "Productos vendidos",
+  "@soldProducts": {
+    "description": "Label for sold products"
+  },
+  "noProductsInSale": "No se encontraron productos en la venta",
+  "@noProductsInSale": {
+    "description": "Message for no products in sale"
+  },
+  "customer": "Cliente",
+  "@customer": {
+    "description": "Label for customer"
+  },
+  "lastUpdate": "Última actualización",
+  "@lastUpdate": {
+    "description": "Label for last update"
+  },
+  "saleDetailsTitle": "Detalles de venta",
+  "@saleDetailsTitle": {
+    "description": "Title for sale details"
+  },
+  "newSale": "Nueva venta",
+  "@newSale": {
+    "description": "Label for new sale"
+  },
+  "createSale": "Crear venta",
+  "@createSale": {
+    "description": "Label for create sale"
+  },
+  "selectEmployee": "Selecciona un empleado",
+  "@selectEmployee": {
+    "description": "Label for select employee"
+  },
+  "selectCustomer": "Selecciona un cliente",
+  "@selectCustomer": {
+    "description": "Label for select customer"
+  },
+  "selectDate": "Selecciona una fecha",
+  "@selectDate": {
+    "description": "Label for select date"
+  },
+  "totalProducts": "Total de productos",
+  "@totalProducts": {
+    "description": "Label for total products"
+  },
+  "addDelivery": "Agregar entrega",
+  "@addDelivery": {
+    "description": "Label for add delivery"
+  },
+  "noDeliveriesScheduled": "No se han programado entregas",
+  "@noDeliveriesScheduled": {
+    "description": "Message for no deliveries scheduled"
+  },
+  "editProduct": "Editar producto",
+  "@editProduct": {
+    "description": "Label for edit product"
   }
 }

@@ -15,11 +15,11 @@ class AuthGuard extends StatefulWidget {
       required this.child,
       this.fallback,
       this.maintainSpace = false,
-      this.allPermissions = false});
+      this.allPermissions = true});
 
   static bool checkPermissions(
     List<String> permissions, {
-    bool allPermissions = false,
+    bool allPermissions = true,
     bool showFeedback = true,
   }) {
     final currentUser = AuthManager.instance.currentUser;

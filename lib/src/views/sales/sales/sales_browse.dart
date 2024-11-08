@@ -4,6 +4,8 @@ import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/response/sale_responses.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 import 'package:gvm_flutter/src/services/auth/permissions.dart';
+import 'package:gvm_flutter/src/views/sales/sales/sale_add.dart';
+import 'package:gvm_flutter/src/views/sales/sales/sale_read.dart';
 import 'package:gvm_flutter/src/widgets/auth_guard.dart';
 
 class SalesBrowse extends StatefulWidget {
@@ -51,17 +53,17 @@ class _SalesBrowseState extends State<SalesBrowse> {
   }
 
   void _navigateToSaleDetail(Sale sale) {
-    // if (sale.id != null) {
-    //   Navigator.of(context).push(MaterialPageRoute(
-    //     builder: (context) => SaleRead(saleId: sale.id!),
-    //   ));
-    // }
+    if (sale.id != null) {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => SaleRead(saleId: sale.id!),
+      ));
+    }
   }
 
   void _navigateToSaleAdd() {
-    // Navigator.of(context).push(MaterialPageRoute(
-    //   builder: (context) => const SaleAdd(),
-    // ));
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => const SaleAdd(),
+    ));
   }
 
   Future<void> _selectStartDate(BuildContext context) async {
@@ -239,7 +241,15 @@ class _SalesBrowseState extends State<SalesBrowse> {
         ],
       ),
       floatingActionButton: AuthGuard(
-        permissions: [AppPermissions.saleRoleAdd],
+        permissions: [
+          AppPermissions.saleAdd,
+          AppPermissions.customerBrowse,
+          AppPermissions.employeeBrowse,
+          AppPermissions.productBrowse,
+          AppPermissions.deliveryBrowse,
+          AppPermissions.addressBrowse,
+        ],
+        allPermissions: true,
         fallback: null,
         child: FloatingActionButton(
           onPressed: _navigateToSaleAdd,

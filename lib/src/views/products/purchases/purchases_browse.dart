@@ -222,7 +222,13 @@ class _PurchasesBrowseState extends State<PurchasesBrowse> {
         ],
       ),
       floatingActionButton: AuthGuard(
-        permissions: [AppPermissions.purchaseRoleAdd],
+        permissions: [
+          AppPermissions.purchaseAdd,
+          AppPermissions.employeeBrowse,
+          AppPermissions.productBrowse,
+          AppPermissions.supplierBrowse,
+        ],
+        allPermissions: true,
         fallback: null,
         child: FloatingActionButton(
           onPressed: _navigateToPurchaseAdd,
