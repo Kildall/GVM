@@ -67,7 +67,9 @@ class _ProductsHomeState extends State<ProductsHome> {
                         AppPermissions.supplierBrowse,
                       ],
                       allPermissions: false,
-                      fallback: const UnauthorizedAccess(),
+                      fallback: const UnauthorizedAccess(
+                        showBackButton: false,
+                      ),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,

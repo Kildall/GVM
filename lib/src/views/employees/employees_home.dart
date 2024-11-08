@@ -5,6 +5,7 @@ import 'package:gvm_flutter/src/views/employees/employees/employees_browse.dart'
 import 'package:gvm_flutter/src/views/employees/entities/entitites_browse.dart';
 import 'package:gvm_flutter/src/widgets/auth_guard.dart';
 import 'package:gvm_flutter/src/widgets/employees/employees_home_stats.dart';
+import 'package:gvm_flutter/src/widgets/unauthorized_access.dart';
 
 class EmployeesHome extends StatefulWidget {
   const EmployeesHome({super.key});
@@ -40,42 +41,52 @@ class _EmployeesHomeState extends State<EmployeesHome> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const EmployeesHomeStats(),
-              const SizedBox(height: 32),
-              Text(
-                AppLocalizations.of(context).modules,
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              const SizedBox(height: 16),
-              Column(
-                children: [
-                  AuthGuard(
-                    permissions: [AppPermissions.employeeBrowse],
-                    child: _NavigationCard(
-                      title: AppLocalizations.of(context).employeeManagement,
-                      icon: Icons.people_outline,
-                      description: AppLocalizations.of(context)
-                          .employeeManagementDescription,
-                      onTap: _navigateToEmployees,
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  AuthGuard(
-                    permissions: [AppPermissions.admin],
-                    child: _NavigationCard(
-                      title: AppLocalizations.of(context).securityManagement,
-                      icon: Icons.security_outlined,
-                      description: AppLocalizations.of(context)
-                          .securityManagementDescription,
-                      onTap: _navigateToEntities,
-                    ),
-                  ),
-                ],
-              ),
+          child: AuthGuard(
+            permissions: [
+              AppPermissions.employeeBrowse,
+              AppPermissions.admin,
             ],
+            allPermissions: false,
+            fallback: const UnauthorizedAccess(
+              showBackButton: false,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const EmployeesHomeStats(),
+                const SizedBox(height: 32),
+                Text(
+                  AppLocalizations.of(context).modules,
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+                const SizedBox(height: 16),
+                Column(
+                  children: [
+                    AuthGuard(
+                      permissions: [AppPermissions.employeeBrowse],
+                      child: _NavigationCard(
+                        title: AppLocalizations.of(context).employeeManagement,
+                        icon: Icons.people_outline,
+                        description: AppLocalizations.of(context)
+                            .employeeManagementDescription,
+                        onTap: _navigateToEmployees,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    AuthGuard(
+                      permissions: [AppPermissions.admin],
+                      child: _NavigationCard(
+                        title: AppLocalizations.of(context).securityManagement,
+                        icon: Icons.security_outlined,
+                        description: AppLocalizations.of(context)
+                            .securityManagementDescription,
+                        onTap: _navigateToEntities,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

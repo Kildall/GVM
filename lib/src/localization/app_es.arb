@@ -889,5 +889,9 @@
   "goBack": "Volver",
   "@goBack": {
     "description": "Label for go back"
+  },
+  "homeDashboardTitle": "Inicio",
+  "@homeDashboardTitle": {
+    "description": "Label for home dashboard title"
   }
 }

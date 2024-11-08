@@ -11,8 +11,8 @@ class AuthUser {
     required this.permissions,
   });
 
-  hasPermission(String permission) {
-    return permission.contains(permission);
+  bool hasPermission(String permission) {
+    return permissions.contains(permission);
   }
 
   factory AuthUser.fromJson(Map<String, dynamic> json) {

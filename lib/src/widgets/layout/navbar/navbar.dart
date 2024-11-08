@@ -11,8 +11,9 @@ import 'package:gvm_flutter/src/views/settings/settings_view.dart';
 class NavItem {
   final BottomNavigationBarItem item;
   final Widget widget;
+  final bool isDefault;
 
-  NavItem({required this.item, required this.widget});
+  NavItem({required this.item, required this.widget, this.isDefault = false});
 }
 
 List<NavItem> getNavItems(
@@ -47,14 +48,20 @@ List<NavItem> getNavItems(
     ));
   }
 
-  // Add
-  navItems.add(NavItem(
-    item: BottomNavigationBarItem(
-        icon: Icon(Icons.add_business),
-        label: AppLocalizations.of(context).dashboardHomeTitle,
-        backgroundColor: Theme.of(context).colorScheme.onPrimary),
-    widget: const HomeDashboard(),
-  ));
+  // Main stats and shortcuts
+  if (user.hasPermission('sale.browse') &&
+      user.hasPermission('customer.browse') &&
+      user.hasPermission('employee.browse') &&
+      user.hasPermission('product.browse')) {
+    navItems.add(NavItem(
+      item: BottomNavigationBarItem(
+          icon: Icon(Icons.add_business),
+          label: AppLocalizations.of(context).dashboardHomeTitle,
+          backgroundColor: Theme.of(context).colorScheme.onPrimary),
+      widget: const HomeDashboard(),
+      isDefault: true,
+    ));
+  }
 
   // Employees
   if (user.hasPermission('employee.browse')) {

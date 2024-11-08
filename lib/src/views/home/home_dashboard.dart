@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/response/dashboard_responses.dart';
 import 'package:gvm_flutter/src/services/api/api_errors.dart';
@@ -54,6 +55,9 @@ class _HomeDashboardState extends State<HomeDashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context).homeDashboardTitle),
+      ),
       body: RefreshIndicator(
         onRefresh: _refreshDashboard,
         child: FutureBuilder<DashboardResponse?>(

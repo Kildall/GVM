@@ -16,11 +16,17 @@ class _BaseLayoutState extends State<BaseLayout> {
   Widget build(BuildContext context) {
     final navItems = getNavItems(widget.settingsController, context);
 
+    // Find the index of the default item
+    final defaultIndex = navItems.indexWhere((item) => item.isDefault);
+    // If no default is set, use 0 as fallback
+    final initialIndex = defaultIndex != -1 ? defaultIndex : 0;
+
     final children = navItems.map((item) => item.widget).toList();
     final items = navItems.map((item) => item.item).toList();
 
     return DefaultTabController(
       length: items.length,
+      initialIndex: initialIndex, // Set the initial index here
       child: Scaffold(
         bottomNavigationBar: BottomAppBar(
           elevation: 10,
@@ -30,7 +36,6 @@ class _BaseLayoutState extends State<BaseLayout> {
             tabAlignment: TabAlignment.fill,
             labelColor: Theme.of(context).colorScheme.primary,
             tabs: List.generate(items.length, (index) {
-              // Other buttons
               return Container(
                 height: 100,
                 decoration: BoxDecoration(
