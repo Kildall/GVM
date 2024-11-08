@@ -893,5 +893,45 @@
   "homeDashboardTitle": "Inicio",
   "@homeDashboardTitle": {
     "description": "Label for home dashboard title"
+  },
+  "pending": "Pendiente",
+  "@pending": {
+    "description": "Label for pending"
+  },
+  "unnamedSale": "Venta sin nombre",
+  "@unnamedSale": {
+    "description": "Label for unnamed sale"
+  },
+  "searchSales": "Buscar ventas...",
+  "@searchSales": {
+    "description": "Placeholder for search sales"
+  },
+  "customers": "Clientes",
+  "@customers": {
+    "description": "Label for customers"
+  },
+  "customersDescription": "Administra tus clientes",
+  "@customersDescription": {
+    "description": "Description for customers"
+  },
+  "noCustomersFound": "No se encontraron clientes",
+  "@noCustomersFound": {
+    "description": "Message for no customers found"
+  },
+  "unnamedCustomer": "Cliente sin nombre",
+  "@unnamedCustomer": {
+    "description": "Label for unnamed customer"
+  },
+  "noSalesFound": "No se encontraron ventas",
+  "@noSalesFound": {
+    "description": "Message for no sales found"
+  },
+  "deliveriesDescription": "Administra tus entregas",
+  "@deliveriesDescription": {
+    "description": "Description for deliveries"
+  },
+  "salesDescription": "Administra tus ventas",
+  "@salesDescription": {
+    "description": "Description for sales"
   }
 }

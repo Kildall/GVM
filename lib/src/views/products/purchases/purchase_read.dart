@@ -113,7 +113,7 @@ class _PurchaseReadState extends State<PurchaseRead> {
         title: Text(AppLocalizations.of(context).purchaseDetailsTitle),
         actions: [
           AuthGuard(
-            permissions: [AppPermissions.purchaseEdit],
+            permissions: [AppPermissions.purchaseRoleEdit],
             fallback: null,
             child: IconButton(
               icon: const Icon(Icons.edit),

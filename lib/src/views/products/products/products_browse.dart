@@ -184,9 +184,7 @@ class _ProductsBrowseState extends State<ProductsBrowse> {
         ],
       ),
       floatingActionButton: AuthGuard(
-        permissions: [
-          AppPermissions.productAdd,
-        ],
+        permissions: [AppPermissions.productRoleAdd],
         fallback: null,
         child: FloatingActionButton(
           onPressed: _navigateToProductAdd,

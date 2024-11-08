@@ -88,9 +88,10 @@ class _SupplierReadState extends State<SupplierRead> {
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
-            onPressed: AuthGuard.checkPermissions([AppPermissions.supplierEdit])
-                ? _navigateToSupplierEdit
-                : null,
+            onPressed:
+                AuthGuard.checkPermissions([AppPermissions.supplierRoleEdit])
+                    ? _navigateToSupplierEdit
+                    : null,
           ),
         ],
       ),

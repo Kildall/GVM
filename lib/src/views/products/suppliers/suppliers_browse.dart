@@ -166,7 +166,7 @@ class _SuppliersBrowseState extends State<SuppliersBrowse> {
         ],
       ),
       floatingActionButton: AuthGuard(
-        permissions: [AppPermissions.supplierAdd],
+        permissions: [AppPermissions.supplierRoleAdd],
         fallback: null,
         child: FloatingActionButton(
           onPressed: _navigateToSupplierAdd,

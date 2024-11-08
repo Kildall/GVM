@@ -88,7 +88,7 @@ class _ProductReadState extends State<ProductRead> {
             .productDetailsTitle(product!.name ?? '')),
         actions: [
           AuthGuard(
-            permissions: [AppPermissions.productEdit],
+            permissions: [AppPermissions.productRoleEdit],
             fallback: null,
             child: IconButton(
               icon: const Icon(Icons.edit),
