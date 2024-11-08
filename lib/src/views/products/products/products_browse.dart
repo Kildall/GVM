@@ -3,8 +3,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/response/product_responses.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
+import 'package:gvm_flutter/src/services/auth/permissions.dart';
 import 'package:gvm_flutter/src/views/products/products/product_add.dart';
 import 'package:gvm_flutter/src/views/products/products/product_read.dart';
+import 'package:gvm_flutter/src/widgets/auth_guard.dart';
 
 class ProductsBrowse extends StatefulWidget {
   const ProductsBrowse({super.key});
@@ -40,7 +42,6 @@ class _ProductsBrowseState extends State<ProductsBrowse> {
       setState(() {
         isLoading = false;
       });
-      // Handle error appropriately
     }
   }
 
@@ -172,16 +173,25 @@ class _ProductsBrowseState extends State<ProductsBrowse> {
                           final product = filteredProducts[index];
                           return _ProductListItem(
                             product: product,
-                            onTap: () => _navigateToProductDetail(product),
+                            onTap: () => AuthGuard.checkPermissions(
+                                    [AppPermissions.productRead])
+                                ? _navigateToProductDetail(product)
+                                : null,
                           );
                         },
                       ),
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _navigateToProductAdd,
-        child: const Icon(Icons.add),
+      floatingActionButton: AuthGuard(
+        permissions: [
+          AppPermissions.productAdd,
+        ],
+        fallback: null,
+        child: FloatingActionButton(
+          onPressed: _navigateToProductAdd,
+          child: const Icon(Icons.add),
+        ),
       ),
     );
   }

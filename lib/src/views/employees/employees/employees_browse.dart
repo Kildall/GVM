@@ -3,8 +3,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/response/employee_responses.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
+import 'package:gvm_flutter/src/services/auth/permissions.dart';
 import 'package:gvm_flutter/src/views/employees/employees/employee_add.dart';
 import 'package:gvm_flutter/src/views/employees/employees/employee_read.dart';
+import 'package:gvm_flutter/src/widgets/auth_guard.dart';
 
 class EmployeesBrowse extends StatefulWidget {
   const EmployeesBrowse({super.key});
@@ -135,16 +137,23 @@ class _EmployeesBrowseState extends State<EmployeesBrowse> {
                           final employee = filteredEmployees[index];
                           return _EmployeeListItem(
                             employee: employee,
-                            onTap: () => _navigateToEmployeeDetail(employee),
+                            onTap: () => AuthGuard.checkPermissions([
+                              AppPermissions.employeeRead,
+                            ])
+                                ? _navigateToEmployeeDetail(employee)
+                                : null,
                           );
                         },
                       ),
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _navigateToEmployeeAdd,
-        child: const Icon(Icons.add),
+      floatingActionButton: AuthGuard(
+        permissions: [AppPermissions.employeeAdd],
+        child: FloatingActionButton(
+          onPressed: _navigateToEmployeeAdd,
+          child: const Icon(Icons.add),
+        ),
       ),
     );
   }

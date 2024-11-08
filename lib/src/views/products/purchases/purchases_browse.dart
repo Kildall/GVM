@@ -3,8 +3,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/response/purchase_response.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
+import 'package:gvm_flutter/src/services/auth/permissions.dart';
 import 'package:gvm_flutter/src/views/products/purchases/purchase_add.dart';
 import 'package:gvm_flutter/src/views/products/purchases/purchase_read.dart';
+import 'package:gvm_flutter/src/widgets/auth_guard.dart';
 
 class PurchasesBrowse extends StatefulWidget {
   const PurchasesBrowse({super.key});
@@ -209,16 +211,23 @@ class _PurchasesBrowseState extends State<PurchasesBrowse> {
                           final purchase = filteredPurchases[index];
                           return _PurchaseListItem(
                             purchase: purchase,
-                            onTap: () => _navigateToPurchaseDetail(purchase),
+                            onTap: () => AuthGuard.checkPermissions(
+                                    [AppPermissions.purchaseRead])
+                                ? _navigateToPurchaseDetail(purchase)
+                                : null,
                           );
                         },
                       ),
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _navigateToPurchaseAdd,
-        child: const Icon(Icons.add),
+      floatingActionButton: AuthGuard(
+        permissions: [AppPermissions.purchaseAdd],
+        fallback: null,
+        child: FloatingActionButton(
+          onPressed: _navigateToPurchaseAdd,
+          child: const Icon(Icons.add),
+        ),
       ),
     );
   }

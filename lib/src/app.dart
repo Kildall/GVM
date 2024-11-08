@@ -1,6 +1,3 @@
-import 'dart:async';
-
-import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -11,6 +8,9 @@ import 'package:gvm_flutter/src/widgets/layout/base_layout.dart';
 import 'package:provider/provider.dart';
 
 import 'settings/settings_controller.dart';
+
+final GlobalKey<ScaffoldMessengerState> snackbarKey =
+    GlobalKey<ScaffoldMessengerState>();
 
 class GVMApp extends StatefulWidget {
   final SettingsController settingsController;
@@ -25,42 +25,9 @@ class GVMApp extends StatefulWidget {
 }
 
 class _GVMAppState extends State<GVMApp> {
-  late AppLinks _appLinks;
-  StreamSubscription<Uri>? _linkSubscription;
-
   @override
   void initState() {
     super.initState();
-
-    initDeepLinks();
-  }
-
-  @override
-  void dispose() {
-    _linkSubscription?.cancel();
-
-    super.dispose();
-  }
-
-  Future<void> initDeepLinks() async {
-    _appLinks = AppLinks();
-
-    final appLink = await _appLinks.getInitialLink();
-    if (appLink != null) {
-      openAppLink(appLink);
-    }
-
-    // Handle links
-    _linkSubscription = _appLinks.uriLinkStream.listen((uri) {
-      openAppLink(uri);
-    });
-  }
-
-  void openAppLink(Uri uri) {
-    if (uri.host == 'kildall.ar') {
-      final path = uri.path.isEmpty ? '/' : uri.path;
-      debugPrint('Navigating to: $path');
-    }
   }
 
   @override
@@ -77,6 +44,7 @@ class _GVMAppState extends State<GVMApp> {
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
+            scaffoldMessengerKey: snackbarKey,
             locale: localeProvider.locale,
             supportedLocales: AppLocalizations.supportedLocales,
             onGenerateTitle: (BuildContext context) =>

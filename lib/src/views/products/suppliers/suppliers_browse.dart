@@ -3,8 +3,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/response/supplier_responses.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
+import 'package:gvm_flutter/src/services/auth/permissions.dart';
 import 'package:gvm_flutter/src/views/products/suppliers/supplier_add.dart';
 import 'package:gvm_flutter/src/views/products/suppliers/supplier_read.dart';
+import 'package:gvm_flutter/src/widgets/auth_guard.dart';
 
 class SuppliersBrowse extends StatefulWidget {
   const SuppliersBrowse({super.key});
@@ -153,16 +155,23 @@ class _SuppliersBrowseState extends State<SuppliersBrowse> {
                           final supplier = filteredSuppliers[index];
                           return _SupplierListItem(
                             supplier: supplier,
-                            onTap: () => _navigateToSupplierDetail(supplier),
+                            onTap: () => AuthGuard.checkPermissions(
+                                    [AppPermissions.supplierRead])
+                                ? _navigateToSupplierDetail(supplier)
+                                : null,
                           );
                         },
                       ),
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _navigateToSupplierAdd,
-        child: const Icon(Icons.add),
+      floatingActionButton: AuthGuard(
+        permissions: [AppPermissions.supplierAdd],
+        fallback: null,
+        child: FloatingActionButton(
+          onPressed: _navigateToSupplierAdd,
+          child: const Icon(Icons.add),
+        ),
       ),
     );
   }

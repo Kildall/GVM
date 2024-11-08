@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
+import 'package:gvm_flutter/src/services/auth/permissions.dart';
 import 'package:gvm_flutter/src/views/products/products/product_edit.dart';
 import 'package:gvm_flutter/src/views/products/purchases/purchase_read.dart';
+import 'package:gvm_flutter/src/widgets/auth_guard.dart';
 
 class ProductRead extends StatefulWidget {
   final int productId;
@@ -85,9 +87,13 @@ class _ProductReadState extends State<ProductRead> {
         title: Text(AppLocalizations.of(context)
             .productDetailsTitle(product!.name ?? '')),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.edit),
-            onPressed: _navigateToProductEdit,
+          AuthGuard(
+            permissions: [AppPermissions.productEdit],
+            fallback: null,
+            child: IconButton(
+              icon: const Icon(Icons.edit),
+              onPressed: _navigateToProductEdit,
+            ),
           ),
         ],
       ),
@@ -286,7 +292,10 @@ class _ProductReadState extends State<ProductRead> {
                       ],
                     ),
                     trailing: const Icon(Icons.chevron_right),
-                    onTap: () => _navigateToSale(sale),
+                    onTap: () =>
+                        AuthGuard.checkPermissions([AppPermissions.saleRead])
+                            ? _navigateToSale(sale)
+                            : null,
                   ),
                 );
               },
@@ -345,7 +354,10 @@ class _ProductReadState extends State<ProductRead> {
                       ],
                     ),
                     trailing: const Icon(Icons.chevron_right),
-                    onTap: () => _navigateToPurchase(purchase),
+                    onTap: () => AuthGuard.checkPermissions(
+                            [AppPermissions.purchaseRead])
+                        ? _navigateToPurchase(purchase)
+                        : null,
                   ),
                 );
               },

@@ -128,8 +128,12 @@ class _ProductEditState extends State<ProductEdit> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _onWillPop,
+    return PopScope(
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop && result == true) {
+          Navigator.pop(context, widget.product);
+        }
+      },
       child: Scaffold(
         appBar: AppBar(
           title: Text('Edit Product'),

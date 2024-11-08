@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
+import 'package:gvm_flutter/src/services/auth/permissions.dart';
 import 'package:gvm_flutter/src/views/products/purchases/purchase_read.dart';
 import 'package:gvm_flutter/src/views/products/suppliers/supplier_edit.dart';
+import 'package:gvm_flutter/src/widgets/auth_guard.dart';
 
 class SupplierRead extends StatefulWidget {
   final int supplierId;
@@ -86,7 +88,9 @@ class _SupplierReadState extends State<SupplierRead> {
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
-            onPressed: _navigateToSupplierEdit,
+            onPressed: AuthGuard.checkPermissions([AppPermissions.supplierEdit])
+                ? _navigateToSupplierEdit
+                : null,
           ),
         ],
       ),
@@ -284,7 +288,10 @@ class _SupplierReadState extends State<SupplierRead> {
                       const Icon(Icons.chevron_right),
                     ],
                   ),
-                  onTap: () => _navigateToPurchase(purchase),
+                  onTap: () =>
+                      AuthGuard.checkPermissions([AppPermissions.purchaseRead])
+                          ? _navigateToPurchase(purchase)
+                          : null,
                 ),
               );
             },

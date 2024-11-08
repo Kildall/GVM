@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
+import 'package:gvm_flutter/src/services/auth/permissions.dart';
 import 'package:gvm_flutter/src/views/employees/employees/employee_edit.dart';
 import 'package:gvm_flutter/src/views/products/purchases/purchase_read.dart';
+import 'package:gvm_flutter/src/widgets/auth_guard.dart';
 
 class EmployeeRead extends StatefulWidget {
   final Employee employee;
@@ -84,9 +86,12 @@ class _EmployeeReadState extends State<EmployeeRead> {
         title: Text(AppLocalizations.of(context)
             .employeeDetailsTitle(employee.name ?? '')),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.edit),
-            onPressed: _navigateToEmployeeEdit,
+          AuthGuard(
+            permissions: [AppPermissions.employeeEdit],
+            child: IconButton(
+              icon: const Icon(Icons.edit),
+              onPressed: _navigateToEmployeeEdit,
+            ),
           ),
         ],
       ),
@@ -231,7 +236,11 @@ class _EmployeeReadState extends State<EmployeeRead> {
                         '${AppLocalizations.of(context).sale} #${sale.id}'),
                     subtitle: Text(sale.startDate?.toLocal().toString() ?? ''),
                     trailing: const Icon(Icons.chevron_right),
-                    onTap: () => _navigateToSale(sale),
+                    onTap: () => AuthGuard.checkPermissions([
+                      AppPermissions.saleRead,
+                    ])
+                        ? _navigateToSale(sale)
+                        : null,
                   ),
                 );
               },
@@ -284,7 +293,11 @@ class _EmployeeReadState extends State<EmployeeRead> {
                     subtitle:
                         Text(delivery.startDate?.toLocal().toString() ?? ''),
                     trailing: const Icon(Icons.chevron_right),
-                    onTap: () => _navigateToDelivery(delivery),
+                    onTap: () => AuthGuard.checkPermissions([
+                      AppPermissions.deliveryRead,
+                    ])
+                        ? _navigateToDelivery(delivery)
+                        : null,
                   ),
                 );
               },
@@ -336,7 +349,11 @@ class _EmployeeReadState extends State<EmployeeRead> {
                         '${AppLocalizations.of(context).purchase} #${purchase.id}'),
                     subtitle: Text(purchase.date?.toLocal().toString() ?? ''),
                     trailing: const Icon(Icons.chevron_right),
-                    onTap: () => _navigateToPurchase(purchase),
+                    onTap: () => AuthGuard.checkPermissions([
+                      AppPermissions.purchaseRead,
+                    ])
+                        ? _navigateToPurchase(purchase)
+                        : null,
                   ),
                 );
               },

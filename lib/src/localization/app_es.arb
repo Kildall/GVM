@@ -877,5 +877,17 @@
   "passwordResetSuccessfully": "Contraseña restablecida exitosamente",
   "@passwordResetSuccessfully": {
     "description": "Message for password reset successfully"
+  },
+  "unauthorized": "Acceso no autorizado",
+  "@unauthorized": {
+    "description": "Message for unauthorized access"
+  },
+  "unauthorizedDescription": "No tienes permisos para acceder a esta sección",
+  "@unauthorizedDescription": {
+    "description": "Message for unauthorized description"
+  },
+  "goBack": "Volver",
+  "@goBack": {
+    "description": "Label for go back"
   }
 }

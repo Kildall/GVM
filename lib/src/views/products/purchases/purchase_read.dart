@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
+import 'package:gvm_flutter/src/services/auth/permissions.dart';
 import 'package:gvm_flutter/src/views/employees/employees/employee_read.dart';
 import 'package:gvm_flutter/src/views/products/products/product_read.dart';
 import 'package:gvm_flutter/src/views/products/purchases/purchase_edit.dart';
 import 'package:gvm_flutter/src/views/products/suppliers/supplier_read.dart';
+import 'package:gvm_flutter/src/widgets/auth_guard.dart';
 
 class PurchaseRead extends StatefulWidget {
   final int purchaseId;
@@ -110,9 +112,13 @@ class _PurchaseReadState extends State<PurchaseRead> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).purchaseDetailsTitle),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.edit),
-            onPressed: _navigateToPurchaseEdit,
+          AuthGuard(
+            permissions: [AppPermissions.purchaseEdit],
+            fallback: null,
+            child: IconButton(
+              icon: const Icon(Icons.edit),
+              onPressed: _navigateToPurchaseEdit,
+            ),
           ),
         ],
       ),
@@ -258,7 +264,9 @@ class _PurchaseReadState extends State<PurchaseRead> {
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () {
                   if (purchase!.supplier != null) {
-                    _navigateToSupplier(purchase!.supplier!);
+                    AuthGuard.checkPermissions([AppPermissions.supplierRead])
+                        ? _navigateToSupplier(purchase!.supplier!)
+                        : null;
                   }
                 },
               ),
@@ -273,7 +281,9 @@ class _PurchaseReadState extends State<PurchaseRead> {
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () {
                   if (purchase!.employee != null) {
-                    _navigateToEmployee(purchase!.employee!);
+                    AuthGuard.checkPermissions([AppPermissions.employeeRead])
+                        ? _navigateToEmployee(purchase!.employee!)
+                        : null;
                   }
                 },
               ),
@@ -348,7 +358,10 @@ class _PurchaseReadState extends State<PurchaseRead> {
                         const Icon(Icons.chevron_right),
                       ],
                     ),
-                    onTap: () => _navigateToProduct(product),
+                    onTap: () =>
+                        AuthGuard.checkPermissions([AppPermissions.productRead])
+                            ? _navigateToProduct(product)
+                            : null,
                   ),
                 );
               },

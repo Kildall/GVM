@@ -42,7 +42,6 @@ class _PurchaseAddState extends State<PurchaseAdd> {
   Future<void> _loadInitialData() async {
     setState(() => isLoading = true);
     try {
-      // Load employees, suppliers, and products
       final employeesResponse = await AuthManager.instance.apiService
           .get<GetEmployeesResponse>('/api/employees',
               fromJson: GetEmployeesResponse.fromJson);
