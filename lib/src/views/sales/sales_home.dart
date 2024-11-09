@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/services/auth/permissions.dart';
+import 'package:gvm_flutter/src/views/sales/deliveries/deliveries_browse.dart';
 import 'package:gvm_flutter/src/views/sales/sales/sales_browse.dart';
 import 'package:gvm_flutter/src/widgets/auth_guard.dart';
 import 'package:gvm_flutter/src/widgets/common/navigation_card.dart';
@@ -28,9 +29,9 @@ class _SalesHomeState extends State<SalesHome> {
   }
 
   void _navigateToDeliveries() {
-    // Navigator.of(context).push(MaterialPageRoute(
-    //   builder: (context) => const DeliveriesBrowse(),
-    // ));
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => const DeliveriesBrowse(),
+    ));
   }
 
   @override

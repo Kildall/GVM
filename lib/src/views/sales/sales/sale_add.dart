@@ -5,6 +5,7 @@ import 'package:gvm_flutter/src/models/response/customers_responses.dart';
 import 'package:gvm_flutter/src/models/response/employee_responses.dart';
 import 'package:gvm_flutter/src/models/response/product_responses.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
+import 'package:gvm_flutter/src/views/sales/sales/utils.dart';
 import 'package:intl/intl.dart';
 
 class SaleAdd extends StatefulWidget {
@@ -460,10 +461,10 @@ class _SaleAddState extends State<SaleAdd> {
                               margin: const EdgeInsets.only(right: 8),
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: _getStatusColor(status),
+                                color: SalesUtils.getStatusColor(status),
                               ),
                             ),
-                            Text(status.name),
+                            Text(SalesUtils.getStatusName(context, status)),
                           ],
                         ),
                       ))
@@ -694,20 +695,5 @@ class _SaleAddState extends State<SaleAdd> {
         );
       },
     );
-  }
-
-  Color _getStatusColor(SaleStatusEnum status) {
-    switch (status) {
-      case SaleStatusEnum.STARTED:
-        return Colors.blue;
-      case SaleStatusEnum.IN_PROGRESS:
-        return Colors.orange;
-      case SaleStatusEnum.COMPLETED:
-        return Colors.green;
-      case SaleStatusEnum.CANCELED:
-        return Colors.red;
-      default:
-        return Theme.of(context).colorScheme.secondary;
-    }
   }
 }

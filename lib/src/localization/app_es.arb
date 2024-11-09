@@ -172,19 +172,19 @@
   "@address": {
     "description": "Label for address"
   },
-  "started": "INICIADO",
+  "started": "Iniciado",
   "@started": {
     "description": "Status label for started sales"
   },
-  "completed": "COMPLETADO",
+  "completed": "Completado",
   "@completed": {
     "description": "Status label for completed sales"
   },
-  "delivered": "ENTREGADO",
+  "delivered": "Entregado",
   "@delivered": {
     "description": "Delivery status label for delivered items"
   },
-  "pendingAssignment": "PENDIENTE DE ASIGNACIÓN",
+  "pendingAssignment": "Pendiente",
   "@pendingAssignment": {
     "description": "Delivery status label for pending assignment"
   },
@@ -989,5 +989,41 @@
   "editProduct": "Editar producto",
   "@editProduct": {
     "description": "Label for edit product"
+  },
+  "streetAddress": "Dirección",
+  "@streetAddress": {
+    "description": "Label for street address"
+  },
+  "noDeliveriesFound": "No se encontraron entregas",
+  "@noDeliveriesFound": {
+    "description": "Message for no deliveries found"
+  },
+  "deliveryStatus": "Estado de la entrega",
+  "@deliveryStatus": {
+    "description": "Label for delivery status"
+  },
+  "driverStatus": "Estado del conductor",
+  "@driverStatus": {
+    "description": "Label for driver status"
+  },
+  "searchDeliveries": "Buscar entregas...",
+  "@searchDeliveries": {
+    "description": "Placeholder for search deliveries"
+  },
+  "assigned": "Asignado",
+  "@assigned": {
+    "description": "Label for assigned"
+  },
+  "inProgress": "En progreso",
+  "@inProgress": {
+    "description": "Label for in progress"
+  },
+  "canceled": "Cancelado",
+  "@canceled": {
+    "description": "Label for canceled"
+  },
+  "disputed": "Disputado",
+  "@disputed": {
+    "description": "Label for disputed"
   }
 }

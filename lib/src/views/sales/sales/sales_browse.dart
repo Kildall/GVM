@@ -6,6 +6,7 @@ import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 import 'package:gvm_flutter/src/services/auth/permissions.dart';
 import 'package:gvm_flutter/src/views/sales/sales/sale_add.dart';
 import 'package:gvm_flutter/src/views/sales/sales/sale_read.dart';
+import 'package:gvm_flutter/src/views/sales/sales/utils.dart';
 import 'package:gvm_flutter/src/widgets/auth_guard.dart';
 
 class SalesBrowse extends StatefulWidget {
@@ -286,20 +287,21 @@ class _SaleListItem extends StatelessWidget {
             Expanded(
               child: Text('${AppLocalizations.of(context).sale} #${sale.id}'),
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: _getStatusColor(context, sale.status),
-                borderRadius: BorderRadius.circular(12),
+            if (sale.status != null)
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: SalesUtils.getStatusColor(sale.status!),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  SalesUtils.getStatusName(context, sale.status!),
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelSmall
+                      ?.copyWith(color: Colors.white),
+                ),
               ),
-              child: Text(
-                sale.status?.name ?? AppLocalizations.of(context).unnamedSale,
-                style: Theme.of(context)
-                    .textTheme
-                    .labelSmall
-                    ?.copyWith(color: Colors.white),
-              ),
-            ),
           ],
         ),
         subtitle: Column(
@@ -337,20 +339,5 @@ class _SaleListItem extends StatelessWidget {
         onTap: onTap,
       ),
     );
-  }
-
-  Color _getStatusColor(BuildContext context, SaleStatusEnum? status) {
-    switch (status) {
-      case SaleStatusEnum.IN_PROGRESS:
-        return Colors.orange;
-      case SaleStatusEnum.COMPLETED:
-        return Colors.green;
-      case SaleStatusEnum.CANCELED:
-        return Colors.red;
-      case SaleStatusEnum.STARTED:
-        return Colors.blue;
-      default:
-        return Theme.of(context).colorScheme.secondary;
-    }
   }
 }

@@ -6,6 +6,7 @@ import 'package:gvm_flutter/src/services/auth/permissions.dart';
 import 'package:gvm_flutter/src/views/employees/employees/employee_read.dart';
 import 'package:gvm_flutter/src/views/products/products/product_read.dart';
 import 'package:gvm_flutter/src/views/sales/sales/sale_edit.dart';
+import 'package:gvm_flutter/src/views/sales/sales/utils.dart';
 import 'package:gvm_flutter/src/widgets/auth_guard.dart';
 
 class SaleRead extends StatefulWidget {
@@ -81,21 +82,6 @@ class _SaleReadState extends State<SaleRead> {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => EmployeeRead(employee: employee),
     ));
-  }
-
-  Color _getStatusColor(SaleStatusEnum? status) {
-    switch (status) {
-      case SaleStatusEnum.STARTED:
-        return Colors.blue;
-      case SaleStatusEnum.IN_PROGRESS:
-        return Colors.orange;
-      case SaleStatusEnum.COMPLETED:
-        return Colors.green;
-      case SaleStatusEnum.CANCELED:
-        return Colors.red;
-      default:
-        return Theme.of(context).colorScheme.secondary;
-    }
   }
 
   @override
@@ -209,11 +195,11 @@ class _SaleReadState extends State<SaleRead> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: _getStatusColor(sale!.status),
+                    color: SalesUtils.getStatusColor(sale!.status!),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Text(
-                    sale!.status?.name ?? 'Unknown',
+                    SalesUtils.getStatusName(context, sale!.status!),
                     style: Theme.of(context)
                         .textTheme
                         .labelMedium
@@ -268,8 +254,8 @@ class _SaleReadState extends State<SaleRead> {
             ),
             _buildDetailRow(
               AppLocalizations.of(context).status,
-              sale!.status?.name ?? 'Unknown',
-              color: _getStatusColor(sale!.status),
+              SalesUtils.getStatusName(context, sale!.status!),
+              color: SalesUtils.getStatusColor(sale!.status!),
             ),
           ],
         ),
