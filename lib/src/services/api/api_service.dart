@@ -20,11 +20,14 @@ class APIService {
   void _handleErrors(List<APIError> errors) {
     if (errors.isEmpty) return;
 
-    debugPrint('API errors: $errors');
+    debugPrint('API errors: ${errors.map((e) => e.code).join(', ')}');
     final error = errors.first;
-    final errorCode = ErrorCode.values.firstWhere(
-        (e) => e.index == error.code - 1000,
+    final errorCode = ErrorCode.values.firstWhere((e) => e.value == error.code,
         orElse: () => ErrorCode.SERVER_ERROR);
+
+    // print the value of the incorrect error code
+    debugPrint('Incorrect error code: $errorCode');
+    debugPrint('Error code: ${errorCode.value}');
 
     switch (errorCode) {
       case ErrorCode.AUTH_ERROR:
