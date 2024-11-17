@@ -236,38 +236,115 @@ class _SaleEditState extends State<SaleEdit> {
       context: context,
       builder: (BuildContext context) {
         DateTime selectedDate = DateTime.now();
+        Address? selectedAddress;
+        Employee? selectedEmployee;
+
+        // Get customer's addresses from the selected customer
+        final customerAddresses = customers
+                .firstWhere((c) => c.id == customerId, orElse: () => Customer())
+                .addresses ??
+            [];
+        debugPrint('customers ids: ${customers.map((c) => c.id).toList()}');
+        debugPrint('customerId: $customerId');
 
         return AlertDialog(
           title: Text(AppLocalizations.of(context).addDelivery),
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  InkWell(
-                    onTap: () async {
-                      final DateTime? picked = await showDatePicker(
-                        context: context,
-                        initialDate: selectedDate,
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime(2100),
-                      );
-                      if (picked != null) {
-                        setState(() => selectedDate = picked);
-                      }
-                    },
-                    child: InputDecorator(
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context).deliveryDate,
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.calendar_today),
-                      ),
-                      child: Text(
-                        DateFormat('yyyy-MM-dd').format(selectedDate),
+              return SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Date Picker
+                    InkWell(
+                      onTap: () async {
+                        final DateTime? picked = await showDatePicker(
+                          context: context,
+                          initialDate: selectedDate,
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime(2100),
+                        );
+                        if (picked != null) {
+                          setState(() => selectedDate = picked);
+                        }
+                      },
+                      child: InputDecorator(
+                        decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context).deliveryDate,
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.calendar_today),
+                        ),
+                        child: Text(
+                          DateFormat('yyyy-MM-dd').format(selectedDate),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 16),
+                    DropdownButtonFormField<Address>(
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).address,
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.location_on),
+                      ),
+                      value: selectedAddress,
+                      items: customerAddresses.map((address) {
+                        return DropdownMenuItem(
+                          value: address,
+                          child: Text(
+                            [
+                              address.street1,
+                              address.street2,
+                              address.postalCode,
+                              address.city,
+                              address.state,
+                            ]
+                                .where((s) => s != null && s.isNotEmpty)
+                                .join(', '),
+                          ),
+                        );
+                      }).toList(),
+                      validator: (value) {
+                        if (value == null) {
+                          return AppLocalizations.of(context).address;
+                        }
+                        return null;
+                      },
+                      onChanged: (Address? value) {
+                        setState(() {
+                          selectedAddress = value;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Optional Employee Dropdown
+                    DropdownButtonFormField<Employee>(
+                      decoration: InputDecoration(
+                        labelText:
+                            '${AppLocalizations.of(context).employee} (${AppLocalizations.of(context).optional})',
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.person),
+                      ),
+                      value: selectedEmployee,
+                      items: [
+                        DropdownMenuItem<Employee>(
+                          value: null,
+                          child: Text(AppLocalizations.of(context).employee),
+                        ),
+                        ...employees.map((employee) => DropdownMenuItem(
+                              value: employee,
+                              child: Text(employee.name ??
+                                  AppLocalizations.of(context).unnamedEmployee),
+                            )),
+                      ],
+                      onChanged: (Employee? value) {
+                        setState(() {
+                          selectedEmployee = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
               );
             },
           ),
@@ -278,10 +355,22 @@ class _SaleEditState extends State<SaleEdit> {
             ),
             TextButton(
               onPressed: () {
+                if (selectedAddress == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(AppLocalizations.of(context).address),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                  return;
+                }
+
                 setState(() {
                   selectedDeliveries.add(Delivery(
                     startDate: selectedDate,
                     saleId: widget.sale.id,
+                    addressId: selectedAddress?.id,
+                    employeeId: selectedEmployee?.id,
                   ));
                 });
                 Navigator.pop(context);
@@ -294,7 +383,7 @@ class _SaleEditState extends State<SaleEdit> {
     );
   }
 
-  void _editProduct(int index) {
+  void editProduct(int index) {
     final product = selectedProducts[index];
     showDialog(
       context: context,
@@ -353,17 +442,17 @@ class _SaleEditState extends State<SaleEdit> {
     );
   }
 
-  bool _hasChanges() {
+  bool hasChanges() {
     return employeeId != widget.sale.employeeId ||
         customerId != widget.sale.customerId ||
         startDate != widget.sale.startDate ||
         status != widget.sale.status ||
-        !_areProductListsEqual(selectedProducts, widget.sale.products ?? []) ||
-        !_areDeliveryListsEqual(
+        !areProductListsEqual(selectedProducts, widget.sale.products ?? []) ||
+        !areDeliveryListsEqual(
             selectedDeliveries, widget.sale.deliveries ?? []);
   }
 
-  bool _areProductListsEqual(List<ProductSale> list1, List<ProductSale> list2) {
+  bool areProductListsEqual(List<ProductSale> list1, List<ProductSale> list2) {
     if (list1.length != list2.length) return false;
     for (int i = 0; i < list1.length; i++) {
       if (list1[i].productId != list2[i].productId ||
@@ -374,7 +463,7 @@ class _SaleEditState extends State<SaleEdit> {
     return true;
   }
 
-  bool _areDeliveryListsEqual(List<Delivery> list1, List<Delivery> list2) {
+  bool areDeliveryListsEqual(List<Delivery> list1, List<Delivery> list2) {
     if (list1.length != list2.length) return false;
     for (int i = 0; i < list1.length; i++) {
       if (list1[i].startDate != list2[i].startDate) {
@@ -388,7 +477,7 @@ class _SaleEditState extends State<SaleEdit> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        if (_hasChanges()) {
+        if (hasChanges()) {
           return await showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
@@ -428,15 +517,15 @@ class _SaleEditState extends State<SaleEdit> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _buildBasicInfoCard(),
+                buildBasicInfoCard(),
                 const SizedBox(height: 16),
-                _buildStatusCard(),
+                buildStatusCard(),
                 const SizedBox(height: 16),
-                _buildProductsCard(),
+                buildProductsCard(),
                 const SizedBox(height: 16),
-                _buildDeliveriesCard(),
+                buildDeliveriesCard(),
                 const SizedBox(height: 24),
-                if (_hasChanges()) ...[
+                if (hasChanges()) ...[
                   ElevatedButton(
                     onPressed: isLoading ? null : _updateSale,
                     style: ElevatedButton.styleFrom(
@@ -462,7 +551,7 @@ class _SaleEditState extends State<SaleEdit> {
     );
   }
 
-  Widget _buildBasicInfoCard() {
+  Widget buildBasicInfoCard() {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -551,7 +640,7 @@ class _SaleEditState extends State<SaleEdit> {
     );
   }
 
-  Widget _buildStatusCard() {
+  Widget buildStatusCard() {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -608,7 +697,7 @@ class _SaleEditState extends State<SaleEdit> {
     );
   }
 
-  Widget _buildProductsCard() {
+  Widget buildProductsCard() {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -658,7 +747,7 @@ class _SaleEditState extends State<SaleEdit> {
                         children: [
                           IconButton(
                             icon: const Icon(Icons.edit),
-                            onPressed: () => _editProduct(index),
+                            onPressed: () => editProduct(index),
                           ),
                           IconButton(
                             icon: const Icon(Icons.delete),
@@ -698,7 +787,7 @@ class _SaleEditState extends State<SaleEdit> {
     );
   }
 
-  Widget _buildDeliveriesCard() {
+  Widget buildDeliveriesCard() {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),

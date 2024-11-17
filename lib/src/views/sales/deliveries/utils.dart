@@ -10,14 +10,16 @@ class DeliveriesUtils {
         return Colors.blue;
       case DeliveryStatusEnum.IN_PROGRESS:
         return Colors.green;
-      case DeliveryStatusEnum.DELIVERED:
+      case DeliveryStatusEnum.IN_TRANSIT:
         return Colors.green;
-      case DeliveryStatusEnum.CANCELED:
+      case DeliveryStatusEnum.CANCELLED:
         return Colors.red;
-      case DeliveryStatusEnum.DISPUTED:
+      case DeliveryStatusEnum.CONFLICT:
         return Colors.yellow;
-      case DeliveryStatusEnum.PENDING_ASSIGNMENT:
+      case DeliveryStatusEnum.CREATED:
         return Colors.orange;
+      case DeliveryStatusEnum.FINISHED:
+        return Colors.purple;
     }
   }
 
@@ -31,14 +33,16 @@ class DeliveriesUtils {
         return AppLocalizations.of(context).assigned;
       case DeliveryStatusEnum.IN_PROGRESS:
         return AppLocalizations.of(context).inProgress;
-      case DeliveryStatusEnum.DELIVERED:
-        return AppLocalizations.of(context).delivered;
-      case DeliveryStatusEnum.CANCELED:
-        return AppLocalizations.of(context).canceled;
-      case DeliveryStatusEnum.DISPUTED:
-        return AppLocalizations.of(context).disputed;
-      case DeliveryStatusEnum.PENDING_ASSIGNMENT:
-        return AppLocalizations.of(context).pendingAssignment;
+      case DeliveryStatusEnum.IN_TRANSIT:
+        return AppLocalizations.of(context).inTransit;
+      case DeliveryStatusEnum.CANCELLED:
+        return AppLocalizations.of(context).cancelled;
+      case DeliveryStatusEnum.CONFLICT:
+        return AppLocalizations.of(context).conflict;
+      case DeliveryStatusEnum.CREATED:
+        return AppLocalizations.of(context).created;
+      case DeliveryStatusEnum.FINISHED:
+        return AppLocalizations.of(context).finished;
     }
   }
 }
@@ -49,26 +53,42 @@ class DriverUtils {
       return AppLocalizations.of(context).all;
     }
     switch (status) {
-      case DriverStatusEnum.STARTED:
-        return AppLocalizations.of(context).started;
-      case DriverStatusEnum.IN_PROGRESS:
-        return AppLocalizations.of(context).inProgress;
-      case DriverStatusEnum.COMPLETED:
-        return AppLocalizations.of(context).completed;
-      case DriverStatusEnum.CANCELED:
-        return AppLocalizations.of(context).canceled;
+      case DriverStatusEnum.PENDING_PICKUP:
+        return AppLocalizations.of(context).pendingPickup;
+      case DriverStatusEnum.PICKING_UP:
+        return AppLocalizations.of(context).pickingUp;
+      case DriverStatusEnum.IN_TRANSIT:
+        return AppLocalizations.of(context).inTransit;
+      case DriverStatusEnum.DELIVERED:
+        return AppLocalizations.of(context).delivered;
+      case DriverStatusEnum.CANCELLED:
+        return AppLocalizations.of(context).cancelled;
+      case DriverStatusEnum.IN_RETURN:
+        return AppLocalizations.of(context).inReturn;
+      case DriverStatusEnum.TRYING_DELIVERY:
+        return AppLocalizations.of(context).tryingDelivery;
+      case DriverStatusEnum.NOT_DELIVERED:
+        return AppLocalizations.of(context).notDelivered;
     }
   }
 
   static Color getStatusColor(DriverStatusEnum status) {
     switch (status) {
-      case DriverStatusEnum.STARTED:
+      case DriverStatusEnum.PENDING_PICKUP:
         return Colors.blue;
-      case DriverStatusEnum.IN_PROGRESS:
+      case DriverStatusEnum.PICKING_UP:
         return Colors.green;
-      case DriverStatusEnum.COMPLETED:
+      case DriverStatusEnum.IN_TRANSIT:
         return Colors.green;
-      case DriverStatusEnum.CANCELED:
+      case DriverStatusEnum.DELIVERED:
+        return Colors.green;
+      case DriverStatusEnum.CANCELLED:
+        return Colors.red;
+      case DriverStatusEnum.IN_RETURN:
+        return Colors.orange;
+      case DriverStatusEnum.TRYING_DELIVERY:
+        return Colors.yellow;
+      case DriverStatusEnum.NOT_DELIVERED:
         return Colors.red;
     }
   }

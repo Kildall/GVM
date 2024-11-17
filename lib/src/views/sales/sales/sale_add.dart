@@ -26,7 +26,7 @@ class _SaleAddState extends State<SaleAdd> {
   int? employeeId;
   int? customerId;
   DateTime? startDate;
-  SaleStatusEnum status = SaleStatusEnum.STARTED;
+  SaleStatusEnum status = SaleStatusEnum.CREATED;
   List<ProductSale> selectedProducts = [];
   List<Delivery> selectedDeliveries = [];
 

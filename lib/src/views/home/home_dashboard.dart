@@ -305,15 +305,16 @@ class _HomeDashboardState extends State<HomeDashboard> {
   Widget _buildDeliveryStatusChip(DeliveryStatusEnum status) {
     Color color;
     switch (status) {
-      case DeliveryStatusEnum.PENDING_ASSIGNMENT:
+      case DeliveryStatusEnum.CREATED:
         color = Colors.blue;
         break;
-      case DeliveryStatusEnum.DELIVERED:
+      case DeliveryStatusEnum.IN_PROGRESS:
+      case DeliveryStatusEnum.IN_TRANSIT:
       case DeliveryStatusEnum.ASSIGNED:
         color = Colors.green;
         break;
-      case DeliveryStatusEnum.CANCELED:
-      case DeliveryStatusEnum.DISPUTED:
+      case DeliveryStatusEnum.CANCELLED:
+      case DeliveryStatusEnum.CONFLICT:
         color = Colors.red;
         break;
       default:
@@ -328,13 +329,13 @@ class _HomeDashboardState extends State<HomeDashboard> {
   Widget _buildSaleStatusChip(SaleStatusEnum status) {
     Color color;
     switch (status) {
-      case SaleStatusEnum.COMPLETED:
+      case SaleStatusEnum.DELIVERED:
         color = Colors.green;
         break;
       case SaleStatusEnum.IN_PROGRESS:
         color = Colors.orange;
         break;
-      case SaleStatusEnum.CANCELED:
+      case SaleStatusEnum.CANCELLED:
         color = Colors.red;
         break;
       default:

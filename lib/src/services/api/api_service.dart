@@ -59,6 +59,7 @@ class APIService {
       case ErrorCode.RESOURCE_NOT_FOUND:
       case ErrorCode.RESOURCE_ALREADY_EXISTS:
       case ErrorCode.RESOURCE_UPDATE_FAILED:
+      case ErrorCode.INVALID_STATUS_TRANSITION:
         throw ResourceException(errorCode, error.message, error.code);
 
       case ErrorCode.VALIDATION_ERROR:

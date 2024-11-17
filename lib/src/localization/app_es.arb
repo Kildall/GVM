@@ -1018,8 +1018,8 @@
   "@inProgress": {
     "description": "Label for in progress"
   },
-  "canceled": "Cancelado",
-  "@canceled": {
+  "cancelled": "Cancelado",
+  "@cancelled": {
     "description": "Label for canceled"
   },
   "disputed": "Disputado",
@@ -1070,5 +1070,57 @@
   "scheduleDelivery": "Programar entrega",
   "@scheduleDelivery": {
     "description": "Label for schedule delivery"
+  },
+  "optional": "Opcional",
+  "@optional": {
+    "description": "Label for optional"
+  },
+  "inDelivery": "En entrega",
+  "@inDelivery": {
+    "description": "Label for in delivery"
+  },
+  "preparing": "Preparando",
+  "@preparing": {
+    "description": "Label for preparing"
+  },
+  "ready": "Listo",
+  "@ready": {
+    "description": "Label for ready"
+  },
+  "created": "Creado",
+  "@created": {
+    "description": "Label for created"
+  },
+  "pendingPickup": "Pendiente de recogida",
+  "@pendingPickup": {
+    "description": "Label for pending pickup"
+  },
+  "pickingUp": "Recogiendo",
+  "@pickingUp": {
+    "description": "Label for picking up"
+  },
+  "inTransit": "En tránsito",
+  "@inTransit": {
+    "description": "Label for in transit"
+  },
+  "tryingDelivery": "Intentando entrega",
+  "@tryingDelivery": {
+    "description": "Label for trying delivery"
+  },
+  "notDelivered": "No entregado",
+  "@notDelivered": {
+    "description": "Label for not delivered"
+  },
+  "inReturn": "En retorno",
+  "@inReturn": {
+    "description": "Label for in return"
+  },
+  "finished": "Finalizado",
+  "@finished": {
+    "description": "Label for finished"
+  },
+  "conflict": "Conflicto",
+  "@conflict": {
+    "description": "Label for conflict"
   }
 }
