@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
+import 'package:gvm_flutter/src/models/request/sale_requests.dart';
 import 'package:gvm_flutter/src/models/response/customers_responses.dart';
 import 'package:gvm_flutter/src/models/response/employee_responses.dart';
 import 'package:gvm_flutter/src/models/response/product_responses.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
+import 'package:gvm_flutter/src/views/sales/sales/sale_read.dart';
 import 'package:gvm_flutter/src/views/sales/sales/utils.dart';
 import 'package:intl/intl.dart';
 
@@ -18,6 +20,7 @@ class SaleAdd extends StatefulWidget {
 class _SaleAddState extends State<SaleAdd> {
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
+  bool _autovalidateMode = false;
 
   // Form fields
   int? employeeId;
@@ -63,12 +66,23 @@ class _SaleAddState extends State<SaleAdd> {
   }
 
   Future<void> _createSale() async {
-    if (!_formKey.currentState!.validate()) return;
+    setState(() => _autovalidateMode = true);
+
+    if (!_formKey.currentState!.validate()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context).fixErrors),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
 
     if (selectedProducts.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please add at least one product to the sale'),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)
+              .emptyListError(AppLocalizations.of(context).products)),
           backgroundColor: Colors.red,
         ),
       );
@@ -89,27 +103,46 @@ class _SaleAddState extends State<SaleAdd> {
         deliveries: selectedDeliveries,
       );
 
-      final response = await AuthManager.instance.apiService.post(
-        '/api/sales',
-        body: newSale.toJson(),
-        fromJson: (json) => Sale.fromJson(json['data']),
+      debugPrint(newSale.toJson().toString());
+
+      final request = CreateSaleRequest(
+        employeeId: employeeId!,
+        customerId: customerId!,
+        products: selectedProducts
+            .map((product) => SaleProductItem(
+                  productId: product.productId!,
+                  quantity: product.quantity!,
+                ))
+            .toList(),
+        startDate: startDate!.toIso8601String(),
       );
 
-      if (mounted) {
+      final response = await AuthManager.instance.apiService.post(
+        '/api/sales',
+        body: request.toJson(),
+        fromJson: (json) => Sale.fromJson(json),
+      );
+
+      if (response.success && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Sale created successfully'),
+          SnackBar(
+            content: Text(AppLocalizations.of(context).success),
             backgroundColor: Colors.green,
           ),
         );
-        Navigator.pop(context, response.data);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SaleRead(saleId: response.data!.id!),
+          ),
+        );
       }
     } catch (e) {
       debugPrint(e.toString());
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Error creating sale'),
+          SnackBar(
+            content: Text(AppLocalizations.of(context).anErrorOccurred),
             backgroundColor: Colors.red,
           ),
         );
@@ -129,22 +162,23 @@ class _SaleAddState extends State<SaleAdd> {
         int quantity = 1;
 
         return AlertDialog(
-          title: const Text('Add Product'),
+          title: Text(AppLocalizations.of(context).addProduct),
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   DropdownButtonFormField<Product>(
-                    decoration: const InputDecoration(
-                      labelText: 'Product',
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).product,
                       border: OutlineInputBorder(),
                     ),
                     value: selectedProduct,
                     items: availableProducts
                         .map((product) => DropdownMenuItem(
                               value: product,
-                              child: Text(product.name ?? 'Unnamed Product'),
+                              child: Text(product.name ??
+                                  AppLocalizations.of(context).unnamedProduct),
                             ))
                         .toList(),
                     onChanged: (Product? value) {
@@ -153,8 +187,8 @@ class _SaleAddState extends State<SaleAdd> {
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Quantity',
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).quantity,
                       border: OutlineInputBorder(),
                     ),
                     keyboardType: TextInputType.number,
@@ -172,7 +206,7 @@ class _SaleAddState extends State<SaleAdd> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
+              child: Text(AppLocalizations.of(context).cancel),
             ),
             TextButton(
               onPressed: () {
@@ -187,7 +221,7 @@ class _SaleAddState extends State<SaleAdd> {
                   Navigator.pop(context);
                 }
               },
-              child: const Text('Add'),
+              child: Text(AppLocalizations.of(context).add),
             ),
           ],
         );
@@ -202,7 +236,7 @@ class _SaleAddState extends State<SaleAdd> {
         DateTime selectedDate = DateTime.now();
 
         return AlertDialog(
-          title: const Text('Schedule Delivery'),
+          title: Text(AppLocalizations.of(context).scheduleDelivery),
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
               return Column(
@@ -221,10 +255,10 @@ class _SaleAddState extends State<SaleAdd> {
                       }
                     },
                     child: InputDecorator(
-                      decoration: const InputDecoration(
-                        labelText: 'Delivery Date',
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).deliveryDate,
                         border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.calendar_today),
+                        prefixIcon: const Icon(Icons.calendar_today),
                       ),
                       child: Text(
                         DateFormat('yyyy-MM-dd').format(selectedDate),
@@ -238,7 +272,7 @@ class _SaleAddState extends State<SaleAdd> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
+              child: Text(AppLocalizations.of(context).cancel),
             ),
             TextButton(
               onPressed: () {
@@ -249,7 +283,7 @@ class _SaleAddState extends State<SaleAdd> {
                 });
                 Navigator.pop(context);
               },
-              child: const Text('Add'),
+              child: Text(AppLocalizations.of(context).add),
             ),
           ],
         );
@@ -262,17 +296,17 @@ class _SaleAddState extends State<SaleAdd> {
       return await showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              title: const Text('Discard Changes?'),
+              title: Text(AppLocalizations.of(context).discardChanges),
               content:
-                  const Text('Do you want to discard the current sale draft?'),
+                  Text(AppLocalizations.of(context).discardChangesDescription),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context, false),
-                  child: const Text('Cancel'),
+                  child: Text(AppLocalizations.of(context).cancel),
                 ),
                 TextButton(
                   onPressed: () => Navigator.pop(context, true),
-                  child: const Text('Discard'),
+                  child: Text(AppLocalizations.of(context).discard),
                 ),
               ],
             ),
@@ -360,6 +394,7 @@ class _SaleAddState extends State<SaleAdd> {
                 labelText: AppLocalizations.of(context).employee,
                 border: const OutlineInputBorder(),
                 prefixIcon: const Icon(Icons.person),
+                errorStyle: const TextStyle(color: Colors.red),
               ),
               value: employeeId,
               items: employees
@@ -369,9 +404,12 @@ class _SaleAddState extends State<SaleAdd> {
                             AppLocalizations.of(context).unnamedEmployee),
                       ))
                   .toList(),
+              autovalidateMode: _autovalidateMode
+                  ? AutovalidateMode.always
+                  : AutovalidateMode.disabled,
               validator: (value) {
                 if (value == null) {
-                  return AppLocalizations.of(context).selectEmployee;
+                  return AppLocalizations.of(context).fieldRequired;
                 }
                 return null;
               },
@@ -383,47 +421,74 @@ class _SaleAddState extends State<SaleAdd> {
                 labelText: AppLocalizations.of(context).customer,
                 border: const OutlineInputBorder(),
                 prefixIcon: const Icon(Icons.person_outline),
+                errorStyle: const TextStyle(color: Colors.red),
               ),
               value: customerId,
               items: customers
                   .map((customer) => DropdownMenuItem(
                         value: customer.id,
-                        child: Text(customer.name ?? 'Unnamed Customer'),
+                        child: Text(customer.name ??
+                            AppLocalizations.of(context).unnamedCustomer),
                       ))
                   .toList(),
+              autovalidateMode: _autovalidateMode
+                  ? AutovalidateMode.always
+                  : AutovalidateMode.disabled,
               validator: (value) {
                 if (value == null) {
-                  return AppLocalizations.of(context).selectCustomer;
+                  return AppLocalizations.of(context).fieldRequired;
                 }
                 return null;
               },
               onChanged: (value) => setState(() => customerId = value),
             ),
             const SizedBox(height: 16),
-            InkWell(
-              onTap: () async {
-                final DateTime? picked = await showDatePicker(
-                  context: context,
-                  initialDate: startDate ?? DateTime.now(),
-                  firstDate: DateTime(2000),
-                  lastDate: DateTime.now(),
-                );
-                if (picked != null) {
-                  setState(() => startDate = picked);
+            FormField<DateTime>(
+              initialValue: startDate,
+              autovalidateMode: _autovalidateMode
+                  ? AutovalidateMode.always
+                  : AutovalidateMode.disabled,
+              validator: (value) {
+                if (value == null) {
+                  return AppLocalizations.of(context).fieldRequired;
                 }
+                return null;
               },
-              child: InputDecorator(
-                decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context).date,
-                  border: const OutlineInputBorder(),
-                  prefixIcon: const Icon(Icons.calendar_today),
-                ),
-                child: Text(
-                  startDate != null
-                      ? DateFormat('yyyy-MM-dd').format(startDate!)
-                      : AppLocalizations.of(context).selectDate,
-                ),
-              ),
+              builder: (FormFieldState<DateTime> field) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    InkWell(
+                      onTap: () async {
+                        final DateTime? picked = await showDatePicker(
+                          context: context,
+                          initialDate: startDate ?? DateTime.now(),
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime.now(),
+                        );
+                        if (picked != null) {
+                          setState(() => startDate = picked);
+                          field.didChange(picked);
+                        }
+                      },
+                      child: InputDecorator(
+                        decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context).date,
+                          border: const OutlineInputBorder(),
+                          prefixIcon: const Icon(Icons.calendar_today),
+                          errorText: field.errorText,
+                          errorStyle: const TextStyle(color: Colors.red),
+                        ),
+                        child: Text(
+                          startDate != null
+                              ? DateFormat('yyyy-MM-dd').format(startDate!)
+                              : AppLocalizations.of(context).selectDate,
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
           ],
         ),
@@ -448,8 +513,18 @@ class _SaleAddState extends State<SaleAdd> {
                 labelText: AppLocalizations.of(context).status,
                 border: const OutlineInputBorder(),
                 prefixIcon: const Icon(Icons.flag),
+                errorStyle: const TextStyle(color: Colors.red),
               ),
               value: status,
+              autovalidateMode: _autovalidateMode
+                  ? AutovalidateMode.always
+                  : AutovalidateMode.disabled,
+              validator: (value) {
+                if (value == null) {
+                  return AppLocalizations.of(context).fieldRequired;
+                }
+                return null;
+              },
               items: SaleStatusEnum.values
                   .map((status) => DropdownMenuItem(
                         value: status,

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
+import 'package:gvm_flutter/src/models/request/sale_requests.dart';
 import 'package:gvm_flutter/src/models/response/customers_responses.dart';
 import 'package:gvm_flutter/src/models/response/employee_responses.dart';
 import 'package:gvm_flutter/src/models/response/product_responses.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
+import 'package:gvm_flutter/src/views/sales/sales/sale_read.dart';
 import 'package:gvm_flutter/src/views/sales/sales/utils.dart';
 import 'package:intl/intl.dart';
 
@@ -75,43 +78,71 @@ class _SaleEditState extends State<SaleEdit> {
   }
 
   Future<void> _updateSale() async {
-    if (!_formKey.currentState!.validate()) return;
+    if (!_formKey.currentState!.validate()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context).fixErrors),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    if (selectedProducts.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)
+              .emptyListError(AppLocalizations.of(context).products)),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
 
     _formKey.currentState!.save();
 
     setState(() => isLoading = true);
     try {
-      final updatedSale = widget.sale.copyWith(
-        employeeId: employeeId,
-        customerId: customerId,
-        startDate: startDate,
-        lastUpdateDate: DateTime.now(),
-        status: status,
-        products: selectedProducts,
-        deliveries: selectedDeliveries,
+      final request = UpdateSaleRequest(
+        saleId: widget.sale.id!,
+        products: selectedProducts
+            .map((product) => SaleProductItem(
+                  productId: product.productId!,
+                  quantity: product.quantity!,
+                ))
+            .toList(),
+        status: status!,
+        employeeId: employeeId!,
+        customerId: customerId!,
+        startDate: startDate!.toIso8601String(),
       );
 
       final response = await AuthManager.instance.apiService.put(
-        '/api/sales/${widget.sale.id}',
-        body: updatedSale.toJson(),
-        fromJson: (json) => Sale.fromJson(json['data']),
+        '/api/sales',
+        body: request.toJson(),
+        fromJson: (json) => Sale.fromJson(json),
       );
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Sale updated successfully'),
+            content: Text(AppLocalizations.of(context).success),
             backgroundColor: Colors.green,
           ),
         );
-        Navigator.pop(context, response.data);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SaleRead(saleId: response.data!.id!),
+          ),
+        );
       }
     } catch (e) {
       debugPrint(e.toString());
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error updating sale'),
+            content: Text(AppLocalizations.of(context).anErrorOccurred),
             backgroundColor: Colors.red,
           ),
         );
@@ -131,22 +162,23 @@ class _SaleEditState extends State<SaleEdit> {
         int quantity = 1;
 
         return AlertDialog(
-          title: Text('Add Product'),
+          title: Text(AppLocalizations.of(context).addProduct),
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   DropdownButtonFormField<Product>(
-                    decoration: const InputDecoration(
-                      labelText: 'Product',
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).product,
                       border: OutlineInputBorder(),
                     ),
                     value: selectedProduct,
                     items: availableProducts
                         .map((product) => DropdownMenuItem(
                               value: product,
-                              child: Text(product.name ?? 'Unnamed Product'),
+                              child: Text(product.name ??
+                                  AppLocalizations.of(context).unnamedProduct),
                             ))
                         .toList(),
                     onChanged: (Product? value) {
@@ -157,8 +189,8 @@ class _SaleEditState extends State<SaleEdit> {
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Quantity',
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).quantity,
                       border: OutlineInputBorder(),
                     ),
                     keyboardType: TextInputType.number,
@@ -176,7 +208,7 @@ class _SaleEditState extends State<SaleEdit> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Cancel'),
+              child: Text(AppLocalizations.of(context).cancel),
             ),
             TextButton(
               onPressed: () {
@@ -191,7 +223,7 @@ class _SaleEditState extends State<SaleEdit> {
                   Navigator.pop(context);
                 }
               },
-              child: Text('Add'),
+              child: Text(AppLocalizations.of(context).add),
             ),
           ],
         );
@@ -206,7 +238,7 @@ class _SaleEditState extends State<SaleEdit> {
         DateTime selectedDate = DateTime.now();
 
         return AlertDialog(
-          title: Text('Add Delivery'),
+          title: Text(AppLocalizations.of(context).addDelivery),
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
               return Column(
@@ -225,8 +257,8 @@ class _SaleEditState extends State<SaleEdit> {
                       }
                     },
                     child: InputDecorator(
-                      decoration: const InputDecoration(
-                        labelText: 'Delivery Date',
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).deliveryDate,
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.calendar_today),
                       ),
@@ -242,7 +274,7 @@ class _SaleEditState extends State<SaleEdit> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Cancel'),
+              child: Text(AppLocalizations.of(context).cancel),
             ),
             TextButton(
               onPressed: () {
@@ -254,7 +286,7 @@ class _SaleEditState extends State<SaleEdit> {
                 });
                 Navigator.pop(context);
               },
-              child: Text('Add'),
+              child: Text(AppLocalizations.of(context).add),
             ),
           ],
         );
@@ -270,20 +302,21 @@ class _SaleEditState extends State<SaleEdit> {
         int quantity = product.quantity ?? 1;
 
         return AlertDialog(
-          title: Text('Edit Product'),
+          title: Text(AppLocalizations.of(context).editProduct),
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    product.product?.name ?? 'Unnamed Product',
+                    product.product?.name ??
+                        AppLocalizations.of(context).unnamedProduct,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Quantity',
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).quantity,
                       border: OutlineInputBorder(),
                     ),
                     keyboardType: TextInputType.number,
@@ -301,7 +334,7 @@ class _SaleEditState extends State<SaleEdit> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Cancel'),
+              child: Text(AppLocalizations.of(context).cancel),
             ),
             TextButton(
               onPressed: () {
@@ -312,7 +345,7 @@ class _SaleEditState extends State<SaleEdit> {
                 });
                 Navigator.pop(context);
               },
-              child: Text('Save'),
+              child: Text(AppLocalizations.of(context).save),
             ),
           ],
         );
@@ -359,17 +392,17 @@ class _SaleEditState extends State<SaleEdit> {
           return await showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
-                  title: Text('Discard Changes?'),
+                  title: Text(AppLocalizations.of(context).discardChanges),
                   content: Text(
-                      'You have unsaved changes. Do you want to discard them?'),
+                      AppLocalizations.of(context).discardChangesDescription),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.pop(context, false),
-                      child: Text('Cancel'),
+                      child: Text(AppLocalizations.of(context).cancel),
                     ),
                     TextButton(
                       onPressed: () => Navigator.pop(context, true),
-                      child: Text('Discard'),
+                      child: Text(AppLocalizations.of(context).discard),
                     ),
                   ],
                 ),
@@ -380,7 +413,7 @@ class _SaleEditState extends State<SaleEdit> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Edit Sale'),
+          title: Text(AppLocalizations.of(context).editSale),
           actions: [
             IconButton(
               icon: Icon(Icons.save),
@@ -416,7 +449,7 @@ class _SaleEditState extends State<SaleEdit> {
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
                         : Text(
-                            'Save Changes',
+                            AppLocalizations.of(context).save,
                             style: const TextStyle(fontSize: 16),
                           ),
                   ),
@@ -437,13 +470,13 @@ class _SaleEditState extends State<SaleEdit> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Basic Information',
+              AppLocalizations.of(context).basicInformation,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<int>(
-              decoration: const InputDecoration(
-                labelText: 'Employee',
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context).employee,
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.person),
               ),
@@ -451,12 +484,13 @@ class _SaleEditState extends State<SaleEdit> {
               items: employees
                   .map((employee) => DropdownMenuItem(
                         value: employee.id,
-                        child: Text(employee.name ?? 'Unnamed Employee'),
+                        child: Text(employee.name ??
+                            AppLocalizations.of(context).unnamedEmployee),
                       ))
                   .toList(),
               validator: (value) {
                 if (value == null) {
-                  return 'Please select an employee';
+                  return AppLocalizations.of(context).selectEmployee;
                 }
                 return null;
               },
@@ -464,8 +498,8 @@ class _SaleEditState extends State<SaleEdit> {
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<int>(
-              decoration: const InputDecoration(
-                labelText: 'Customer',
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context).customer,
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.person_outline),
               ),
@@ -473,12 +507,13 @@ class _SaleEditState extends State<SaleEdit> {
               items: customers
                   .map((customer) => DropdownMenuItem(
                         value: customer.id,
-                        child: Text(customer.name ?? 'Unnamed Customer'),
+                        child: Text(customer.name ??
+                            AppLocalizations.of(context).unnamedCustomer),
                       ))
                   .toList(),
               validator: (value) {
                 if (value == null) {
-                  return 'Please select a customer';
+                  return AppLocalizations.of(context).selectCustomer;
                 }
                 return null;
               },
@@ -498,15 +533,15 @@ class _SaleEditState extends State<SaleEdit> {
                 }
               },
               child: InputDecorator(
-                decoration: const InputDecoration(
-                  labelText: 'Start Date',
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context).startDate,
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.calendar_today),
                 ),
                 child: Text(
                   startDate != null
                       ? DateFormat('yyyy-MM-dd').format(startDate!)
-                      : 'Select date',
+                      : AppLocalizations.of(context).selectDate,
                 ),
               ),
             ),
@@ -524,13 +559,13 @@ class _SaleEditState extends State<SaleEdit> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Status Information',
+              AppLocalizations.of(context).status,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<SaleStatusEnum>(
-              decoration: const InputDecoration(
-                labelText: 'Status',
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context).saleStatus,
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.flag),
               ),
@@ -556,7 +591,7 @@ class _SaleEditState extends State<SaleEdit> {
                   .toList(),
               validator: (value) {
                 if (value == null) {
-                  return 'Please select a status';
+                  return AppLocalizations.of(context).selectStatus;
                 }
                 return null;
               },
@@ -564,7 +599,7 @@ class _SaleEditState extends State<SaleEdit> {
             ),
             const SizedBox(height: 8),
             Text(
-              'Last updated: ${DateFormat('yyyy-MM-dd HH:mm').format(lastUpdateDate ?? DateTime.now())}',
+              '${AppLocalizations.of(context).lastUpdate}: ${DateFormat('yyyy-MM-dd HH:mm').format(lastUpdateDate ?? DateTime.now())}',
               style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
@@ -584,13 +619,13 @@ class _SaleEditState extends State<SaleEdit> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Products',
+                  AppLocalizations.of(context).products,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 TextButton.icon(
                   onPressed: _addProduct,
                   icon: const Icon(Icons.add),
-                  label: const Text('Add Product'),
+                  label: Text(AppLocalizations.of(context).addProduct),
                 ),
               ],
             ),
@@ -598,7 +633,7 @@ class _SaleEditState extends State<SaleEdit> {
             if (selectedProducts.isEmpty)
               Center(
                 child: Text(
-                  'No products added',
+                  AppLocalizations.of(context).noProductsFound,
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               )
@@ -614,9 +649,10 @@ class _SaleEditState extends State<SaleEdit> {
                   return Card(
                     margin: const EdgeInsets.only(bottom: 8),
                     child: ListTile(
-                      title: Text(item.product?.name ?? 'Unnamed Product'),
+                      title: Text(item.product?.name ??
+                          AppLocalizations.of(context).unnamedProduct),
                       subtitle: Text(
-                          'Quantity: ${item.quantity} × \$${item.product?.price?.toStringAsFixed(2)} = \$${subtotal.toStringAsFixed(2)}'),
+                          '${AppLocalizations.of(context).quantity}: ${item.quantity} × \$${item.product?.price?.toStringAsFixed(2)} = \$${subtotal.toStringAsFixed(2)}'),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -644,7 +680,7 @@ class _SaleEditState extends State<SaleEdit> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Total',
+                    AppLocalizations.of(context).total,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   Text(
@@ -673,13 +709,13 @@ class _SaleEditState extends State<SaleEdit> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Deliveries',
+                  AppLocalizations.of(context).deliveries,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 TextButton.icon(
                   onPressed: _addDelivery,
                   icon: const Icon(Icons.add),
-                  label: const Text('Add Delivery'),
+                  label: Text(AppLocalizations.of(context).addDelivery),
                 ),
               ],
             ),
@@ -687,7 +723,7 @@ class _SaleEditState extends State<SaleEdit> {
             if (selectedDeliveries.isEmpty)
               Center(
                 child: Text(
-                  'No deliveries scheduled',
+                  AppLocalizations.of(context).noDeliveriesScheduled,
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               )
@@ -704,9 +740,10 @@ class _SaleEditState extends State<SaleEdit> {
                       leading: const CircleAvatar(
                         child: Icon(Icons.local_shipping),
                       ),
-                      title: Text('Delivery ${index + 1}'),
+                      title: Text(
+                          '${AppLocalizations.of(context).delivery} ${index + 1}'),
                       subtitle: Text(
-                          'Date: ${delivery.startDate?.toLocal().toString().split(' ')[0] ?? 'No date'}'),
+                          '${AppLocalizations.of(context).date}: ${delivery.startDate?.toLocal().toString().split(' ')[0] ?? AppLocalizations.of(context).noDate}'),
                       trailing: IconButton(
                         icon: const Icon(Icons.delete),
                         onPressed: () {

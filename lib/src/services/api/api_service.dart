@@ -22,9 +22,18 @@ class APIService {
 
     debugPrint('API errors: $errors');
     final error = errors.first;
-    final errorCode = ErrorCode.values.firstWhere(
-        (e) => e.index == error.code - 1000,
-        orElse: () => ErrorCode.SERVER_ERROR);
+    final errorCode = ErrorCode.values
+        .cast<ErrorCode?>()
+        .firstWhere((e) => e?.index == error.code - 1000, orElse: () => null);
+
+    if (errorCode == null) {
+      developer.log(
+        'Unexpected error code encountered',
+        error: 'Error code: ${error.code}, Message: ${error.message}',
+        name: 'APIService',
+      );
+      throw ServerException(ErrorCode.SERVER_ERROR, error.message, error.code);
+    }
 
     switch (errorCode) {
       case ErrorCode.AUTH_ERROR:

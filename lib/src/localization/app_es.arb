@@ -1025,5 +1025,50 @@
   "disputed": "Disputado",
   "@disputed": {
     "description": "Label for disputed"
+  },
+  "fixErrors": "Corrige los errores",
+  "@fixErrors": {
+    "description": "Message for fix errors"
+  },
+  "emptyListError": "La lista {listName} no puede estar vacía",
+  "@emptyListError": {
+    "description": "Message for empty list error",
+    "placeholders": {
+      "listName": {
+        "description": "Placeholder for list name"
+      }
+    }
+  },
+  "discardChanges": "¿Desea descartar los cambios?",
+  "@discardChanges": {
+    "description": "Message for discard changes"
+  },
+  "discardChangesDescription": "Tienes cambios sin guardar. ¿Desea descartarlos?",
+  "@discardChangesDescription": {
+    "description": "Message for discard changes description"
+  },
+  "discard": "Descartar",
+  "@discard": {
+    "description": "Label for discard"
+  },
+  "deliveryDate": "Fecha de entrega",
+  "@deliveryDate": {
+    "description": "Label for delivery date"
+  },
+  "editSale": "Editar venta",
+  "@editSale": {
+    "description": "Label for edit sale"
+  },
+  "saleStatus": "Estado de la venta",
+  "@saleStatus": {
+    "description": "Label for sale status"
+  },
+  "selectStatus": "Selecciona un estado",
+  "@selectStatus": {
+    "description": "Label for select status"
+  },
+  "scheduleDelivery": "Programar entrega",
+  "@scheduleDelivery": {
+    "description": "Label for schedule delivery"
   }
 }
