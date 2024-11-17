@@ -6,6 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:gvm_flutter/src/models/auth/user.dart';
 import 'package:gvm_flutter/src/models/response/auth_responses.dart';
 import 'package:gvm_flutter/src/models/response/generic_responses.dart';
+import 'package:gvm_flutter/src/services/api/api_errors.dart';
 import 'package:gvm_flutter/src/services/api/api_service.dart';
 import 'package:gvm_flutter/src/services/auth/auth_exceptions.dart';
 
@@ -127,20 +128,27 @@ class AuthManager {
   }
 
   Future<void> login(String email, String password, bool remember) async {
-    final response = await _apiService.post<LoginResponse>('/api/auth/login',
-        body: {
-          'email': email,
-          'password': password,
-          'remember': remember,
-        },
-        fromJson: LoginResponse.fromJson);
+    try {
+      final response = await _apiService.post<LoginResponse>('/api/auth/login',
+          body: {
+            'email': email,
+            'password': password,
+            'remember': remember,
+          },
+          fromJson: LoginResponse.fromJson);
 
-    if (response.data != null) {
-      final token = response.data!.token;
-      final expirationDate = response.data!.expires;
-      await setToken(token, expirationDate);
-      await fetchUserData();
-      _authStateController!.sink.add(true);
+      if (response.data != null) {
+        final token = response.data!.token;
+        final expirationDate = response.data!.expires;
+        await setToken(token, expirationDate);
+        await fetchUserData();
+        _authStateController!.sink.add(true);
+      }
+    } on AuthException catch (e) {
+      final authException = AuthException(e.code, e.message, e.errorCode);
+      throw authException;
+    } catch (e) {
+      rethrow;
     }
   }
 

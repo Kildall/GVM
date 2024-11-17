@@ -20,7 +20,7 @@ class APIService {
   void _handleErrors(List<APIError> errors) {
     if (errors.isEmpty) return;
 
-    debugPrint('API errors: $errors');
+    debugPrint('API errors: ${errors.map((e) => e.code).join(', ')}');
     final error = errors.first;
     final errorCode = ErrorCode.values
         .cast<ErrorCode?>()
@@ -34,6 +34,10 @@ class APIService {
       );
       throw ServerException(ErrorCode.SERVER_ERROR, error.message, error.code);
     }
+
+    // print the value of the incorrect error code
+    debugPrint('Incorrect error code: $errorCode');
+    debugPrint('Error code: ${errorCode.value}');
 
     switch (errorCode) {
       case ErrorCode.AUTH_ERROR:

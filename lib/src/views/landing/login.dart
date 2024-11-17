@@ -185,7 +185,7 @@ class _LoginViewState extends State<LoginView> {
       if (!mounted) return;
 
       Navigator.of(context).pop();
-    } on AuthException catch (e) {
+    } on APIException catch (e) {
       if (!mounted) return;
       switch (e.code) {
         case ErrorCode.INCORRECT_PASSWORD:
