@@ -41,3 +41,43 @@ class SalesUtils {
     }
   }
 }
+
+class BusinessUtils {
+  static String getStatusName(BuildContext context, BusinessStatusEnum status) {
+    switch (status) {
+      case BusinessStatusEnum.PENDING:
+        return AppLocalizations.of(context).pending;
+      case BusinessStatusEnum.IN_PROGRESS:
+        return AppLocalizations.of(context).inProgress;
+      case BusinessStatusEnum.IN_TRANSIT:
+        return AppLocalizations.of(context).inTransit;
+      case BusinessStatusEnum.IN_RETURN:
+        return AppLocalizations.of(context).inReturn;
+      case BusinessStatusEnum.DELIVERED:
+        return AppLocalizations.of(context).delivered;
+      case BusinessStatusEnum.CANCELLED:
+        return AppLocalizations.of(context).cancelled;
+      case BusinessStatusEnum.NOT_DELIVERED:
+        return AppLocalizations.of(context).notDelivered;
+    }
+  }
+
+  static Color getStatusColor(BusinessStatusEnum status) {
+    switch (status) {
+      case BusinessStatusEnum.PENDING:
+        return Colors.blue;
+      case BusinessStatusEnum.IN_PROGRESS:
+        return Colors.green;
+      case BusinessStatusEnum.IN_TRANSIT:
+        return Colors.orange;
+      case BusinessStatusEnum.IN_RETURN:
+        return Colors.purple;
+      case BusinessStatusEnum.DELIVERED:
+        return Colors.teal;
+      case BusinessStatusEnum.CANCELLED:
+        return Colors.red;
+      case BusinessStatusEnum.NOT_DELIVERED:
+        return Colors.grey;
+    }
+  }
+}

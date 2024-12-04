@@ -285,7 +285,8 @@ class _SaleListItem extends StatelessWidget {
         title: Row(
           children: [
             Expanded(
-              child: Text('${AppLocalizations.of(context).sale} #${sale.id}'),
+              child: Text(
+                  '${AppLocalizations.of(context).sale} #${sale.id.toString().padLeft(4, '0')}'),
             ),
             if (sale.status != null)
               Container(

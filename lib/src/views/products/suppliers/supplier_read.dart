@@ -265,7 +265,7 @@ class _SupplierReadState extends State<SupplierRead> {
                     ),
                   ),
                   title: Text(
-                      '${AppLocalizations.of(context).purchase} #${purchase.id}'),
+                      '${AppLocalizations.of(context).purchase} #${purchase.id.toString().padLeft(4, '0')}'),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

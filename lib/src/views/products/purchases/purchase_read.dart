@@ -173,7 +173,7 @@ class _PurchaseReadState extends State<PurchaseRead> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${AppLocalizations.of(context).purchase} #${purchase!.id}',
+                        '${AppLocalizations.of(context).purchase} #${purchase!.id.toString().padLeft(4, '0')}',
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
                       Text(

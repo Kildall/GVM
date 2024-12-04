@@ -175,7 +175,7 @@ class _SaleReadState extends State<SaleRead> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${AppLocalizations.of(context).sale} #${sale!.id}',
+                        '${AppLocalizations.of(context).sale} #${sale!.id.toString().padLeft(4, '0')}',
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
                       Text(
@@ -419,7 +419,7 @@ class _SaleReadState extends State<SaleRead> {
                   ),
                 ),
                 title: Text(
-                    '${AppLocalizations.of(context).delivery} #${delivery.id}'),
+                    '${AppLocalizations.of(context).delivery} #${delivery.id.toString().padLeft(4, '0')}'),
                 subtitle: Text(
                     delivery.startDate?.toLocal().toString().split(' ')[0] ??
                         AppLocalizations.of(context).noDate),

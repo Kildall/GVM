@@ -1122,5 +1122,65 @@
   "conflict": "Conflicto",
   "@conflict": {
     "description": "Label for conflict"
+  },
+  "filters": "Filtros",
+  "@filters": {
+    "description": "Label for filters"
+  },
+  "dateRange": "Rango de fechas",
+  "@dateRange": {
+    "description": "Label for date range"
+  },
+  "noDriver": "Sin conductor asignado",
+  "@noDriver": {
+    "description": "Label for no driver"
+  },
+  "noStatus": "Sin estado",
+  "@noStatus": {
+    "description": "Label for no status"
+  },
+  "now": "Ahora",
+  "@now": {
+    "description": "Label for now"
+  },
+  "until": "Hasta",
+  "@until": {
+    "description": "Label for until"
+  },
+  "deliveryDetails": "Detalles de la entrega",
+  "@deliveryDetails": {
+    "description": "Label for delivery details"
+  },
+  "noAddress": "Sin dirección",
+  "@noAddress": {
+    "description": "Label for no address"
+  },
+  "city": "Ciudad",
+  "@city": {
+    "description": "Label for city"
+  },
+  "editDelivery": "Editar entrega",
+  "@editDelivery": {
+    "description": "Label for edit delivery"
+  },
+  "change": "Cambiar",
+  "@change": {
+    "description": "Label for change"
+  },
+  "businessStatus": "Estado del envío (negocio)",
+  "@businessStatus": {
+    "description": "Label for business status"
+  },
+  "saleInformation": "Información de la venta",
+  "@saleInformation": {
+    "description": "Label for sale information"
+  },
+  "noCustomer": "Cliente desconocido",
+  "@noCustomer": {
+    "description": "Label for no customer"
+  },
+  "selectAddress": "Selecciona una dirección",
+  "@selectAddress": {
+    "description": "Label for select address"
   }
 }

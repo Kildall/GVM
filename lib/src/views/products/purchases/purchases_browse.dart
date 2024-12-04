@@ -263,7 +263,8 @@ class _PurchaseListItem extends StatelessWidget {
         title: Row(
           children: [
             Expanded(
-              child: Text('Purchase #${purchase.id}'),
+              child: Text(
+                  '${AppLocalizations.of(context).purchase} #${purchase.id.toString().padLeft(4, '0')}'),
             ),
             Text(
               '\$${purchase.amount?.toStringAsFixed(2) ?? '0.00'}',

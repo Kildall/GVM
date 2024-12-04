@@ -233,7 +233,7 @@ class _EmployeeReadState extends State<EmployeeRead> {
                       child: Icon(Icons.shopping_cart),
                     ),
                     title: Text(
-                        '${AppLocalizations.of(context).sale} #${sale.id}'),
+                        '${AppLocalizations.of(context).sale} #${sale.id.toString().padLeft(4, '0')}'),
                     subtitle: Text(sale.startDate?.toLocal().toString() ?? ''),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => AuthGuard.checkPermissions([
@@ -289,7 +289,7 @@ class _EmployeeReadState extends State<EmployeeRead> {
                       child: Icon(Icons.local_shipping),
                     ),
                     title: Text(
-                        '${AppLocalizations.of(context).delivery} #${delivery.id}'),
+                        '${AppLocalizations.of(context).delivery} #${delivery.id.toString().padLeft(4, '0')}'),
                     subtitle:
                         Text(delivery.startDate?.toLocal().toString() ?? ''),
                     trailing: const Icon(Icons.chevron_right),
@@ -346,7 +346,7 @@ class _EmployeeReadState extends State<EmployeeRead> {
                       child: Icon(Icons.shopping_bag),
                     ),
                     title: Text(
-                        '${AppLocalizations.of(context).purchase} #${purchase.id}'),
+                        '${AppLocalizations.of(context).purchase} #${purchase.id.toString().padLeft(4, '0')}'),
                     subtitle: Text(purchase.date?.toLocal().toString() ?? ''),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => AuthGuard.checkPermissions([

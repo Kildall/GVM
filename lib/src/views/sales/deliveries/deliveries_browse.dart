@@ -1,12 +1,13 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/response/delivery_responses.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 import 'package:gvm_flutter/src/services/auth/permissions.dart';
+import 'package:gvm_flutter/src/views/sales/deliveries/delivery_read.dart';
 import 'package:gvm_flutter/src/views/sales/deliveries/utils.dart';
 import 'package:gvm_flutter/src/widgets/auth_guard.dart';
+import 'package:gvm_flutter/src/widgets/deliveries/deliveries_filters.dart';
 
 class DeliveriesBrowse extends StatefulWidget {
   const DeliveriesBrowse({super.key});
@@ -53,45 +54,17 @@ class _DeliveriesBrowseState extends State<DeliveriesBrowse> {
   }
 
   void _navigateToDeliveryDetail(Delivery delivery) {
-    // if (delivery.id != null) {
-    //   Navigator.of(context).push(MaterialPageRoute(
-    //     builder: (context) => DeliveryRead(deliveryId: delivery.id!),
-    //   ));
-    // }
+    if (delivery.id != null) {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => DeliveryRead(deliveryId: delivery.id!),
+      ));
+    }
   }
 
   void _navigateToDeliveryAdd() {
     // Navigator.of(context).push(MaterialPageRoute(
     //   builder: (context) => const DeliveryAdd(),
     // ));
-  }
-
-  Future<void> _selectStartDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedStartDate ?? DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime.now(),
-    );
-    if (picked != null) {
-      setState(() {
-        selectedStartDate = picked;
-      });
-    }
-  }
-
-  Future<void> _selectEndDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedEndDate ?? DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime.now(),
-    );
-    if (picked != null) {
-      setState(() {
-        selectedEndDate = picked;
-      });
-    }
   }
 
   void _clearFilters() {
@@ -152,120 +125,21 @@ class _DeliveriesBrowseState extends State<DeliveriesBrowse> {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                TextField(
-                  decoration: InputDecoration(
-                    hintText: AppLocalizations.of(context).searchDeliveries,
-                    prefixIcon: const Icon(Icons.search),
-                    border: const OutlineInputBorder(),
-                  ),
-                  onChanged: (value) => setState(() => searchQuery = value),
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton.icon(
-                        onPressed: () => _selectStartDate(context),
-                        icon: const Icon(Icons.calendar_today),
-                        label: Text(selectedStartDate != null
-                            ? AppLocalizations.of(context).fromDate(
-                                selectedStartDate!
-                                    .toLocal()
-                                    .toString()
-                                    .split(' ')[0])
-                            : AppLocalizations.of(context).startDate),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: OutlinedButton.icon(
-                        onPressed: () => _selectEndDate(context),
-                        icon: const Icon(Icons.calendar_today),
-                        label: Text(selectedEndDate != null
-                            ? AppLocalizations.of(context).toDate(
-                                selectedEndDate!
-                                    .toLocal()
-                                    .toString()
-                                    .split(' ')[0])
-                            : AppLocalizations.of(context).endDate),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Expanded(
-                      child: DropdownButtonFormField<DeliveryStatusEnum?>(
-                        decoration: InputDecoration(
-                          label: Container(
-                            padding: const EdgeInsets.fromLTRB(0, 0, 24, 0),
-                            child: AutoSizeText(
-                              AppLocalizations.of(context).deliveryStatus,
-                              maxLines: 1,
-                            ),
-                          ),
-                          border: const OutlineInputBorder(),
-                        ),
-                        value: selectedStatus,
-                        items: [
-                          DropdownMenuItem<DeliveryStatusEnum?>(
-                            value: null,
-                            child: Text(AppLocalizations.of(context).all),
-                          ),
-                          ...DeliveryStatusEnum.values.map((status) {
-                            return DropdownMenuItem<DeliveryStatusEnum?>(
-                              value: status,
-                              child: Text(
-                                DeliveriesUtils.getStatusName(context, status),
-                              ),
-                            );
-                          }),
-                        ],
-                        onChanged: (value) =>
-                            setState(() => selectedStatus = value),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: DropdownButtonFormField<DriverStatusEnum?>(
-                        decoration: InputDecoration(
-                          label: Container(
-                            padding: const EdgeInsets.fromLTRB(0, 0, 24, 0),
-                            child: AutoSizeText(
-                              AppLocalizations.of(context).driverStatus,
-                              maxLines: 1,
-                            ),
-                          ),
-                          border: const OutlineInputBorder(),
-                        ),
-                        value: selectedDriverStatus,
-                        items: [
-                          DropdownMenuItem<DriverStatusEnum?>(
-                            value: null,
-                            child: Text(AppLocalizations.of(context).all),
-                          ),
-                          ...DriverStatusEnum.values.map((status) {
-                            return DropdownMenuItem<DriverStatusEnum?>(
-                              value: status,
-                              child: Text(
-                                DriverUtils.getStatusName(context, status),
-                              ),
-                            );
-                          }),
-                        ],
-                        onChanged: (value) =>
-                            setState(() => selectedDriverStatus = value),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+          DeliveriesFilters(
+            searchQuery: searchQuery,
+            selectedStartDate: selectedStartDate,
+            selectedEndDate: selectedEndDate,
+            selectedStatus: selectedStatus,
+            selectedDriverStatus: selectedDriverStatus,
+            onSearchChanged: (value) => setState(() => searchQuery = value),
+            onStartDateChanged: (value) =>
+                setState(() => selectedStartDate = value),
+            onEndDateChanged: (value) =>
+                setState(() => selectedEndDate = value),
+            onStatusChanged: (value) => setState(() => selectedStatus = value),
+            onDriverStatusChanged: (value) =>
+                setState(() => selectedDriverStatus = value),
+            onClearFilters: _clearFilters,
           ),
           Expanded(
             child: isLoading
@@ -323,47 +197,113 @@ class _DeliveryListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-          child: Icon(
-            Icons.local_shipping,
-            color: Theme.of(context).colorScheme.primary,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${AppLocalizations.of(context).delivery} #${delivery.id.toString().padLeft(4, '0')}',
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        if (delivery.startDate != null)
+                          Text(
+                            delivery.startDate!
+                                .toLocal()
+                                .toString()
+                                .split(' ')[0],
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                      ],
+                    ),
+                  ),
+                  _DeliveryStatusChip(status: delivery.status),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(
+                    Icons.person,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        delivery.employee?.name != null
+                            ? Text(
+                                delivery.employee!.name!,
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              )
+                            : Text(
+                                AppLocalizations.of(context).noDriver,
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.error,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                        const SizedBox(width: 8),
+                        Container(
+                          margin: const EdgeInsets.only(top: 4),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primaryContainer
+                                .withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(
+                            delivery.driverStatus != null
+                                ? DriverUtils.getStatusName(
+                                    context, delivery.driverStatus!)
+                                : AppLocalizations.of(context).noStatus,
+                            style: TextStyle(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onPrimaryContainer,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              if (delivery.address?.street1 != null) ...[
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.location_on,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        delivery.address!.street1!,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ],
           ),
         ),
-        title: Row(
-          children: [
-            Expanded(
-              child: Text('Delivery #${delivery.id}'),
-            ),
-            _DeliveryStatusChip(status: delivery.status),
-          ],
-        ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (delivery.startDate != null)
-              Text(delivery.startDate!.toLocal().toString().split(' ')[0]),
-            if (delivery.employee?.name != null) Text(delivery.employee!.name!),
-            if (delivery.address?.street1 != null)
-              Text(
-                delivery.address!.street1!,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-          ],
-        ),
-        trailing: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.chevron_right),
-            if (delivery.driverStatus != null)
-              Text(
-                delivery.driverStatus!.name,
-                style: Theme.of(context).textTheme.labelSmall,
-              ),
-          ],
-        ),
-        onTap: onTap,
       ),
     );
   }

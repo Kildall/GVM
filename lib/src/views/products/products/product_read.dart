@@ -287,7 +287,7 @@ class _ProductReadState extends State<ProductRead> {
                       child: Icon(Icons.shopping_cart),
                     ),
                     title: Text(
-                        '${AppLocalizations.of(context).sale} #${sale.saleId}'),
+                        '${AppLocalizations.of(context).sale} #${sale.saleId.toString().padLeft(4, '0')}'),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -349,7 +349,7 @@ class _ProductReadState extends State<ProductRead> {
                       child: Icon(Icons.shopping_bag),
                     ),
                     title: Text(
-                        '${AppLocalizations.of(context).purchase} #${purchase.purchaseId}'),
+                        '${AppLocalizations.of(context).purchase} #${purchase.purchaseId.toString().padLeft(4, '0')}'),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
