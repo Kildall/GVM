@@ -61,12 +61,6 @@ class _DeliveriesBrowseState extends State<DeliveriesBrowse> {
     }
   }
 
-  void _navigateToDeliveryAdd() {
-    // Navigator.of(context).push(MaterialPageRoute(
-    //   builder: (context) => const DeliveryAdd(),
-    // ));
-  }
-
   void _clearFilters() {
     setState(() {
       searchQuery = null;
@@ -166,19 +160,6 @@ class _DeliveriesBrowseState extends State<DeliveriesBrowse> {
                       ),
           ),
         ],
-      ),
-      floatingActionButton: AuthGuard(
-        permissions: [
-          AppPermissions.deliveryAdd,
-          AppPermissions.employeeBrowse,
-          AppPermissions.saleBrowse,
-        ],
-        allPermissions: true,
-        fallback: null,
-        child: FloatingActionButton(
-          onPressed: _navigateToDeliveryAdd,
-          child: const Icon(Icons.add),
-        ),
       ),
     );
   }

@@ -1182,5 +1182,81 @@
   "selectAddress": "Selecciona una dirección",
   "@selectAddress": {
     "description": "Label for select address"
+  },
+  "searchCustomers": "Buscar clientes...",
+  "@searchCustomers": {
+    "description": "Placeholder for search customers"
+  },
+  "customerDetailsTitle": "Detalles del cliente",
+  "@customerDetailsTitle": {
+    "description": "Title for customer details"
+  },
+  "noCustomerFound": "No se encontró ningún cliente",
+  "@noCustomerFound": {
+    "description": "Message for no customer found"
+  },
+  "addresses": "Direcciones",
+  "@addresses": {
+    "description": "Label for addresses"
+  },
+  "registrationDate": "Fecha de registro",
+  "@registrationDate": {
+    "description": "Label for registration date"
+  },
+  "noAddressesFound": "No se encontraron direcciones",
+  "@noAddressesFound": {
+    "description": "Message for no addresses found"
+  },
+  "noStreet": "Sin calle",
+  "@noStreet": {
+    "description": "Label for no street"
+  },
+  "addAddress": "Agregar dirección",
+  "@addAddress": {
+    "description": "Label for add address"
+  },
+  "street": "Calle",
+  "@street": {
+    "description": "Label for street"
+  },
+  "secondaryStreet": "Segunda calle",
+  "@secondaryStreet": {
+    "description": "Label for secondary street"
+  },
+  "state": "Provincia",
+  "@state": {
+    "description": "Label for state"
+  },
+  "postalCode": "Código postal",
+  "@postalCode": {
+    "description": "Label for postal code"
+  },
+  "editAddress": "Editar dirección",
+  "@editAddress": {
+    "description": "Label for edit address"
+  },
+  "editCustomer": "Editar cliente",
+  "@editCustomer": {
+    "description": "Label for edit customer"
+  },
+  "phone": "Teléfono",
+  "@phone": {
+    "description": "Label for phone"
+  },
+  "addressDetails": "Detalles de la dirección",
+  "@addressDetails": {
+    "description": "Label for address details"
+  },
+  "noAddressFound": "No se encontró ninguna dirección",
+  "@noAddressFound": {
+    "description": "Message for no address found"
+  },
+  "searchAddresses": "Buscar direcciones...",
+  "@searchAddresses": {
+    "description": "Placeholder for search addresses"
+  },
+  "addressesDescription": "Gestiona las direcciones de los clientes",
+  "@addressesDescription": {
+    "description": "Description for addresses"
   }
 }

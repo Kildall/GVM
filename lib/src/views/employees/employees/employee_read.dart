@@ -5,6 +5,8 @@ import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 import 'package:gvm_flutter/src/services/auth/permissions.dart';
 import 'package:gvm_flutter/src/views/employees/employees/employee_edit.dart';
 import 'package:gvm_flutter/src/views/products/purchases/purchase_read.dart';
+import 'package:gvm_flutter/src/views/sales/deliveries/delivery_read.dart';
+import 'package:gvm_flutter/src/views/sales/sales/sale_read.dart';
 import 'package:gvm_flutter/src/widgets/auth_guard.dart';
 
 class EmployeeRead extends StatefulWidget {
@@ -61,22 +63,27 @@ class _EmployeeReadState extends State<EmployeeRead> {
     );
   }
 
-  void _navigateToDelivery(Delivery delivery) {
-    Navigator.pushNamed(context, '/deliveries/detail', arguments: delivery);
+  void _navigateToDelivery(int deliveryId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => DeliveryRead(deliveryId: deliveryId)),
+    );
   }
 
-  void _navigateToSale(Sale sale) {
-    Navigator.pushNamed(context, '/sales/detail', arguments: sale);
+  void _navigateToSale(int saleId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SaleRead(saleId: saleId)),
+    );
   }
 
-  void _navigateToPurchase(Purchase purchase) {
-    if (purchase.id != null) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => PurchaseRead(purchaseId: purchase.id!)),
-      );
-    }
+  void _navigateToPurchase(int purchaseId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => PurchaseRead(purchaseId: purchaseId)),
+    );
   }
 
   @override
@@ -237,9 +244,10 @@ class _EmployeeReadState extends State<EmployeeRead> {
                     subtitle: Text(sale.startDate?.toLocal().toString() ?? ''),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => AuthGuard.checkPermissions([
-                      AppPermissions.saleRead,
-                    ])
-                        ? _navigateToSale(sale)
+                              AppPermissions.saleRead,
+                            ]) &&
+                            sale.id != null
+                        ? _navigateToSale(sale.id!)
                         : null,
                   ),
                 );
@@ -294,9 +302,10 @@ class _EmployeeReadState extends State<EmployeeRead> {
                         Text(delivery.startDate?.toLocal().toString() ?? ''),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => AuthGuard.checkPermissions([
-                      AppPermissions.deliveryRead,
-                    ])
-                        ? _navigateToDelivery(delivery)
+                              AppPermissions.deliveryRead,
+                            ]) &&
+                            delivery.id != null
+                        ? _navigateToDelivery(delivery.id!)
                         : null,
                   ),
                 );
@@ -350,9 +359,10 @@ class _EmployeeReadState extends State<EmployeeRead> {
                     subtitle: Text(purchase.date?.toLocal().toString() ?? ''),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => AuthGuard.checkPermissions([
-                      AppPermissions.purchaseRead,
-                    ])
-                        ? _navigateToPurchase(purchase)
+                              AppPermissions.purchaseRead,
+                            ]) &&
+                            purchase.id != null
+                        ? _navigateToPurchase(purchase.id!)
                         : null,
                   ),
                 );

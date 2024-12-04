@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/services/auth/permissions.dart';
+import 'package:gvm_flutter/src/views/sales/customers/addresses/addresses_browse.dart';
+import 'package:gvm_flutter/src/views/sales/customers/customers_browse.dart';
 import 'package:gvm_flutter/src/views/sales/deliveries/deliveries_browse.dart';
 import 'package:gvm_flutter/src/views/sales/sales/sales_browse.dart';
 import 'package:gvm_flutter/src/widgets/auth_guard.dart';
@@ -23,14 +25,20 @@ class _SalesHomeState extends State<SalesHome> {
   }
 
   void _navigateToCustomers() {
-    // Navigator.of(context).push(MaterialPageRoute(
-    //   builder: (context) => const CustomersBrowse(),
-    // ));
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => const CustomersBrowse(),
+    ));
   }
 
   void _navigateToDeliveries() {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => const DeliveriesBrowse(),
+    ));
+  }
+
+  void _navigateToAddresses() {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => const AddressesBrowse(),
     ));
   }
 
@@ -45,6 +53,7 @@ class _SalesHomeState extends State<SalesHome> {
           AppPermissions.saleBrowse,
           AppPermissions.deliveryBrowse,
           AppPermissions.customerBrowse,
+          AppPermissions.addressBrowse,
         ],
         allPermissions: false,
         fallback: const UnauthorizedAccess(
@@ -105,6 +114,14 @@ class _SalesHomeState extends State<SalesHome> {
                         description:
                             AppLocalizations.of(context).deliveriesDescription,
                         onTap: () => _navigateToDeliveries(),
+                      ),
+                      const SizedBox(height: 16),
+                      NavigationCard(
+                        title: AppLocalizations.of(context).addresses,
+                        icon: Icons.location_on,
+                        description:
+                            AppLocalizations.of(context).addressesDescription,
+                        onTap: () => _navigateToAddresses(),
                       ),
                     ],
                   ),

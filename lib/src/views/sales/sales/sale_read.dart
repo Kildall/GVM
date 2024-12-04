@@ -5,6 +5,8 @@ import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 import 'package:gvm_flutter/src/services/auth/permissions.dart';
 import 'package:gvm_flutter/src/views/employees/employees/employee_read.dart';
 import 'package:gvm_flutter/src/views/products/products/product_read.dart';
+import 'package:gvm_flutter/src/views/sales/customers/customer_read.dart';
+import 'package:gvm_flutter/src/views/sales/deliveries/delivery_read.dart';
 import 'package:gvm_flutter/src/views/sales/sales/sale_edit.dart';
 import 'package:gvm_flutter/src/views/sales/sales/utils.dart';
 import 'package:gvm_flutter/src/widgets/auth_guard.dart';
@@ -71,11 +73,19 @@ class _SaleReadState extends State<SaleRead> {
   }
 
   void _navigateToCustomer(Customer customer) {
-    // if (customer.id != null) {
-    //   Navigator.of(context).push(MaterialPageRoute(
-    //     builder: (context) => CustomerRead(customerId: customer.id!),
-    //   ));
-    // }
+    if (customer.id != null) {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => CustomerRead(customerId: customer.id!),
+      ));
+    }
+  }
+
+  void _navigateToDelivery(Delivery delivery) {
+    if (delivery.id != null) {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => DeliveryRead(deliveryId: delivery.id!),
+      ));
+    }
   }
 
   void _navigateToEmployee(Employee employee) {
@@ -424,9 +434,7 @@ class _SaleReadState extends State<SaleRead> {
                     delivery.startDate?.toLocal().toString().split(' ')[0] ??
                         AppLocalizations.of(context).noDate),
                 trailing: const Icon(Icons.chevron_right),
-                onTap: () {
-                  // Navigate to delivery details if needed
-                },
+                onTap: () => _navigateToDelivery(delivery),
               ),
             );
           },
