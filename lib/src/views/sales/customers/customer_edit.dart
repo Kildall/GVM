@@ -59,10 +59,14 @@ class _CustomerEditState extends State<CustomerEdit> {
         enabled: enabled,
         addresses: selectedAddresses
             .map((address) => Address(
-                  street1: address.street1 ?? '',
-                  city: address.city ?? '',
-                  state: address.state ?? '',
-                  postalCode: address.postalCode ?? '',
+                  name: address.name,
+                  street1: address.street1!,
+                  street2: address.street2,
+                  city: address.city!,
+                  state: address.state!,
+                  postalCode: address.postalCode!,
+                  details: address.details,
+                  enabled: address.enabled,
                 ))
             .toList(),
       );
@@ -105,119 +109,158 @@ class _CustomerEditState extends State<CustomerEdit> {
   }
 
   void _addAddress() {
+    // Declare variables outside the builder
+    String? name;
+    String? street1;
+    String? street2;
+    String? city;
+    String? state;
+    String? postalCode;
+    String? details;
+    bool enabled = true;
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        String? name;
-        String? street1;
-        String? street2;
-        String? city;
-        String? state;
-        String? postalCode;
-        String? details;
-        bool enabled = true;
-
-        return AlertDialog(
-          title: Text(AppLocalizations.of(context).addAddress),
-          content: SizedBox(
-            width: double.maxFinite,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).name,
-                      border: const OutlineInputBorder(),
-                    ),
-                    onChanged: (value) => name = value,
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+              title: Text(AppLocalizations.of(context).addAddress),
+              content: SizedBox(
+                width: double.maxFinite,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context).name,
+                          border: const OutlineInputBorder(),
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            name = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context).street,
+                          border: const OutlineInputBorder(),
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            street1 = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText:
+                              AppLocalizations.of(context).secondaryStreet,
+                          border: const OutlineInputBorder(),
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            street2 = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context).city,
+                          border: const OutlineInputBorder(),
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            city = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context).state,
+                          border: const OutlineInputBorder(),
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            state = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context).postalCode,
+                          border: const OutlineInputBorder(),
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            postalCode = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context).details,
+                          border: const OutlineInputBorder(),
+                        ),
+                        maxLines: 3,
+                        onChanged: (value) {
+                          setState(() {
+                            details = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      SwitchListTile(
+                        title: Text(AppLocalizations.of(context).enabled),
+                        value: enabled,
+                        onChanged: (value) {
+                          setState(() {
+                            enabled = value;
+                          });
+                        },
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).street,
-                      border: const OutlineInputBorder(),
-                    ),
-                    onChanged: (value) => street1 = value,
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).secondaryStreet,
-                      border: const OutlineInputBorder(),
-                    ),
-                    onChanged: (value) => street2 = value,
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).city,
-                      border: const OutlineInputBorder(),
-                    ),
-                    onChanged: (value) => city = value,
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).state,
-                      border: const OutlineInputBorder(),
-                    ),
-                    onChanged: (value) => state = value,
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).postalCode,
-                      border: const OutlineInputBorder(),
-                    ),
-                    onChanged: (value) => postalCode = value,
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).details,
-                      border: const OutlineInputBorder(),
-                    ),
-                    maxLines: 3,
-                    onChanged: (value) => details = value,
-                  ),
-                  const SizedBox(height: 16),
-                  SwitchListTile(
-                    title: Text(AppLocalizations.of(context).enabled),
-                    value: enabled,
-                    onChanged: (value) => enabled = value,
-                  ),
-                ],
+                ),
               ),
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(AppLocalizations.of(context).cancel),
-            ),
-            TextButton(
-              onPressed: () {
-                if (street1?.isNotEmpty == true && city?.isNotEmpty == true) {
-                  setState(() {
-                    selectedAddresses.add(Address(
-                      name: name,
-                      street1: street1,
-                      street2: street2,
-                      city: city,
-                      state: state,
-                      postalCode: postalCode,
-                      details: details,
-                      enabled: enabled,
-                    ));
-                  });
-                  Navigator.pop(context);
-                }
-              },
-              child: Text(AppLocalizations.of(context).add),
-            ),
-          ],
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(AppLocalizations.of(context).cancel),
+                ),
+                TextButton(
+                  onPressed: () {
+                    if (street1?.isNotEmpty == true &&
+                        city?.isNotEmpty == true) {
+                      this.setState(() {
+                        selectedAddresses.add(Address(
+                          name: name,
+                          street1: street1,
+                          street2: street2,
+                          city: city,
+                          state: state,
+                          postalCode: postalCode,
+                          details: details,
+                          enabled: enabled,
+                        ));
+                      });
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: Text(AppLocalizations.of(context).add),
+                ),
+              ],
+            );
+          },
         );
       },
     );
@@ -225,125 +268,166 @@ class _CustomerEditState extends State<CustomerEdit> {
 
   void _editAddress(int index) {
     final address = selectedAddresses[index];
+
+    // Declare variables outside the builder
+    String? name = address.name;
+    String? street1 = address.street1;
+    String? street2 = address.street2;
+    String? city = address.city;
+    String? state = address.state;
+    String? postalCode = address.postalCode;
+    String? details = address.details;
+    bool enabled = address.enabled ?? true;
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        String? name = address.name;
-        String? street1 = address.street1;
-        String? street2 = address.street2;
-        String? city = address.city;
-        String? state = address.state;
-        String? postalCode = address.postalCode;
-        String? details = address.details;
-        bool enabled = address.enabled ?? true;
-
-        return AlertDialog(
-          title: Text(AppLocalizations.of(context).editAddress),
-          content: SizedBox(
-            width: double.maxFinite,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).name,
-                      border: const OutlineInputBorder(),
-                    ),
-                    initialValue: name,
-                    onChanged: (value) => name = value,
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text(AppLocalizations.of(context).editAddress),
+              content: SizedBox(
+                width: double.maxFinite,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context).name,
+                          border: const OutlineInputBorder(),
+                        ),
+                        initialValue: name,
+                        onChanged: (value) {
+                          setState(() {
+                            name = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context).street,
+                          border: const OutlineInputBorder(),
+                        ),
+                        initialValue: street1,
+                        onChanged: (value) {
+                          setState(() {
+                            street1 = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText:
+                              AppLocalizations.of(context).secondaryStreet,
+                          border: const OutlineInputBorder(),
+                        ),
+                        initialValue: street2,
+                        onChanged: (value) {
+                          setState(() {
+                            street2 = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context).city,
+                          border: const OutlineInputBorder(),
+                        ),
+                        initialValue: city,
+                        onChanged: (value) {
+                          setState(() {
+                            city = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context).state,
+                          border: const OutlineInputBorder(),
+                        ),
+                        initialValue: state,
+                        onChanged: (value) {
+                          setState(() {
+                            state = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context).postalCode,
+                          border: const OutlineInputBorder(),
+                        ),
+                        initialValue: postalCode,
+                        onChanged: (value) {
+                          setState(() {
+                            postalCode = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context).details,
+                          border: const OutlineInputBorder(),
+                        ),
+                        initialValue: details,
+                        maxLines: 3,
+                        onChanged: (value) {
+                          setState(() {
+                            details = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      SwitchListTile(
+                        title: Text(AppLocalizations.of(context).enabled),
+                        value: enabled,
+                        onChanged: (value) {
+                          setState(() {
+                            enabled = value;
+                          });
+                        },
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).street,
-                      border: const OutlineInputBorder(),
-                    ),
-                    initialValue: street1,
-                    onChanged: (value) => street1 = value,
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).secondaryStreet,
-                      border: const OutlineInputBorder(),
-                    ),
-                    initialValue: street2,
-                    onChanged: (value) => street2 = value,
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).city,
-                      border: const OutlineInputBorder(),
-                    ),
-                    initialValue: city,
-                    onChanged: (value) => city = value,
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).state,
-                      border: const OutlineInputBorder(),
-                    ),
-                    initialValue: state,
-                    onChanged: (value) => state = value,
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).postalCode,
-                      border: const OutlineInputBorder(),
-                    ),
-                    initialValue: postalCode,
-                    onChanged: (value) => postalCode = value,
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).details,
-                      border: const OutlineInputBorder(),
-                    ),
-                    initialValue: details,
-                    maxLines: 3,
-                    onChanged: (value) => details = value,
-                  ),
-                  const SizedBox(height: 16),
-                  SwitchListTile(
-                    title: Text(AppLocalizations.of(context).enabled),
-                    value: enabled,
-                    onChanged: (value) => enabled = value,
-                  ),
-                ],
+                ),
               ),
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(AppLocalizations.of(context).cancel),
-            ),
-            TextButton(
-              onPressed: () {
-                if (street1?.isNotEmpty == true && city?.isNotEmpty == true) {
-                  setState(() {
-                    selectedAddresses[index] = address.copyWith(
-                      name: name,
-                      street1: street1,
-                      street2: street2,
-                      city: city,
-                      state: state,
-                      postalCode: postalCode,
-                      details: details,
-                      enabled: enabled,
-                    );
-                  });
-                  Navigator.pop(context);
-                }
-              },
-              child: Text(AppLocalizations.of(context).save),
-            ),
-          ],
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(AppLocalizations.of(context).cancel),
+                ),
+                TextButton(
+                  onPressed: () {
+                    if (street1?.isNotEmpty == true &&
+                        city?.isNotEmpty == true) {
+                      this.setState(() {
+                        // Changed from setState to this.setState
+                        selectedAddresses[index] = address.copyWith(
+                          name: name,
+                          street1: street1,
+                          street2: street2,
+                          city: city,
+                          state: state,
+                          postalCode: postalCode,
+                          details: details,
+                          enabled: enabled,
+                        );
+                      });
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: Text(AppLocalizations.of(context).save),
+                ),
+              ],
+            );
+          },
         );
       },
     );

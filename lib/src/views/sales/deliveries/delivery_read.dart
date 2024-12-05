@@ -4,6 +4,7 @@ import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 import 'package:gvm_flutter/src/services/auth/permissions.dart';
 import 'package:gvm_flutter/src/views/employees/employees/employee_read.dart';
+import 'package:gvm_flutter/src/views/sales/customers/addresses/address_read.dart';
 import 'package:gvm_flutter/src/views/sales/deliveries/delivery_edit.dart';
 import 'package:gvm_flutter/src/views/sales/deliveries/utils.dart';
 import 'package:gvm_flutter/src/views/sales/sales/sale_read.dart';
@@ -70,6 +71,12 @@ class _DeliveryReadState extends State<DeliveryRead> {
   void _navigateToSale(int saleId) {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => SaleRead(saleId: saleId),
+    ));
+  }
+
+  void _navigateToAddress(int addressId) {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => AddressRead(addressId: addressId),
     ));
   }
 
@@ -296,18 +303,32 @@ class _DeliveryReadState extends State<DeliveryRead> {
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 16),
-            if (delivery!.address != null) ...[
-              if (delivery!.address!.street1 != null)
-                _buildDetailRow(
-                  AppLocalizations.of(context).streetAddress,
-                  delivery!.address!.street1!,
+            if (delivery!.address != null)
+              ListTile(
+                leading: const CircleAvatar(
+                  child: Icon(Icons.location_on),
                 ),
-              if (delivery!.address!.city != null)
-                _buildDetailRow(
-                  AppLocalizations.of(context).city,
-                  delivery!.address!.city!,
+                title: Text(
+                  delivery!.address!.street1 ??
+                      AppLocalizations.of(context).noStreet,
                 ),
-            ] else
+                subtitle: Text(
+                  [
+                    delivery!.address!.city,
+                    delivery!.address!.state,
+                    delivery!.address!.postalCode,
+                  ].where((item) => item != null && item.isNotEmpty).join(', '),
+                ),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () {
+                  if (delivery!.address != null) {
+                    AuthGuard.checkPermissions([AppPermissions.addressRead])
+                        ? _navigateToAddress(delivery!.address!.id!)
+                        : null;
+                  }
+                },
+              )
+            else
               Text(AppLocalizations.of(context).noAddress),
           ],
         ),

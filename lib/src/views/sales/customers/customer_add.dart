@@ -50,13 +50,12 @@ class _CustomerAddState extends State<CustomerAdd> {
         addresses: selectedAddresses
             .map((address) => Address(
                   name: address.name,
-                  street1: address.street1 ?? '',
+                  street1: address.street1!,
                   street2: address.street2,
-                  city: address.city ?? '',
-                  state: address.state,
-                  postalCode: address.postalCode,
+                  city: address.city!,
+                  state: address.state!,
+                  postalCode: address.postalCode!,
                   details: address.details,
-                  enabled: address.enabled,
                 ))
             .toList(),
       );
