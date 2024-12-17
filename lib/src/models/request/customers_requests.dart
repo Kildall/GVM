@@ -20,20 +20,21 @@ class UpdateCustomerRequest {
   final String name;
   final String phone;
   final bool enabled;
-  final List<Address> addresses;
+  final List<Address>? addresses;
 
   UpdateCustomerRequest(
       {required this.customerId,
       required this.name,
       required this.phone,
       required this.enabled,
-      required this.addresses});
+      this.addresses});
 
   Map<String, dynamic> toJson() => {
         'customerId': customerId,
         'name': name,
         'phone': phone,
         'enabled': enabled,
-        'addresses': addresses.map((address) => address.toJson()).toList(),
+        if (addresses != null)
+          'addresses': addresses!.map((address) => address.toJson()).toList(),
       };
 }

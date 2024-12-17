@@ -6,7 +6,6 @@ import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 import 'package:gvm_flutter/src/services/auth/permissions.dart';
 import 'package:gvm_flutter/src/views/employees/employees/employee_read.dart';
 import 'package:gvm_flutter/src/views/sales/customers/addresses/address_read.dart';
-import 'package:gvm_flutter/src/views/sales/deliveries/delivery_edit.dart';
 import 'package:gvm_flutter/src/views/sales/deliveries/utils.dart';
 import 'package:gvm_flutter/src/views/sales/sales/sale_read.dart';
 import 'package:gvm_flutter/src/views/sales/sales/utils.dart';
@@ -67,14 +66,6 @@ class _DeliveryReadState extends State<DeliveryRead>
     ));
   }
 
-  void _navigateToDeliveryEdit() {
-    if (delivery != null) {
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => DeliveryEdit(delivery: delivery!),
-      ));
-    }
-  }
-
   void _navigateToSale(int saleId) {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => SaleRead(saleId: saleId),
@@ -112,20 +103,6 @@ class _DeliveryReadState extends State<DeliveryRead>
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).deliveryDetails),
-        actions: [
-          AuthGuard(
-            permissions: [
-              AppPermissions.deliveryEdit,
-              AppPermissions.employeeBrowse,
-            ],
-            allPermissions: true,
-            fallback: null,
-            child: IconButton(
-              icon: const Icon(Icons.edit),
-              onPressed: _navigateToDeliveryEdit,
-            ),
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         child: Padding(

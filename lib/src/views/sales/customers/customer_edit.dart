@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gvm_flutter/src/helpers/validators.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/request/customers_requests.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
-import 'package:gvm_flutter/src/views/sales/customers/customer_read.dart';
 
 class CustomerEdit extends StatefulWidget {
   final Customer customer;
@@ -53,28 +53,29 @@ class _CustomerEditState extends State<CustomerEdit> {
     setState(() => isLoading = true);
     try {
       final request = UpdateCustomerRequest(
-        customerId: widget.customer.id!,
-        name: name!,
-        phone: phone!,
-        enabled: enabled,
-        addresses: selectedAddresses
-            .map((address) => Address(
-                  name: address.name,
-                  street1: address.street1!,
-                  street2: address.street2,
-                  city: address.city!,
-                  state: address.state!,
-                  postalCode: address.postalCode!,
-                  details: address.details,
-                  enabled: address.enabled,
-                ))
-            .toList(),
-      );
+          customerId: widget.customer.id!,
+          name: name!,
+          phone: phone!,
+          enabled: enabled,
+          addresses: selectedAddresses
+              .map((address) => Address(
+                    id: address.id,
+                    name: address.name,
+                    street1: address.street1!,
+                    street2: address.street2,
+                    city: address.city!,
+                    state: address.state!,
+                    postalCode: address.postalCode!,
+                    details: address.details,
+                  ))
+              .toList());
 
-      final response = await AuthManager.instance.apiService.put(
+      debugPrint(request.toJson().toString());
+
+      await AuthManager.instance.apiService.put(
         '/api/customers',
         body: request.toJson(),
-        fromJson: (json) => Customer.fromJson(json),
+        fromJson: (json) => {},
       );
 
       if (mounted) {
@@ -84,12 +85,7 @@ class _CustomerEditState extends State<CustomerEdit> {
             backgroundColor: Colors.green,
           ),
         );
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => CustomerRead(customerId: response.data!.id!),
-          ),
-        );
+        Navigator.pop(context);
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -138,6 +134,8 @@ class _CustomerEditState extends State<CustomerEdit> {
                           labelText: AppLocalizations.of(context).name,
                           border: const OutlineInputBorder(),
                         ),
+                        validator: (value) => Validators.validateString(value,
+                            required: true, minLength: 3, maxLength: 256),
                         onChanged: (value) {
                           setState(() {
                             name = value;
@@ -150,6 +148,8 @@ class _CustomerEditState extends State<CustomerEdit> {
                           labelText: AppLocalizations.of(context).street,
                           border: const OutlineInputBorder(),
                         ),
+                        validator: (value) => Validators.validateString(value,
+                            required: true, minLength: 3, maxLength: 256),
                         onChanged: (value) {
                           setState(() {
                             street1 = value;
@@ -163,6 +163,8 @@ class _CustomerEditState extends State<CustomerEdit> {
                               AppLocalizations.of(context).secondaryStreet,
                           border: const OutlineInputBorder(),
                         ),
+                        validator: (value) => Validators.validateString(value,
+                            required: true, minLength: 3, maxLength: 256),
                         onChanged: (value) {
                           setState(() {
                             street2 = value;
@@ -175,6 +177,8 @@ class _CustomerEditState extends State<CustomerEdit> {
                           labelText: AppLocalizations.of(context).city,
                           border: const OutlineInputBorder(),
                         ),
+                        validator: (value) => Validators.validateString(value,
+                            required: true, minLength: 3, maxLength: 256),
                         onChanged: (value) {
                           setState(() {
                             city = value;
@@ -187,6 +191,8 @@ class _CustomerEditState extends State<CustomerEdit> {
                           labelText: AppLocalizations.of(context).state,
                           border: const OutlineInputBorder(),
                         ),
+                        validator: (value) => Validators.validateString(value,
+                            required: true, minLength: 3, maxLength: 256),
                         onChanged: (value) {
                           setState(() {
                             state = value;
@@ -199,6 +205,8 @@ class _CustomerEditState extends State<CustomerEdit> {
                           labelText: AppLocalizations.of(context).postalCode,
                           border: const OutlineInputBorder(),
                         ),
+                        validator: (value) => Validators.validateString(value,
+                            required: true, minLength: 3, maxLength: 10),
                         onChanged: (value) {
                           setState(() {
                             postalCode = value;
@@ -212,6 +220,8 @@ class _CustomerEditState extends State<CustomerEdit> {
                           border: const OutlineInputBorder(),
                         ),
                         maxLines: 3,
+                        validator: (value) => Validators.validateString(value,
+                            required: true, minLength: 3, maxLength: 256),
                         onChanged: (value) {
                           setState(() {
                             details = value;
@@ -298,6 +308,8 @@ class _CustomerEditState extends State<CustomerEdit> {
                           border: const OutlineInputBorder(),
                         ),
                         initialValue: name,
+                        validator: (value) => Validators.validateString(value,
+                            required: true, minLength: 3, maxLength: 256),
                         onChanged: (value) {
                           setState(() {
                             name = value;
@@ -311,6 +323,8 @@ class _CustomerEditState extends State<CustomerEdit> {
                           border: const OutlineInputBorder(),
                         ),
                         initialValue: street1,
+                        validator: (value) => Validators.validateString(value,
+                            required: true, minLength: 3, maxLength: 256),
                         onChanged: (value) {
                           setState(() {
                             street1 = value;
@@ -325,6 +339,8 @@ class _CustomerEditState extends State<CustomerEdit> {
                           border: const OutlineInputBorder(),
                         ),
                         initialValue: street2,
+                        validator: (value) => Validators.validateString(value,
+                            required: true, minLength: 3, maxLength: 256),
                         onChanged: (value) {
                           setState(() {
                             street2 = value;
@@ -338,6 +354,8 @@ class _CustomerEditState extends State<CustomerEdit> {
                           border: const OutlineInputBorder(),
                         ),
                         initialValue: city,
+                        validator: (value) => Validators.validateString(value,
+                            required: true, minLength: 3, maxLength: 256),
                         onChanged: (value) {
                           setState(() {
                             city = value;
@@ -351,6 +369,8 @@ class _CustomerEditState extends State<CustomerEdit> {
                           border: const OutlineInputBorder(),
                         ),
                         initialValue: state,
+                        validator: (value) => Validators.validateString(value,
+                            required: true, minLength: 3, maxLength: 256),
                         onChanged: (value) {
                           setState(() {
                             state = value;
@@ -364,6 +384,8 @@ class _CustomerEditState extends State<CustomerEdit> {
                           border: const OutlineInputBorder(),
                         ),
                         initialValue: postalCode,
+                        validator: (value) => Validators.validateString(value,
+                            required: true, minLength: 3, maxLength: 10),
                         onChanged: (value) {
                           setState(() {
                             postalCode = value;
@@ -378,6 +400,8 @@ class _CustomerEditState extends State<CustomerEdit> {
                         ),
                         initialValue: details,
                         maxLines: 3,
+                        validator: (value) => Validators.validateString(value,
+                            required: true, minLength: 3, maxLength: 256),
                         onChanged: (value) {
                           setState(() {
                             details = value;
@@ -549,12 +573,8 @@ class _CustomerEditState extends State<CustomerEdit> {
                 prefixIcon: const Icon(Icons.person),
               ),
               initialValue: name,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return AppLocalizations.of(context).fieldRequired;
-                }
-                return null;
-              },
+              validator: (value) => Validators.validateString(value,
+                  required: true, minLength: 3, maxLength: 256),
               onChanged: (value) => setState(() => name = value),
             ),
             const SizedBox(height: 16),
@@ -565,6 +585,8 @@ class _CustomerEditState extends State<CustomerEdit> {
                 prefixIcon: const Icon(Icons.phone),
               ),
               initialValue: phone,
+              validator: (value) => Validators.validateString(value,
+                  required: true, minLength: 3, maxLength: 15),
               onChanged: (value) => setState(() => phone = value),
             ),
           ],

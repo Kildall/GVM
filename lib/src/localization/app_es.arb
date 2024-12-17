@@ -1412,9 +1412,13 @@
   "@delete": {
     "description": "Label for delete"
   },
-  "insufficientInventoryToDelete": "No se puede eliminar la compra porque no hay suficiente inventario",
+  "insufficientInventoryToDelete": "No se puede eliminar porque no hay suficiente inventario",
   "@insufficientInventoryToDelete": {
     "description": "Message for insufficient inventory to delete"
+  },
+  "insufficientInventoryToUpdate": "No se puede actualizar porque no hay suficiente inventario",
+  "@insufficientInventoryToUpdate": {
+    "description": "Message for insufficient inventory to update"
   },
   "maximumQuantityAvailable": "Cantidad máxima disponible: {quantity}",
   "@maximumQuantityAvailable": {

@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/helpers/validators.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/request/product_requests.dart';
+import 'package:gvm_flutter/src/services/api/api_errors.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 
 class ProductEdit extends StatefulWidget {
@@ -78,14 +79,33 @@ class _ProductEditState extends State<ProductEdit> {
         }
       }
     } catch (e) {
-      debugPrint(e.toString());
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context).anErrorOccurred),
-            backgroundColor: Colors.red,
-          ),
-        );
+        if (e is APIException) {
+          switch (e.code) {
+            case ErrorCode.INSUFFICIENT_INVENTORY:
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(AppLocalizations.of(context)
+                      .insufficientInventoryToUpdate),
+                  backgroundColor: Colors.red,
+                ),
+              );
+              break;
+            default:
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(AppLocalizations.of(context).anErrorOccurred),
+                ),
+              );
+              break;
+          }
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(AppLocalizations.of(context).anErrorOccurred),
+            ),
+          );
+        }
       }
     } finally {
       if (mounted) {
@@ -276,7 +296,7 @@ class _ProductEditState extends State<ProductEdit> {
                       FilteringTextInputFormatter.digitsOnly,
                     ],
                     validator: (value) =>
-                        Validators.validateNumber(value, min: 1),
+                        Validators.validateNumber(value, min: 1, integer: true),
                     onChanged: (value) =>
                         setState(() => quantity = int.tryParse(value)),
                     onSaved: (value) => quantity = int.tryParse(value ?? ''),

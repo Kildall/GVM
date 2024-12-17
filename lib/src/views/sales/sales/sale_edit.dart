@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/request/sale_requests.dart';
+import 'package:gvm_flutter/src/models/response/address_responses.dart';
 import 'package:gvm_flutter/src/models/response/customers_responses.dart';
 import 'package:gvm_flutter/src/models/response/employee_responses.dart';
 import 'package:gvm_flutter/src/models/response/product_responses.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
+import 'package:gvm_flutter/src/views/sales/deliveries/utils.dart';
 import 'package:gvm_flutter/src/views/sales/sales/sale_read.dart';
 import 'package:gvm_flutter/src/views/sales/sales/utils.dart';
 import 'package:intl/intl.dart';
@@ -39,6 +41,7 @@ class _SaleEditState extends State<SaleEdit> {
   List<Employee> employees = [];
   List<Customer> customers = [];
   List<Product> availableProducts = [];
+  List<Address> addresses = [];
 
   @override
   void initState() {
@@ -66,11 +69,15 @@ class _SaleEditState extends State<SaleEdit> {
       final productsResponse = await AuthManager.instance.apiService
           .get<GetProductsResponse>('/api/products',
               fromJson: GetProductsResponse.fromJson);
+      final addressesResponse = await AuthManager.instance.apiService
+          .get<GetAddressesResponse>('/api/addresses',
+              fromJson: GetAddressesResponse.fromJson);
 
       setState(() {
         employees = employeesResponse.data?.employees ?? [];
         customers = customersResponse.data?.customers ?? [];
         availableProducts = productsResponse.data?.products ?? [];
+        addresses = addressesResponse.data?.addresses ?? [];
       });
     } finally {
       setState(() => isLoading = false);
@@ -115,6 +122,14 @@ class _SaleEditState extends State<SaleEdit> {
         employeeId: employeeId!,
         customerId: customerId!,
         startDate: startDate!.toIso8601String(),
+        deliveries: selectedDeliveries
+            .map((delivery) => UpdateSaleDeliveryItem(
+                  employeeId: delivery.employeeId!,
+                  addressId: delivery.addressId!,
+                  startDate: delivery.startDate!.toIso8601String(),
+                  status: delivery.status!,
+                ))
+            .toList(),
       );
 
       final response = await AuthManager.instance.apiService.put(
@@ -231,38 +246,141 @@ class _SaleEditState extends State<SaleEdit> {
     );
   }
 
-  void _addDelivery() {
+  void _editDelivery(int index) {
+    final delivery = selectedDeliveries[index];
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        DateTime selectedDate = DateTime.now();
-        Address? selectedAddress;
-        Employee? selectedEmployee;
-
-        // Get customer's addresses from the selected customer
-        final customerAddresses = customers
-                .firstWhere((c) => c.id == customerId, orElse: () => Customer())
-                .addresses ??
-            [];
-        debugPrint('customers ids: ${customers.map((c) => c.id).toList()}');
-        debugPrint('customerId: $customerId');
+        DateTime selectedDate = delivery.startDate ?? DateTime.now();
+        int? selectedEmployeeId = delivery.employeeId;
+        int? selectedAddressId = delivery.addressId;
+        DeliveryStatusEnum? selectedDeliveryStatus = delivery.status;
 
         return AlertDialog(
-          title: Text(AppLocalizations.of(context).addDelivery),
+          title: Text(AppLocalizations.of(context).editDelivery),
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
               return SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Date Picker
+                    // Employee Selection (Mandatory)
+                    DropdownButtonFormField<int>(
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).employee,
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.person),
+                        errorStyle: TextStyle(color: Colors.red),
+                      ),
+                      value: selectedEmployeeId,
+                      items: employees
+                          .map((employee) => DropdownMenuItem(
+                                value: employee.id,
+                                child: Text(employee.name ??
+                                    AppLocalizations.of(context)
+                                        .unnamedEmployee),
+                              ))
+                          .toList(),
+                      validator: (value) {
+                        if (value == null) {
+                          return AppLocalizations.of(context).fieldRequired;
+                        }
+                        return null;
+                      },
+                      onChanged: (value) {
+                        setState(() => selectedEmployeeId = value);
+                      },
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Address Selection (Mandatory)
+                    DropdownButtonFormField<int>(
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).address,
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.location_on),
+                        errorStyle: TextStyle(color: Colors.red),
+                      ),
+                      value: selectedAddressId,
+                      items: addresses
+                          .where((address) => address.customerId == customerId)
+                          .map((address) => DropdownMenuItem(
+                                value: address.id,
+                                child: Text(
+                                  [
+                                    address.street1,
+                                    address.street2,
+                                    address.postalCode,
+                                    address.city,
+                                    address.state,
+                                  ]
+                                      .where((s) => s != null && s.isNotEmpty)
+                                      .join(', '),
+                                ),
+                              ))
+                          .toList(),
+                      validator: (value) {
+                        if (value == null) {
+                          return AppLocalizations.of(context).fieldRequired;
+                        }
+                        return null;
+                      },
+                      onChanged: (value) {
+                        setState(() => selectedAddressId = value);
+                      },
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Delivery Status
+                    DropdownButtonFormField<DeliveryStatusEnum>(
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).deliveryStatus,
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.flag),
+                      ),
+                      value: selectedDeliveryStatus,
+                      items: DeliveryStatusEnum.values
+                          .map((status) => DropdownMenuItem(
+                                value: status,
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      width: 12,
+                                      height: 12,
+                                      margin: const EdgeInsets.only(right: 8),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: DeliveriesUtils.getStatusColor(
+                                            status),
+                                      ),
+                                    ),
+                                    Text(DeliveriesUtils.getStatusName(
+                                        context, status)),
+                                  ],
+                                ),
+                              ))
+                          .toList(),
+                      validator: (value) {
+                        if (value == null) {
+                          return AppLocalizations.of(context).selectStatus;
+                        }
+                        return null;
+                      },
+                      onChanged: (value) =>
+                          setState(() => selectedDeliveryStatus = value),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Date Selection
                     InkWell(
                       onTap: () async {
                         final DateTime? picked = await showDatePicker(
                           context: context,
                           initialDate: selectedDate,
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime(2100),
+                          firstDate: DateTime.now(),
+                          lastDate:
+                              DateTime.now().add(const Duration(days: 365)),
                         );
                         if (picked != null) {
                           setState(() => selectedDate = picked);
@@ -279,69 +397,198 @@ class _SaleEditState extends State<SaleEdit> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 16),
-                    DropdownButtonFormField<Address>(
+                  ],
+                ),
+              );
+            },
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(AppLocalizations.of(context).cancel),
+            ),
+            TextButton(
+              onPressed: () {
+                if (selectedEmployeeId == null ||
+                    selectedAddressId == null ||
+                    selectedDeliveryStatus == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(AppLocalizations.of(context).fieldRequired),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                  return;
+                }
+
+                setState(() {
+                  // Remove the old delivery and add the updated one
+                  selectedDeliveries.removeAt(index);
+                  selectedDeliveries.insert(
+                    index,
+                    Delivery(
+                      startDate: selectedDate,
+                      employeeId: selectedEmployeeId,
+                      addressId: selectedAddressId,
+                      status: selectedDeliveryStatus,
+                    ),
+                  );
+                });
+                Navigator.pop(context);
+              },
+              child: Text(AppLocalizations.of(context).save),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _addDelivery() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        DateTime selectedDate = DateTime.now();
+        int? selectedEmployeeId;
+        int? selectedAddressId;
+        DeliveryStatusEnum? selectedDeliveryStatus;
+
+        return AlertDialog(
+          title: Text(AppLocalizations.of(context).scheduleDelivery),
+          content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Employee Selection (Mandatory)
+                    DropdownButtonFormField<int>(
                       decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context).address,
+                        labelText: AppLocalizations.of(context).employee,
                         border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.location_on),
+                        prefixIcon: Icon(Icons.person),
+                        errorStyle: TextStyle(color: Colors.red),
                       ),
-                      value: selectedAddress,
-                      items: customerAddresses.map((address) {
-                        return DropdownMenuItem(
-                          value: address,
-                          child: Text(
-                            [
-                              address.street1,
-                              address.street2,
-                              address.postalCode,
-                              address.city,
-                              address.state,
-                            ]
-                                .where((s) => s != null && s.isNotEmpty)
-                                .join(', '),
-                          ),
-                        );
-                      }).toList(),
+                      value: selectedEmployeeId,
+                      items: employees
+                          .map((employee) => DropdownMenuItem(
+                                value: employee.id,
+                                child: Text(employee.name ??
+                                    AppLocalizations.of(context)
+                                        .unnamedEmployee),
+                              ))
+                          .toList(),
                       validator: (value) {
                         if (value == null) {
-                          return AppLocalizations.of(context).address;
+                          return AppLocalizations.of(context).fieldRequired;
                         }
                         return null;
                       },
-                      onChanged: (Address? value) {
-                        setState(() {
-                          selectedAddress = value;
-                        });
+                      onChanged: (value) {
+                        setState(() => selectedEmployeeId = value);
                       },
                     ),
                     const SizedBox(height: 16),
 
-                    // Optional Employee Dropdown
-                    DropdownButtonFormField<Employee>(
+                    // Address Selection (Mandatory)
+                    DropdownButtonFormField<int>(
                       decoration: InputDecoration(
-                        labelText:
-                            '${AppLocalizations.of(context).employee} (${AppLocalizations.of(context).optional})',
+                        labelText: AppLocalizations.of(context).address,
                         border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.person),
+                        prefixIcon: Icon(Icons.location_on),
+                        errorStyle: TextStyle(color: Colors.red),
                       ),
-                      value: selectedEmployee,
-                      items: [
-                        DropdownMenuItem<Employee>(
-                          value: null,
-                          child: Text(AppLocalizations.of(context).employee),
-                        ),
-                        ...employees.map((employee) => DropdownMenuItem(
-                              value: employee,
-                              child: Text(employee.name ??
-                                  AppLocalizations.of(context).unnamedEmployee),
-                            )),
-                      ],
-                      onChanged: (Employee? value) {
-                        setState(() {
-                          selectedEmployee = value;
-                        });
+                      value: selectedAddressId,
+                      items: addresses
+                          .where((address) => address.customerId == customerId)
+                          .map((address) => DropdownMenuItem(
+                                value: address.id,
+                                child: Text(
+                                  [
+                                    address.street1,
+                                    address.street2,
+                                    address.postalCode,
+                                    address.city,
+                                    address.state,
+                                  ]
+                                      .where((s) => s != null && s.isNotEmpty)
+                                      .join(', '),
+                                ),
+                              ))
+                          .toList(),
+                      validator: (value) {
+                        if (value == null) {
+                          return AppLocalizations.of(context).fieldRequired;
+                        }
+                        return null;
                       },
+                      onChanged: (value) {
+                        setState(() => selectedAddressId = value);
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    DropdownButtonFormField<DeliveryStatusEnum>(
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).deliveryStatus,
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.flag),
+                      ),
+                      value: selectedDeliveryStatus,
+                      items: DeliveryStatusEnum.values
+                          .map((status) => DropdownMenuItem(
+                                value: status,
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      width: 12,
+                                      height: 12,
+                                      margin: const EdgeInsets.only(right: 8),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: DeliveriesUtils.getStatusColor(
+                                            status),
+                                      ),
+                                    ),
+                                    Text(DeliveriesUtils.getStatusName(
+                                        context, status)),
+                                  ],
+                                ),
+                              ))
+                          .toList(),
+                      validator: (value) {
+                        if (value == null) {
+                          return AppLocalizations.of(context).selectStatus;
+                        }
+                        return null;
+                      },
+                      onChanged: (value) =>
+                          setState(() => selectedDeliveryStatus = value),
+                    ),
+                    const SizedBox(height: 16),
+                    // Date Selection
+                    InkWell(
+                      onTap: () async {
+                        final DateTime? picked = await showDatePicker(
+                          context: context,
+                          initialDate: selectedDate,
+                          firstDate: DateTime.now(),
+                          lastDate:
+                              DateTime.now().add(const Duration(days: 365)),
+                        );
+                        if (picked != null) {
+                          setState(() => selectedDate = picked);
+                        }
+                      },
+                      child: InputDecorator(
+                        decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context).deliveryDate,
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.calendar_today),
+                        ),
+                        child: Text(
+                          DateFormat('yyyy-MM-dd').format(selectedDate),
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -355,10 +602,10 @@ class _SaleEditState extends State<SaleEdit> {
             ),
             TextButton(
               onPressed: () {
-                if (selectedAddress == null) {
+                if (selectedEmployeeId == null || selectedAddressId == null) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(AppLocalizations.of(context).address),
+                      content: Text(AppLocalizations.of(context).fieldRequired),
                       backgroundColor: Colors.red,
                     ),
                   );
@@ -368,8 +615,8 @@ class _SaleEditState extends State<SaleEdit> {
                 setState(() {
                   selectedDeliveries.add(Delivery(
                     startDate: selectedDate,
-                    addressId: selectedAddress?.id,
-                    employeeId: selectedEmployee?.id,
+                    employeeId: selectedEmployeeId,
+                    addressId: selectedAddressId,
                   ));
                 });
                 Navigator.pop(context);
@@ -822,6 +1069,15 @@ class _SaleEditState extends State<SaleEdit> {
                 itemCount: selectedDeliveries.length,
                 itemBuilder: (context, index) {
                   final delivery = selectedDeliveries[index];
+                  final employee = employees.firstWhere(
+                    (e) => e.id == delivery.employeeId,
+                    orElse: () => Employee(),
+                  );
+                  final address = addresses.firstWhere(
+                    (a) => a.id == delivery.addressId,
+                    orElse: () => Address(),
+                  );
+
                   return Card(
                     margin: const EdgeInsets.only(bottom: 8),
                     child: ListTile(
@@ -830,15 +1086,54 @@ class _SaleEditState extends State<SaleEdit> {
                       ),
                       title: Text(
                           '${AppLocalizations.of(context).delivery} ${index + 1}'),
-                      subtitle: Text(
-                          '${AppLocalizations.of(context).date}: ${delivery.startDate?.toLocal().toString().split(' ')[0] ?? AppLocalizations.of(context).noDate}'),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () {
-                          setState(() {
-                            selectedDeliveries.removeAt(index);
-                          });
-                        },
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${AppLocalizations.of(context).date}: ${delivery.startDate?.toLocal().toString().split(' ')[0] ?? AppLocalizations.of(context).noDate}',
+                          ),
+                          Text(
+                            '${AppLocalizations.of(context).employee}: ${employee.name ?? AppLocalizations.of(context).unnamedEmployee}',
+                          ),
+                          Text(
+                            '${AppLocalizations.of(context).address}: ${address.street1 ?? AppLocalizations.of(context).noAddress}',
+                          ),
+                          if (delivery.status != null)
+                            Row(
+                              children: [
+                                Container(
+                                  width: 8,
+                                  height: 8,
+                                  margin: const EdgeInsets.only(right: 4),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: DeliveriesUtils.getStatusColor(
+                                        delivery.status!),
+                                  ),
+                                ),
+                                Text(
+                                  '${AppLocalizations.of(context).status}: ${DeliveriesUtils.getStatusName(context, delivery.status!)}',
+                                ),
+                              ],
+                            ),
+                        ],
+                      ),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.edit),
+                            onPressed: () => _editDelivery(index),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete),
+                            onPressed: () {
+                              setState(() {
+                                selectedDeliveries.removeAt(index);
+                              });
+                            },
+                          ),
+                        ],
                       ),
                     ),
                   );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gvm_flutter/src/helpers/validators.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/request/customers_requests.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
@@ -14,8 +15,9 @@ class CustomerAdd extends StatefulWidget {
 
 class _CustomerAddState extends State<CustomerAdd> {
   final _formKey = GlobalKey<FormState>();
+  final _addAddressFormKey = GlobalKey<FormState>();
+  final _editAddressFormKey = GlobalKey<FormState>();
   bool isLoading = false;
-  bool _autovalidateMode = false;
 
   // Form fields
   String? name;
@@ -28,15 +30,7 @@ class _CustomerAddState extends State<CustomerAdd> {
   }
 
   Future<void> _createCustomer() async {
-    setState(() => _autovalidateMode = true);
-
     if (!_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context).fixErrors),
-          backgroundColor: Colors.red,
-        ),
-      );
       return;
     }
 
@@ -110,103 +104,124 @@ class _CustomerAddState extends State<CustomerAdd> {
         String? details;
         bool addressEnabled = true;
 
-        return AlertDialog(
-          title: Text(AppLocalizations.of(context).addAddress),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context).name,
-                    border: const OutlineInputBorder(),
+        return Form(
+          key: _addAddressFormKey,
+          child: AlertDialog(
+            title: Text(AppLocalizations.of(context).addAddress),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).name,
+                      border: const OutlineInputBorder(),
+                    ),
+                    validator: (value) => Validators.validateString(value,
+                        required: true, minLength: 3, maxLength: 256),
+                    onChanged: (value) => addressName = value,
                   ),
-                  onChanged: (value) => addressName = value,
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context).street,
-                    border: const OutlineInputBorder(),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).street,
+                      border: const OutlineInputBorder(),
+                    ),
+                    validator: (value) => Validators.validateString(value,
+                        required: true, minLength: 3, maxLength: 256),
+                    onChanged: (value) => street1 = value,
                   ),
-                  onChanged: (value) => street1 = value,
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context).secondaryStreet,
-                    border: const OutlineInputBorder(),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).secondaryStreet,
+                      border: const OutlineInputBorder(),
+                    ),
+                    validator: (value) => Validators.validateString(value,
+                        required: false, minLength: 3, maxLength: 256),
+                    onChanged: (value) => street2 = value,
                   ),
-                  onChanged: (value) => street2 = value,
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context).city,
-                    border: const OutlineInputBorder(),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).city,
+                      border: const OutlineInputBorder(),
+                    ),
+                    validator: (value) => Validators.validateString(value,
+                        required: true, minLength: 3, maxLength: 256),
+                    onChanged: (value) => city = value,
                   ),
-                  onChanged: (value) => city = value,
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context).state,
-                    border: const OutlineInputBorder(),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).state,
+                      border: const OutlineInputBorder(),
+                    ),
+                    validator: (value) => Validators.validateString(value,
+                        required: true, minLength: 3, maxLength: 256),
+                    onChanged: (value) => state = value,
                   ),
-                  onChanged: (value) => state = value,
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context).postalCode,
-                    border: const OutlineInputBorder(),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).postalCode,
+                      border: const OutlineInputBorder(),
+                    ),
+                    validator: (value) => Validators.validateString(value,
+                        required: true, minLength: 3, maxLength: 10),
+                    onChanged: (value) => postalCode = value,
                   ),
-                  onChanged: (value) => postalCode = value,
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context).details,
-                    border: const OutlineInputBorder(),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).details,
+                      border: const OutlineInputBorder(),
+                    ),
+                    maxLines: 3,
+                    validator: (value) => Validators.validateString(value,
+                        required: false, minLength: 3, maxLength: 256),
+                    onChanged: (value) => details = value,
                   ),
-                  maxLines: 3,
-                  onChanged: (value) => details = value,
-                ),
-                const SizedBox(height: 16),
-                SwitchListTile(
-                  title: Text(AppLocalizations.of(context).enabled),
-                  value: addressEnabled,
-                  onChanged: (value) => addressEnabled = value,
-                ),
-              ],
+                  const SizedBox(height: 16),
+                  SwitchListTile(
+                    title: Text(AppLocalizations.of(context).enabled),
+                    value: addressEnabled,
+                    onChanged: (value) => addressEnabled = value,
+                  ),
+                ],
+              ),
             ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text(AppLocalizations.of(context).cancel),
+              ),
+              TextButton(
+                onPressed: () {
+                  if (!_addAddressFormKey.currentState!.validate()) {
+                    return;
+                  }
+                  _formKey.currentState!.save();
+                  if (street1?.isNotEmpty == true && city?.isNotEmpty == true) {
+                    setState(() {
+                      selectedAddresses.add(Address(
+                        name: addressName,
+                        street1: street1,
+                        street2: street2,
+                        city: city,
+                        state: state,
+                        postalCode: postalCode,
+                        details: details,
+                        enabled: addressEnabled,
+                      ));
+                    });
+                    Navigator.pop(context);
+                  }
+                },
+                child: Text(AppLocalizations.of(context).add),
+              ),
+            ],
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(AppLocalizations.of(context).cancel),
-            ),
-            TextButton(
-              onPressed: () {
-                if (street1?.isNotEmpty == true && city?.isNotEmpty == true) {
-                  setState(() {
-                    selectedAddresses.add(Address(
-                      name: addressName,
-                      street1: street1,
-                      street2: street2,
-                      city: city,
-                      state: state,
-                      postalCode: postalCode,
-                      details: details,
-                      enabled: addressEnabled,
-                    ));
-                  });
-                  Navigator.pop(context);
-                }
-              },
-              child: Text(AppLocalizations.of(context).add),
-            ),
-          ],
         );
       },
     );
@@ -310,15 +325,8 @@ class _CustomerAddState extends State<CustomerAdd> {
                 prefixIcon: const Icon(Icons.person),
                 errorStyle: const TextStyle(color: Colors.red),
               ),
-              autovalidateMode: _autovalidateMode
-                  ? AutovalidateMode.always
-                  : AutovalidateMode.disabled,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return AppLocalizations.of(context).fieldRequired;
-                }
-                return null;
-              },
+              validator: (value) => Validators.validateString(value,
+                  required: true, minLength: 3, maxLength: 256),
               onChanged: (value) => setState(() => name = value),
             ),
             const SizedBox(height: 16),
@@ -328,6 +336,8 @@ class _CustomerAddState extends State<CustomerAdd> {
                 border: const OutlineInputBorder(),
                 prefixIcon: const Icon(Icons.phone),
               ),
+              validator: (value) => Validators.validateString(value,
+                  required: true, minLength: 3, maxLength: 15),
               onChanged: (value) => setState(() => phone = value),
             ),
           ],
@@ -452,111 +462,132 @@ class _CustomerAddState extends State<CustomerAdd> {
         String? details = address.details;
         bool addressEnabled = address.enabled ?? true;
 
-        return AlertDialog(
-          title: Text(AppLocalizations.of(context).editAddress),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context).name,
-                    border: const OutlineInputBorder(),
-                  ),
-                  initialValue: addressName,
-                  onChanged: (value) => addressName = value,
+        return Form(
+            key: _editAddressFormKey,
+            child: AlertDialog(
+              title: Text(AppLocalizations.of(context).editAddress),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).name,
+                        border: const OutlineInputBorder(),
+                      ),
+                      validator: (value) => Validators.validateString(value,
+                          required: true, minLength: 3, maxLength: 256),
+                      initialValue: addressName,
+                      onChanged: (value) => addressName = value,
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).street,
+                        border: const OutlineInputBorder(),
+                      ),
+                      validator: (value) => Validators.validateString(value,
+                          required: true, minLength: 3, maxLength: 256),
+                      initialValue: street1,
+                      onChanged: (value) => street1 = value,
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).secondaryStreet,
+                        border: const OutlineInputBorder(),
+                      ),
+                      validator: (value) => Validators.validateString(value,
+                          required: false, minLength: 3, maxLength: 256),
+                      initialValue: street2,
+                      onChanged: (value) => street2 = value,
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).city,
+                        border: const OutlineInputBorder(),
+                      ),
+                      validator: (value) => Validators.validateString(value,
+                          required: true, minLength: 3, maxLength: 256),
+                      initialValue: city,
+                      onChanged: (value) => city = value,
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).state,
+                        border: const OutlineInputBorder(),
+                      ),
+                      validator: (value) => Validators.validateString(value,
+                          required: true, minLength: 3, maxLength: 256),
+                      initialValue: state,
+                      onChanged: (value) => state = value,
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).postalCode,
+                        border: const OutlineInputBorder(),
+                      ),
+                      validator: (value) => Validators.validateString(value,
+                          required: true, minLength: 3, maxLength: 10),
+                      initialValue: postalCode,
+                      onChanged: (value) => postalCode = value,
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).details,
+                        border: const OutlineInputBorder(),
+                      ),
+                      validator: (value) => Validators.validateString(value,
+                          required: false, minLength: 3, maxLength: 256),
+                      initialValue: details,
+                      maxLines: 3,
+                      onChanged: (value) => details = value,
+                    ),
+                    const SizedBox(height: 16),
+                    SwitchListTile(
+                      title: Text(AppLocalizations.of(context).enabled),
+                      value: addressEnabled,
+                      onChanged: (value) => addressEnabled = value,
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context).street,
-                    border: const OutlineInputBorder(),
-                  ),
-                  initialValue: street1,
-                  onChanged: (value) => street1 = value,
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(AppLocalizations.of(context).cancel),
                 ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context).secondaryStreet,
-                    border: const OutlineInputBorder(),
-                  ),
-                  initialValue: street2,
-                  onChanged: (value) => street2 = value,
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context).city,
-                    border: const OutlineInputBorder(),
-                  ),
-                  initialValue: city,
-                  onChanged: (value) => city = value,
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context).state,
-                    border: const OutlineInputBorder(),
-                  ),
-                  initialValue: state,
-                  onChanged: (value) => state = value,
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context).postalCode,
-                    border: const OutlineInputBorder(),
-                  ),
-                  initialValue: postalCode,
-                  onChanged: (value) => postalCode = value,
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context).details,
-                    border: const OutlineInputBorder(),
-                  ),
-                  initialValue: details,
-                  maxLines: 3,
-                  onChanged: (value) => details = value,
-                ),
-                const SizedBox(height: 16),
-                SwitchListTile(
-                  title: Text(AppLocalizations.of(context).enabled),
-                  value: addressEnabled,
-                  onChanged: (value) => addressEnabled = value,
+                TextButton(
+                  onPressed: () {
+                    if (!_editAddressFormKey.currentState!.validate()) {
+                      return;
+                    }
+                    _editAddressFormKey.currentState!.save();
+                    if (street1?.isNotEmpty == true &&
+                        city?.isNotEmpty == true) {
+                      setState(() {
+                        selectedAddresses[index] = address.copyWith(
+                          name: addressName,
+                          street1: street1,
+                          street2: street2,
+                          city: city,
+                          state: state,
+                          postalCode: postalCode,
+                          details: details,
+                          enabled: addressEnabled,
+                        );
+                      });
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: Text(AppLocalizations.of(context).save),
                 ),
               ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(AppLocalizations.of(context).cancel),
-            ),
-            TextButton(
-              onPressed: () {
-                if (street1?.isNotEmpty == true && city?.isNotEmpty == true) {
-                  setState(() {
-                    selectedAddresses[index] = address.copyWith(
-                      name: addressName,
-                      street1: street1,
-                      street2: street2,
-                      city: city,
-                      state: state,
-                      postalCode: postalCode,
-                      details: details,
-                      enabled: addressEnabled,
-                    );
-                  });
-                  Navigator.pop(context);
-                }
-              },
-              child: Text(AppLocalizations.of(context).save),
-            ),
-          ],
-        );
+            ));
       },
     );
   }

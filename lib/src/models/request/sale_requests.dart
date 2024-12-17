@@ -54,6 +54,27 @@ class SaleProductItem {
       };
 }
 
+class UpdateSaleDeliveryItem {
+  final int employeeId;
+  final int addressId;
+  final String startDate;
+  final DeliveryStatusEnum status;
+
+  UpdateSaleDeliveryItem({
+    required this.employeeId,
+    required this.addressId,
+    required this.startDate,
+    required this.status,
+  });
+
+  Map<String, dynamic> toJson() => {
+        'employeeId': employeeId,
+        'addressId': addressId,
+        'startDate': startDate,
+        'status': status.name,
+      };
+}
+
 class UpdateSaleRequest {
   final int saleId;
   final List<SaleProductItem> products;
@@ -61,6 +82,7 @@ class UpdateSaleRequest {
   final int employeeId;
   final int customerId;
   final String startDate;
+  final List<UpdateSaleDeliveryItem> deliveries;
 
   UpdateSaleRequest({
     required this.saleId,
@@ -69,6 +91,7 @@ class UpdateSaleRequest {
     required this.employeeId,
     required this.customerId,
     required this.startDate,
+    required this.deliveries,
   });
 
   Map<String, dynamic> toJson() => {
@@ -78,5 +101,6 @@ class UpdateSaleRequest {
         'employeeId': employeeId,
         'customerId': customerId,
         'startDate': startDate,
+        'deliveries': deliveries.map((item) => item.toJson()).toList(),
       };
 }

@@ -100,19 +100,6 @@ class _AddressReadState extends State<AddressRead>
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).addressDetails),
-        actions: [
-          AuthGuard(
-            permissions: [AppPermissions.addressEdit],
-            allPermissions: true,
-            fallback: null,
-            child: IconButton(
-              icon: const Icon(Icons.edit),
-              onPressed: () {
-                // Navigate to address edit
-              },
-            ),
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         child: Padding(

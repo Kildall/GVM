@@ -23,7 +23,6 @@ class _CustomersBrowseState extends State<CustomersBrowse>
   String? searchQuery;
   DateTime? selectedStartDate;
   DateTime? selectedEndDate;
-  bool? selectedEnabled;
 
   @override
   void initState() {
@@ -105,7 +104,6 @@ class _CustomersBrowseState extends State<CustomersBrowse>
       searchQuery = null;
       selectedStartDate = null;
       selectedEndDate = null;
-      selectedEnabled = null;
     });
   }
 
@@ -125,10 +123,7 @@ class _CustomersBrowseState extends State<CustomersBrowse>
                       selectedEndDate!.add(const Duration(days: 1))) ==
                   true);
 
-      final matchesEnabled =
-          selectedEnabled == null || customer.enabled == selectedEnabled;
-
-      return matchesSearch && matchesDateRange && matchesEnabled;
+      return matchesSearch && matchesDateRange;
     }).toList();
   }
 
@@ -190,25 +185,6 @@ class _CustomersBrowseState extends State<CustomersBrowse>
                       ),
                     ),
                   ],
-                ),
-                const SizedBox(height: 16),
-                DropdownButtonFormField<bool>(
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context).status,
-                    border: const OutlineInputBorder(),
-                  ),
-                  value: selectedEnabled,
-                  items: [
-                    DropdownMenuItem(
-                      value: true,
-                      child: Text(AppLocalizations.of(context).enabled),
-                    ),
-                    DropdownMenuItem(
-                      value: false,
-                      child: Text(AppLocalizations.of(context).disabled),
-                    ),
-                  ],
-                  onChanged: (value) => setState(() => selectedEnabled = value),
                 ),
               ],
             ),
