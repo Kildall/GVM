@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/response/entity_responses.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
@@ -75,7 +76,7 @@ class _EntityAddState extends State<EntityAdd> {
         if (response.data != null) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Entity created successfully'),
+              content: Text(AppLocalizations.of(context).entitySaved),
               backgroundColor: Colors.green,
             ),
           );
@@ -88,7 +89,7 @@ class _EntityAddState extends State<EntityAdd> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error creating entity'),
+            content: Text(AppLocalizations.of(context).anErrorOccurred),
             backgroundColor: Colors.red,
           ),
         );
@@ -104,7 +105,7 @@ class _EntityAddState extends State<EntityAdd> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Entity'),
+        title: Text(AppLocalizations.of(context).addEntity),
       ),
       body: Form(
         key: _formKey,
@@ -135,7 +136,7 @@ class _EntityAddState extends State<EntityAdd> {
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
                     : Text(
-                        'Save',
+                        AppLocalizations.of(context).save,
                         style: const TextStyle(fontSize: 16),
                       ),
               ),
@@ -154,7 +155,7 @@ class _EntityAddState extends State<EntityAdd> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Entity Type',
+              AppLocalizations.of(context).entityType,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 16),
@@ -162,12 +163,12 @@ class _EntityAddState extends State<EntityAdd> {
               segments: [
                 ButtonSegment<EntityType>(
                   value: EntityType.Role,
-                  label: Text('Role'),
+                  label: Text(AppLocalizations.of(context).role),
                   icon: const Icon(Icons.badge),
                 ),
                 ButtonSegment<EntityType>(
                   value: EntityType.Permission,
-                  label: Text('Permission'),
+                  label: Text(AppLocalizations.of(context).permission),
                   icon: const Icon(Icons.key),
                 ),
               ],
@@ -196,15 +197,15 @@ class _EntityAddState extends State<EntityAdd> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Name',
+              AppLocalizations.of(context).name,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 16),
             TextFormField(
               decoration: InputDecoration(
                 hintText: selectedType == EntityType.Role
-                    ? 'Enter role name'
-                    : 'Enter permission name',
+                    ? AppLocalizations.of(context).enterRoleName
+                    : AppLocalizations.of(context).enterPermissionName,
                 border: const OutlineInputBorder(),
                 prefixIcon: Icon(
                   selectedType == EntityType.Role ? Icons.badge : Icons.key,
@@ -212,7 +213,7 @@ class _EntityAddState extends State<EntityAdd> {
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'This field is required';
+                  return AppLocalizations.of(context).fieldRequired;
                 }
                 return null;
               },
@@ -232,7 +233,7 @@ class _EntityAddState extends State<EntityAdd> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Assign permissions',
+              AppLocalizations.of(context).assign,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 16),
@@ -241,7 +242,7 @@ class _EntityAddState extends State<EntityAdd> {
             else if (availablePermissions.isEmpty)
               Center(
                 child: Text(
-                  'No permissions available',
+                  AppLocalizations.of(context).noPermissionsAvailable,
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               )
@@ -255,7 +256,7 @@ class _EntityAddState extends State<EntityAdd> {
                   itemBuilder: (context, index) {
                     final permission = availablePermissions[index];
                     return CheckboxListTile(
-                      title: Text(permission.name ?? 'Unnamed Permission'),
+                      title: Text(permission.name ?? ''),
                       value: selectedPermissions.contains(permission),
                       onChanged: (bool? value) {
                         setState(() {

@@ -75,7 +75,6 @@ class _EmployeeAddState extends State<EmployeeAdd> {
         );
 
         if (mounted) {
-          // Show success dialog with the generated password
           showDialog(
             context: context,
             barrierDismissible: false,

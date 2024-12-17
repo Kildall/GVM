@@ -66,7 +66,7 @@ class _ProductAddState extends State<ProductAdd> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error creating product'),
+            content: Text(AppLocalizations.of(context).anErrorOccurred),
             backgroundColor: Colors.red,
           ),
         );
@@ -82,7 +82,7 @@ class _ProductAddState extends State<ProductAdd> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Product'),
+        title: Text(AppLocalizations.of(context).addProduct),
       ),
       body: Form(
         key: _formKey,
@@ -107,7 +107,7 @@ class _ProductAddState extends State<ProductAdd> {
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
                     : Text(
-                        'Save Product',
+                        AppLocalizations.of(context).save,
                         style: const TextStyle(fontSize: 16),
                       ),
               ),
@@ -131,8 +131,8 @@ class _ProductAddState extends State<ProductAdd> {
             ),
             const SizedBox(height: 16),
             TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'Name',
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context).name,
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.inventory),
               ),
@@ -146,8 +146,8 @@ class _ProductAddState extends State<ProductAdd> {
             ),
             const SizedBox(height: 16),
             TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'Brand',
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context).brand,
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.branding_watermark),
               ),
@@ -167,7 +167,7 @@ class _ProductAddState extends State<ProductAdd> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Pricing & Quantity',
+              AppLocalizations.of(context).pricingQuantity,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 16),
@@ -175,8 +175,8 @@ class _ProductAddState extends State<ProductAdd> {
               children: [
                 Expanded(
                   child: TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Price',
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).price,
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.attach_money),
                     ),
@@ -197,8 +197,8 @@ class _ProductAddState extends State<ProductAdd> {
                 const SizedBox(width: 16),
                 Expanded(
                   child: TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Quantity',
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).quantity,
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.numbers),
                     ),
@@ -220,8 +220,8 @@ class _ProductAddState extends State<ProductAdd> {
             ),
             const SizedBox(height: 16),
             TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'Measure',
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context).measure,
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.straighten),
               ),

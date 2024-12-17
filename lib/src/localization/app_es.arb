@@ -1342,5 +1342,57 @@
   "averageOrder": "Pedido promedio",
   "@averageOrder": {
     "description": "Label for average order"
+  },
+  "entityType": "Tipo de entidad",
+  "@entityType": {
+    "description": "Label for entity type"
+  },
+  "enterRoleName": "Ingrese el nombre del rol",
+  "@enterRoleName": {
+    "description": "Label for enter role name"
+  },
+  "enterPermissionName": "Ingrese el nombre de la permiso",
+  "@enterPermissionName": {
+    "description": "Label for enter permission name"
+  },
+  "assign": "Asignar",
+  "@assign": {
+    "description": "Label for assign"
+  },
+  "noPermissionsAvailable": "No hay permisos disponibles",
+  "@noPermissionsAvailable": {
+    "description": "Label for no permissions available"
+  },
+  "pricingQuantity": "Precio y cantidad",
+  "@pricingQuantity": {
+    "description": "Label for pricing quantity"
+  },
+  "unsavedChanges": "Tienes cambios sin guardar. ¿Quieres descartarlos?",
+  "@unsavedChanges": {
+    "description": "Label for unsaved changes"
+  },
+  "editPurchase": "Editar compra",
+  "@editPurchase": {
+    "description": "Label for edit purchase"
+  },
+  "changesSummary": "Resumen de cambios",
+  "@changesSummary": {
+    "description": "Label for changes summary"
+  },
+  "removed": "Eliminado",
+  "@removed": {
+    "description": "Label for removed"
+  },
+  "modified": "Modificado",
+  "@modified": {
+    "description": "Label for modified"
+  },
+  "added": "Agregado",
+  "@added": {
+    "description": "Label for added"
+  },
+  "notes": "Notas",
+  "@notes": {
+    "description": "Label for notes"
   }
 }

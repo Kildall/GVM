@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/response/employee_responses.dart';
 import 'package:gvm_flutter/src/models/response/product_responses.dart';
@@ -101,7 +102,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Purchase updated successfully'), // TODO: Translate
+            content: Text(AppLocalizations.of(context).success),
             backgroundColor: Colors.green,
           ),
         );
@@ -112,7 +113,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error updating purchase'), // TODO: Translate
+            content: Text(AppLocalizations.of(context).anErrorOccurred),
             backgroundColor: Colors.red,
           ),
         );
@@ -133,15 +134,15 @@ class _PurchaseEditState extends State<PurchaseEdit> {
         double price = 0;
 
         return AlertDialog(
-          title: Text('Add Product'),
+          title: Text(AppLocalizations.of(context).add),
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   DropdownButtonFormField<Product>(
-                    decoration: const InputDecoration(
-                      labelText: 'Product', // TODO: Translate
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).product,
                       border: OutlineInputBorder(),
                     ),
                     value: selectedProduct,
@@ -162,8 +163,8 @@ class _PurchaseEditState extends State<PurchaseEdit> {
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Quantity', // TODO: Translate
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).quantity,
                       border: OutlineInputBorder(),
                     ),
                     keyboardType: TextInputType.number,
@@ -176,8 +177,8 @@ class _PurchaseEditState extends State<PurchaseEdit> {
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Price', // TODO: Translate
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).price,
                       border: OutlineInputBorder(),
                     ),
                     keyboardType: TextInputType.number,
@@ -195,7 +196,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Cancel'), // TODO: Translate
+              child: Text(AppLocalizations.of(context).cancel),
             ),
             TextButton(
               onPressed: () {
@@ -210,7 +211,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
                   Navigator.pop(context);
                 }
               },
-              child: Text('Add'), // TODO: Translate
+              child: Text(AppLocalizations.of(context).add),
             ),
           ],
         );
@@ -227,7 +228,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
         double price = product.product?.price ?? 0;
 
         return AlertDialog(
-          title: Text('Edit Product'), // TODO: Translate
+          title: Text(AppLocalizations.of(context).editProduct),
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
               return Column(
@@ -235,13 +236,13 @@ class _PurchaseEditState extends State<PurchaseEdit> {
                 children: [
                   Text(
                     product.product?.name ??
-                        'Unnamed Product', // TODO: Translate
+                        AppLocalizations.of(context).unnamedProduct,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Quantity', // TODO: Translate
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).quantity,
                       border: OutlineInputBorder(),
                     ),
                     keyboardType: TextInputType.number,
@@ -254,8 +255,8 @@ class _PurchaseEditState extends State<PurchaseEdit> {
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Price', // TODO: Translate
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).price,
                       border: OutlineInputBorder(),
                     ),
                     keyboardType: TextInputType.number,
@@ -273,7 +274,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Cancel'), // TODO: Translate
+              child: Text(AppLocalizations.of(context).cancel),
             ),
             TextButton(
               onPressed: () {
@@ -284,7 +285,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
                 });
                 Navigator.pop(context);
               },
-              child: Text('Save'), // TODO: Translate
+              child: Text(AppLocalizations.of(context).save),
             ),
           ],
         );
@@ -297,17 +298,16 @@ class _PurchaseEditState extends State<PurchaseEdit> {
       return await showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              title: Text('Discard Changes?'), // TODO: Translate
-              content: Text(
-                  'You have unsaved changes. Do you want to discard them?'), // TODO: Translate
+              title: Text(AppLocalizations.of(context).discardChanges),
+              content: Text(AppLocalizations.of(context).unsavedChanges),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context, false),
-                  child: Text('Cancel'), // TODO: Translate
+                  child: Text(AppLocalizations.of(context).cancel),
                 ),
                 TextButton(
                   onPressed: () => Navigator.pop(context, true),
-                  child: Text('Discard'), // TODO: Translate
+                  child: Text(AppLocalizations.of(context).discard),
                 ),
               ],
             ),
@@ -344,7 +344,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
       onWillPop: _onWillPop,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Edit Purchase'), // TODO: Translate
+          title: Text(AppLocalizations.of(context).editPurchase),
           actions: [
             IconButton(
               icon: Icon(Icons.save),
@@ -378,7 +378,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
                         : Text(
-                            'Save Changes', // TODO: Translate
+                            AppLocalizations.of(context).save,
                             style: const TextStyle(fontSize: 16),
                           ),
                   ),
@@ -399,13 +399,13 @@ class _PurchaseEditState extends State<PurchaseEdit> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Basic Information', // TODO: Translate
+              AppLocalizations.of(context).basicInformation,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<int>(
-              decoration: const InputDecoration(
-                labelText: 'Employee',
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context).employee,
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.person),
               ),
@@ -413,12 +413,13 @@ class _PurchaseEditState extends State<PurchaseEdit> {
               items: employees
                   .map((employee) => DropdownMenuItem(
                         value: employee.id,
-                        child: Text(employee.name ?? 'Unnamed Employee'),
+                        child: Text(employee.name ??
+                            AppLocalizations.of(context).unnamedEmployee),
                       ))
                   .toList(),
               validator: (value) {
                 if (value == null) {
-                  return 'Please select an employee'; // TODO: Translate
+                  return AppLocalizations.of(context).fieldRequired;
                 }
                 return null;
               },
@@ -426,8 +427,8 @@ class _PurchaseEditState extends State<PurchaseEdit> {
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<int>(
-              decoration: const InputDecoration(
-                labelText: 'Supplier',
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context).supplier,
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.business),
               ),
@@ -435,12 +436,13 @@ class _PurchaseEditState extends State<PurchaseEdit> {
               items: suppliers
                   .map((supplier) => DropdownMenuItem(
                         value: supplier.id,
-                        child: Text(supplier.name ?? 'Unnamed Supplier'),
+                        child: Text(supplier.name ??
+                            AppLocalizations.of(context).unnamedSupplier),
                       ))
                   .toList(),
               validator: (value) {
                 if (value == null) {
-                  return 'Please select a supplier'; // TODO: Translate
+                  return AppLocalizations.of(context).fieldRequired;
                 }
                 return null;
               },
@@ -460,15 +462,15 @@ class _PurchaseEditState extends State<PurchaseEdit> {
                 }
               },
               child: InputDecorator(
-                decoration: const InputDecoration(
-                  labelText: 'Date',
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context).date,
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.calendar_today),
                 ),
                 child: Text(
                   date != null
                       ? DateFormat('yyyy-MM-dd').format(date!)
-                      : 'Select date', // TODO: Translate
+                      : AppLocalizations.of(context).selectDate,
                 ),
               ),
             ),
@@ -489,13 +491,13 @@ class _PurchaseEditState extends State<PurchaseEdit> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Products', // TODO: Translate
+                  AppLocalizations.of(context).products,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 TextButton.icon(
                   onPressed: _addProduct,
                   icon: const Icon(Icons.add),
-                  label: const Text('Add Product'), // TODO: Translate
+                  label: Text(AppLocalizations.of(context).add),
                 ),
               ],
             ),
@@ -503,7 +505,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
             if (selectedProducts.isEmpty)
               Center(
                 child: Text(
-                  'No products added', // TODO: Translate
+                  AppLocalizations.of(context).noProducts,
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               )
@@ -519,9 +521,10 @@ class _PurchaseEditState extends State<PurchaseEdit> {
                   return Card(
                     margin: const EdgeInsets.only(bottom: 8),
                     child: ListTile(
-                      title: Text(item.product?.name ?? 'Unnamed Product'),
+                      title: Text(item.product?.name ??
+                          AppLocalizations.of(context).unnamedProduct),
                       subtitle: Text(
-                          'Quantity: ${item.quantity} × \$${item.product?.price?.toStringAsFixed(2)} = \$${subtotal.toStringAsFixed(2)}'),
+                          '${AppLocalizations.of(context).quantity}: ${item.quantity} × \$${item.product?.price?.toStringAsFixed(2)} = \$${subtotal.toStringAsFixed(2)}'),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -549,7 +552,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Total', // TODO: Translate
+                    AppLocalizations.of(context).total,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   Text(
@@ -565,7 +568,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
               if (_hasProductChanges()) ...[
                 const Divider(height: 32),
                 Text(
-                  'Changes Summary:', // TODO: Translate
+                  AppLocalizations.of(context).changesSummary,
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
                 const SizedBox(height: 8),
@@ -610,7 +613,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (addedProducts.isNotEmpty) ...[
-          Text('Added:', // TODO: Translate
+          Text(AppLocalizations.of(context).added,
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium
@@ -620,7 +623,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
         ],
         if (removedProducts.isNotEmpty) ...[
           const SizedBox(height: 8),
-          Text('Removed:', // TODO: Translate
+          Text(AppLocalizations.of(context).removed,
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium
@@ -630,7 +633,7 @@ class _PurchaseEditState extends State<PurchaseEdit> {
         ],
         if (modifiedProducts.isNotEmpty) ...[
           const SizedBox(height: 8),
-          Text('Modified:', // TODO: Translate
+          Text(AppLocalizations.of(context).modified,
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium
@@ -654,17 +657,16 @@ class _PurchaseEditState extends State<PurchaseEdit> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Additional Information', // TODO: Translate
+              AppLocalizations.of(context).additionalInformation,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 16),
             TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'Description', // TODO: Translate
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context).description,
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.description),
-                hintText:
-                    'Enter any additional notes or comments', // TODO: Translate
+                hintText: AppLocalizations.of(context).notes,
               ),
               initialValue: description,
               maxLines: 3,

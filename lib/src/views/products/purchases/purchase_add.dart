@@ -120,7 +120,7 @@ class _PurchaseAddState extends State<PurchaseAdd> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error creating purchase'),
+            content: Text(AppLocalizations.of(context).anErrorOccurred),
             backgroundColor: Colors.red,
           ),
         );
@@ -193,7 +193,7 @@ class _PurchaseAddState extends State<PurchaseAdd> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Cancel'),
+              child: Text(AppLocalizations.of(context).cancel),
             ),
             TextButton(
               onPressed: () {
@@ -208,7 +208,7 @@ class _PurchaseAddState extends State<PurchaseAdd> {
                   Navigator.pop(context);
                 }
               },
-              child: Text('Add'),
+              child: Text(AppLocalizations.of(context).add),
             ),
           ],
         );
@@ -220,7 +220,7 @@ class _PurchaseAddState extends State<PurchaseAdd> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Purchase'),
+        title: Text(AppLocalizations.of(context).add),
       ),
       body: Form(
         key: _formKey,
@@ -247,7 +247,7 @@ class _PurchaseAddState extends State<PurchaseAdd> {
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
                     : Text(
-                        'Save Purchase',
+                        AppLocalizations.of(context).save,
                         style: const TextStyle(fontSize: 16),
                       ),
               ),
@@ -266,13 +266,13 @@ class _PurchaseAddState extends State<PurchaseAdd> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Basic Information',
+              AppLocalizations.of(context).basicInformation,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<int>(
-              decoration: const InputDecoration(
-                labelText: 'Employee',
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context).employee,
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.person),
               ),
@@ -280,12 +280,13 @@ class _PurchaseAddState extends State<PurchaseAdd> {
               items: employees
                   .map((employee) => DropdownMenuItem(
                         value: employee.id,
-                        child: Text(employee.name ?? 'Unnamed Employee'),
+                        child: Text(employee.name ??
+                            AppLocalizations.of(context).unnamedEmployee),
                       ))
                   .toList(),
               validator: (value) {
                 if (value == null) {
-                  return 'Please select an employee';
+                  return AppLocalizations.of(context).fieldRequired;
                 }
                 return null;
               },
@@ -293,8 +294,8 @@ class _PurchaseAddState extends State<PurchaseAdd> {
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<int>(
-              decoration: const InputDecoration(
-                labelText: 'Supplier',
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context).supplier,
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.business),
               ),
@@ -302,12 +303,13 @@ class _PurchaseAddState extends State<PurchaseAdd> {
               items: suppliers
                   .map((supplier) => DropdownMenuItem(
                         value: supplier.id,
-                        child: Text(supplier.name ?? 'Unnamed Supplier'),
+                        child: Text(supplier.name ??
+                            AppLocalizations.of(context).unnamedSupplier),
                       ))
                   .toList(),
               validator: (value) {
                 if (value == null) {
-                  return 'Please select a supplier';
+                  return AppLocalizations.of(context).fieldRequired;
                 }
                 return null;
               },
@@ -327,15 +329,15 @@ class _PurchaseAddState extends State<PurchaseAdd> {
                 }
               },
               child: InputDecorator(
-                decoration: const InputDecoration(
-                  labelText: 'Date',
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context).date,
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.calendar_today),
                 ),
                 child: Text(
                   date != null
                       ? DateFormat('yyyy-MM-dd').format(date!)
-                      : 'Select date',
+                      : AppLocalizations.of(context).selectDate,
                 ),
               ),
             ),

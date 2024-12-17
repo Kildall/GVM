@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/request/product_requests.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
@@ -68,7 +69,7 @@ class _ProductEditState extends State<ProductEdit> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Product updated successfully'),
+              content: Text(AppLocalizations.of(context).success),
               backgroundColor: Colors.green,
             ),
           );
@@ -80,7 +81,7 @@ class _ProductEditState extends State<ProductEdit> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error updating product'),
+            content: Text(AppLocalizations.of(context).anErrorOccurred),
             backgroundColor: Colors.red,
           ),
         );
@@ -97,17 +98,16 @@ class _ProductEditState extends State<ProductEdit> {
       return await showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              title: Text('Discard Changes?'),
-              content: Text(
-                  'You have unsaved changes. Do you want to discard them?'),
+              title: Text(AppLocalizations.of(context).discardChanges),
+              content: Text(AppLocalizations.of(context).unsavedChanges),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context, false),
-                  child: Text('Cancel'),
+                  child: Text(AppLocalizations.of(context).cancel),
                 ),
                 TextButton(
                   onPressed: () => Navigator.pop(context, true),
-                  child: Text('Discard'),
+                  child: Text(AppLocalizations.of(context).discard),
                 ),
               ],
             ),
@@ -136,7 +136,7 @@ class _ProductEditState extends State<ProductEdit> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Edit Product'),
+          title: Text(AppLocalizations.of(context).editProduct),
           actions: [
             IconButton(
               icon: Icon(Icons.save),
@@ -170,7 +170,7 @@ class _ProductEditState extends State<ProductEdit> {
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
                         : Text(
-                            'Save Changes',
+                            AppLocalizations.of(context).save,
                             style: const TextStyle(fontSize: 16),
                           ),
                   ),
@@ -191,20 +191,20 @@ class _ProductEditState extends State<ProductEdit> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Basic Information',
+              AppLocalizations.of(context).basicInformation,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 16),
             TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'Name',
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context).name,
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.inventory),
               ),
               initialValue: name,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Product name is required';
+                  return AppLocalizations.of(context).fieldRequired;
                 }
                 return null;
               },
@@ -213,8 +213,8 @@ class _ProductEditState extends State<ProductEdit> {
             ),
             const SizedBox(height: 16),
             TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'Brand',
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context).brand,
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.branding_watermark),
               ),
@@ -236,7 +236,7 @@ class _ProductEditState extends State<ProductEdit> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Pricing & Quantity',
+              AppLocalizations.of(context).pricingQuantity,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 16),
@@ -244,8 +244,8 @@ class _ProductEditState extends State<ProductEdit> {
               children: [
                 Expanded(
                   child: TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Price',
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).price,
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.attach_money),
                     ),
@@ -256,7 +256,7 @@ class _ProductEditState extends State<ProductEdit> {
                     ],
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Price is required';
+                        return AppLocalizations.of(context).fieldRequired;
                       }
                       return null;
                     },
@@ -268,8 +268,8 @@ class _ProductEditState extends State<ProductEdit> {
                 const SizedBox(width: 16),
                 Expanded(
                   child: TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Quantity',
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).quantity,
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.numbers),
                     ),
@@ -280,7 +280,7 @@ class _ProductEditState extends State<ProductEdit> {
                     ],
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Quantity is required';
+                        return AppLocalizations.of(context).fieldRequired;
                       }
                       return null;
                     },
@@ -293,8 +293,8 @@ class _ProductEditState extends State<ProductEdit> {
             ),
             const SizedBox(height: 16),
             TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'Measure',
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context).measure,
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.straighten),
               ),
@@ -321,14 +321,14 @@ class _ProductEditState extends State<ProductEdit> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Status',
+              AppLocalizations.of(context).status,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 16),
             SwitchListTile(
-              title: const Text('Product Enabled'),
+              title: Text(AppLocalizations.of(context).enabled),
               subtitle: Text(
-                'Enable or disable this product',
+                AppLocalizations.of(context).enabled,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               value: enabled,
