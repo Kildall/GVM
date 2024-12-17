@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gvm_flutter/src/helpers/validators.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 
 class SupplierForm extends StatefulWidget {
@@ -86,12 +87,8 @@ class SupplierFormState extends State<SupplierForm> {
                         border: const OutlineInputBorder(),
                         prefixIcon: const Icon(Icons.business),
                       ),
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return AppLocalizations.of(context).fieldRequired;
-                        }
-                        return null;
-                      },
+                      validator: (value) => Validators.validateString(value,
+                          minLength: 3, maxLength: 256),
                       textInputAction: TextInputAction.next,
                       enabled: !_isSubmitting,
                     ),

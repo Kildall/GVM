@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 import 'package:gvm_flutter/src/settings/settings_controller.dart';
+import 'package:gvm_flutter/src/views/deliveries/deliveries_home.dart';
 import 'package:gvm_flutter/src/views/employees/employees_home.dart';
 import 'package:gvm_flutter/src/views/home/home_dashboard.dart';
 import 'package:gvm_flutter/src/views/products/products_home.dart';
@@ -70,6 +71,16 @@ List<NavItem> getNavItems(
           icon: Icon(Icons.badge),
           label: AppLocalizations.of(context).employeesHomeTitle),
       widget: const EmployeesHome(),
+    ));
+  }
+
+  // Deliveries
+  if (user.hasPermission('delivery.browse')) {
+    navItems.add(NavItem(
+      item: BottomNavigationBarItem(
+          icon: Icon(Icons.delivery_dining),
+          label: AppLocalizations.of(context).deliveriesHomeTitle),
+      widget: const DeliveriesHome(),
     ));
   }
 

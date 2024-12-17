@@ -20,13 +20,13 @@ class APIService {
   void _handleErrors(List<APIError> errors) {
     if (errors.isEmpty) return;
 
-    debugPrint('API errors: ${errors.map((e) => e.code).join(', ')}');
     final error = errors.first;
     final errorCode = ErrorCode.values
         .cast<ErrorCode?>()
-        .firstWhere((e) => e?.index == error.code - 1000, orElse: () => null);
+        .firstWhere((e) => e?.value == error.code, orElse: () => null);
 
     if (errorCode == null) {
+      debugPrint('Error code: ${error.code}, Message: ${error.message}');
       developer.log(
         'Unexpected error code encountered',
         error: 'Error code: ${error.code}, Message: ${error.message}',

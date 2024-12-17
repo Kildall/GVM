@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gvm_flutter/src/mixins/refresh_on_pop.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/response/customers_responses.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
@@ -15,7 +16,8 @@ class CustomersBrowse extends StatefulWidget {
   _CustomersBrowseState createState() => _CustomersBrowseState();
 }
 
-class _CustomersBrowseState extends State<CustomersBrowse> {
+class _CustomersBrowseState extends State<CustomersBrowse>
+    with RouteAware, RefreshOnPopMixin {
   bool isLoading = true;
   List<Customer> customers = [];
   String? searchQuery;
@@ -27,6 +29,11 @@ class _CustomersBrowseState extends State<CustomersBrowse> {
   void initState() {
     super.initState();
     _loadCustomers();
+  }
+
+  @override
+  Future<void> refresh() async {
+    await _loadCustomers();
   }
 
   Future<void> _loadCustomers() async {

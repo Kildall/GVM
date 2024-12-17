@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gvm_flutter/src/helpers/validators.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/request/sale_requests.dart';
+import 'package:gvm_flutter/src/models/response/address_responses.dart';
 import 'package:gvm_flutter/src/models/response/customers_responses.dart';
 import 'package:gvm_flutter/src/models/response/employee_responses.dart';
 import 'package:gvm_flutter/src/models/response/product_responses.dart';
@@ -34,6 +36,7 @@ class _SaleAddState extends State<SaleAdd> {
   List<Employee> employees = [];
   List<Customer> customers = [];
   List<Product> availableProducts = [];
+  List<Address> addresses = [];
 
   @override
   void initState() {
@@ -54,11 +57,15 @@ class _SaleAddState extends State<SaleAdd> {
       final productsResponse = await AuthManager.instance.apiService
           .get<GetProductsResponse>('/api/products',
               fromJson: GetProductsResponse.fromJson);
+      final addressesResponse = await AuthManager.instance.apiService
+          .get<GetAddressesResponse>('/api/addresses',
+              fromJson: GetAddressesResponse.fromJson);
 
       setState(() {
         employees = employeesResponse.data?.employees ?? [];
         customers = customersResponse.data?.customers ?? [];
         availableProducts = productsResponse.data?.products ?? [];
+        addresses = addressesResponse.data?.addresses ?? [];
       });
     } finally {
       setState(() => isLoading = false);
@@ -93,18 +100,6 @@ class _SaleAddState extends State<SaleAdd> {
 
     setState(() => isLoading = true);
     try {
-      final newSale = Sale(
-        employeeId: employeeId,
-        customerId: customerId,
-        startDate: startDate,
-        lastUpdateDate: DateTime.now(),
-        status: status,
-        products: selectedProducts,
-        deliveries: selectedDeliveries,
-      );
-
-      debugPrint(newSale.toJson().toString());
-
       final request = CreateSaleRequest(
         employeeId: employeeId!,
         customerId: customerId!,
@@ -115,6 +110,13 @@ class _SaleAddState extends State<SaleAdd> {
                 ))
             .toList(),
         startDate: startDate!.toIso8601String(),
+        deliveries: selectedDeliveries
+            .map((delivery) => SaleDeliveryItem(
+                  employeeId: delivery.employeeId!,
+                  addressId: delivery.addressId!,
+                  startDate: delivery.startDate!.toIso8601String(),
+                ))
+            .toList(),
       );
 
       final response = await AuthManager.instance.apiService.post(
@@ -154,86 +156,13 @@ class _SaleAddState extends State<SaleAdd> {
     }
   }
 
-  void _addProduct() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        Product? selectedProduct;
-        int quantity = 1;
-
-        return AlertDialog(
-          title: Text(AppLocalizations.of(context).addProduct),
-          content: StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  DropdownButtonFormField<Product>(
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).product,
-                      border: OutlineInputBorder(),
-                    ),
-                    value: selectedProduct,
-                    items: availableProducts
-                        .map((product) => DropdownMenuItem(
-                              value: product,
-                              child: Text(product.name ??
-                                  AppLocalizations.of(context).unnamedProduct),
-                            ))
-                        .toList(),
-                    onChanged: (Product? value) {
-                      setState(() => selectedProduct = value);
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).quantity,
-                      border: OutlineInputBorder(),
-                    ),
-                    keyboardType: TextInputType.number,
-                    initialValue: '1',
-                    onChanged: (value) {
-                      setState(() {
-                        quantity = int.tryParse(value) ?? 1;
-                      });
-                    },
-                  ),
-                ],
-              );
-            },
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(AppLocalizations.of(context).cancel),
-            ),
-            TextButton(
-              onPressed: () {
-                if (selectedProduct != null) {
-                  setState(() {
-                    selectedProducts.add(ProductSale(
-                      productId: selectedProduct!.id,
-                      quantity: quantity,
-                      product: selectedProduct,
-                    ));
-                  });
-                  Navigator.pop(context);
-                }
-              },
-              child: Text(AppLocalizations.of(context).add),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   void _addDelivery() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         DateTime selectedDate = DateTime.now();
+        int? selectedEmployeeId;
+        int? selectedAddressId;
 
         return AlertDialog(
           title: Text(AppLocalizations.of(context).scheduleDelivery),
@@ -242,6 +171,44 @@ class _SaleAddState extends State<SaleAdd> {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  DropdownButtonFormField<int>(
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).employee,
+                      border: OutlineInputBorder(),
+                      prefixIcon: const Icon(Icons.person),
+                    ),
+                    value: selectedEmployeeId,
+                    items: employees
+                        .map((employee) => DropdownMenuItem(
+                              value: employee.id,
+                              child: Text(employee.name ??
+                                  AppLocalizations.of(context).unnamedEmployee),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      setState(() => selectedEmployeeId = value);
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  DropdownButtonFormField<int>(
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).address,
+                      border: OutlineInputBorder(),
+                      prefixIcon: const Icon(Icons.location_on),
+                    ),
+                    value: selectedAddressId,
+                    items: addresses
+                        .where((address) => address.customerId == customerId)
+                        .map((address) => DropdownMenuItem(
+                              value: address.id,
+                              child: Text(address.street1!),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      setState(() => selectedAddressId = value);
+                    },
+                  ),
+                  const SizedBox(height: 16),
                   InkWell(
                     onTap: () async {
                       final DateTime? picked = await showDatePicker(
@@ -276,14 +243,165 @@ class _SaleAddState extends State<SaleAdd> {
             ),
             TextButton(
               onPressed: () {
-                setState(() {
-                  selectedDeliveries.add(Delivery(
-                    startDate: selectedDate,
-                  ));
-                });
-                Navigator.pop(context);
+                if (selectedEmployeeId != null) {
+                  setState(() {
+                    selectedDeliveries.add(Delivery(
+                      startDate: selectedDate,
+                      employeeId: selectedEmployeeId,
+                      addressId: selectedAddressId!,
+                    ));
+                  });
+                  Navigator.pop(context);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(AppLocalizations.of(context)
+                          .fieldRequired), // Assuming this translation exists
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
               },
               child: Text(AppLocalizations.of(context).add),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _addProduct() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        Product? selectedProduct;
+        int quantity = 1;
+        String? errorText;
+
+        return AlertDialog(
+          title: Text(AppLocalizations.of(context).addProduct),
+          content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  DropdownButtonFormField<Product>(
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).product,
+                      border: OutlineInputBorder(),
+                    ),
+                    value: selectedProduct,
+                    items: availableProducts
+                        .map((product) => DropdownMenuItem(
+                              value: product,
+                              child: Text(
+                                '${product.name ?? AppLocalizations.of(context).unnamedProduct}: ${product.quantity}',
+                              ),
+                            ))
+                        .toList(),
+                    onChanged: (Product? value) {
+                      setState(() {
+                        selectedProduct = value;
+                        errorText = null;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).quantity,
+                      border: OutlineInputBorder(),
+                      errorText: errorText,
+                    ),
+                    keyboardType: TextInputType.number,
+                    initialValue: '1',
+                    validator: (value) => Validators.validateNumber(value,
+                        min: 1, max: selectedProduct?.quantity ?? 0),
+                  ),
+                ],
+              );
+            },
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(AppLocalizations.of(context).cancel),
+            ),
+            TextButton(
+              onPressed: () {
+                if (selectedProduct != null) {
+                  if (quantity <= (selectedProduct?.quantity ?? 0)) {
+                    setState(() {
+                      selectedProducts.add(ProductSale(
+                        productId: selectedProduct!.id,
+                        quantity: quantity,
+                        product: selectedProduct,
+                      ));
+                    });
+                    Navigator.pop(context);
+                  }
+                }
+              },
+              child: Text(AppLocalizations.of(context).add),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _editProduct(int index) {
+    final product = selectedProducts[index];
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        int quantity = product.quantity ?? 1;
+        String? errorText;
+
+        return AlertDialog(
+          title: Text(AppLocalizations.of(context).editProduct),
+          content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    '${product.product?.name ?? AppLocalizations.of(context).unnamedProduct} (${AppLocalizations.of(context).available}: ${product.product?.quantity})',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).quantity,
+                      border: const OutlineInputBorder(),
+                      errorText: errorText,
+                    ),
+                    keyboardType: TextInputType.number,
+                    initialValue: quantity.toString(),
+                    validator: (value) => Validators.validateNumber(value,
+                        min: 1, max: product.product?.quantity ?? 0),
+                  ),
+                ],
+              );
+            },
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(AppLocalizations.of(context).cancel),
+            ),
+            TextButton(
+              onPressed: () {
+                if (quantity <= (product.product?.quantity ?? 0)) {
+                  setState(() {
+                    selectedProducts[index] = product.copyWith(
+                      quantity: quantity,
+                    );
+                  });
+                  Navigator.pop(context);
+                }
+              },
+              child: Text(AppLocalizations.of(context).save),
             ),
           ],
         );
@@ -693,8 +811,15 @@ class _SaleAddState extends State<SaleAdd> {
                       ),
                       title: Text(
                           '${AppLocalizations.of(context).delivery} ${index + 1}'),
-                      subtitle: Text(
-                          '${AppLocalizations.of(context).date}: ${delivery.startDate?.toLocal().toString().split(' ')[0] ?? AppLocalizations.of(context).noDate}'),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                              '${AppLocalizations.of(context).date}: ${delivery.startDate?.toLocal().toString().split(' ')[0] ?? AppLocalizations.of(context).noDate}'),
+                          Text(
+                              '${AppLocalizations.of(context).address}: ${addresses.firstWhere((a) => a.id == delivery.addressId).street1 ?? AppLocalizations.of(context).noAddress}'),
+                        ],
+                      ),
                       trailing: IconButton(
                         icon: const Icon(Icons.delete),
                         onPressed: () {
@@ -710,65 +835,6 @@ class _SaleAddState extends State<SaleAdd> {
           ],
         ),
       ),
-    );
-  }
-
-  void _editProduct(int index) {
-    final product = selectedProducts[index];
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        int quantity = product.quantity ?? 1;
-
-        return AlertDialog(
-          title: Text(AppLocalizations.of(context).editProduct),
-          content: StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    product.product?.name ??
-                        AppLocalizations.of(context).unnamedProduct,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).quantity,
-                      border: const OutlineInputBorder(),
-                    ),
-                    keyboardType: TextInputType.number,
-                    initialValue: quantity.toString(),
-                    onChanged: (value) {
-                      setState(() {
-                        quantity = int.tryParse(value) ?? quantity;
-                      });
-                    },
-                  ),
-                ],
-              );
-            },
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(AppLocalizations.of(context).cancel),
-            ),
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  selectedProducts[index] = product.copyWith(
-                    quantity: quantity,
-                  );
-                });
-                Navigator.pop(context);
-              },
-              child: Text(AppLocalizations.of(context).save),
-            ),
-          ],
-        );
-      },
     );
   }
 }

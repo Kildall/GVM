@@ -28,6 +28,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
   }
 
   void _showMessage(String message) {
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message)),
     );
@@ -36,26 +37,36 @@ class _HomeDashboardState extends State<HomeDashboard> {
   Future<DashboardResponse?> _fetchDashboardData() async {
     try {
       final apiService = AuthManager.instance.apiService;
-      final response = await apiService.get<DashboardResponse>('/api/dashboard',
-          fromJson: DashboardResponse.fromJson);
+      final response = await apiService.get<DashboardResponse>(
+        '/api/dashboard',
+        fromJson: DashboardResponse.fromJson,
+      );
 
-      if (response.data != null) {
-        return response.data!;
-      }
+      return response.data;
     } on AuthException catch (_) {
       if (mounted) {
         _showMessage(AppLocalizations.of(context).noAccess);
       }
+      return null;
     } catch (e) {
-      throw Exception('Error fetching dashboard data: $e');
+      debugPrint('Error fetching dashboard data: ${e.toString()}');
+      if (mounted) {
+        _showMessage(AppLocalizations.of(context).anErrorOccurred);
+      }
+      rethrow;
     }
-    return null;
   }
 
   Future<void> _refreshDashboard() async {
-    setState(() {
-      _dashboardFuture = _fetchDashboardData();
-    });
+    try {
+      setState(() {
+        _dashboardFuture = _fetchDashboardData();
+      });
+    } catch (e) {
+      if (mounted) {
+        _showMessage('Error refreshing: ${e.toString()}');
+      }
+    }
   }
 
   @override
@@ -116,22 +127,22 @@ class _HomeDashboardState extends State<HomeDashboard> {
               SizedBox(height: 24),
               _buildSummaryCards(context, dashboard, completionRate),
               SizedBox(height: 24),
-              if (dashboard.stats.topSellingProducts.isNotEmpty) ...[
+              if (dashboard.stats.topSellingProducts?.isNotEmpty ?? false) ...[
                 Text(
                   AppLocalizations.of(context).topProducts,
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 SizedBox(height: 16),
-                _buildTopProducts(dashboard.stats.topSellingProducts),
+                _buildTopProducts(dashboard.stats.topSellingProducts ?? []),
               ],
-              if (dashboard.stats.mostActiveCustomers.isNotEmpty) ...[
+              if (dashboard.stats.mostActiveCustomers?.isNotEmpty ?? false) ...[
                 SizedBox(height: 32),
                 Text(
                   AppLocalizations.of(context).topCustomers,
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 SizedBox(height: 16),
-                _buildTopCustomers(dashboard.stats.mostActiveCustomers),
+                _buildTopCustomers(dashboard.stats.mostActiveCustomers ?? []),
               ],
               if (dashboard.sales.isNotEmpty) ...[
                 SizedBox(height: 32),
@@ -309,7 +320,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
                 _buildSummaryCard(
                   context,
                   AppLocalizations.of(context).totalSales,
-                  '\$${dashboard.stats.totalSalesAmount.toStringAsFixed(2)}',
+                  '\$${(dashboard.stats.totalSalesAmount ?? 0).toStringAsFixed(2)}',
                   Icons.attach_money,
                   Colors.orange,
                 ),
@@ -364,12 +375,12 @@ class _HomeDashboardState extends State<HomeDashboard> {
               foregroundColor: Colors.white,
               child: Text('#${index + 1}'),
             ),
-            title: Text(product.product.name ?? ''),
+            title: Text(product.product?.name ?? ''),
             subtitle: Text(
               '${AppLocalizations.of(context).totalSold}: ${product.totalQuantitySold}',
             ),
             trailing: Text(
-              '\$${product.totalRevenue.toStringAsFixed(2)}',
+              '\$${(product.totalRevenue ?? 0).toStringAsFixed(2)}',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.green,
@@ -397,12 +408,12 @@ class _HomeDashboardState extends State<HomeDashboard> {
               foregroundColor: Colors.white,
               child: Text('#${index + 1}'),
             ),
-            title: Text(customer.customer.name ?? ''),
+            title: Text(customer.customer?.name ?? ''),
             subtitle: Text(
               '${AppLocalizations.of(context).totalOrders}: ${customer.totalOrders}',
             ),
             trailing: Text(
-              '\$${customer.totalSpent.toStringAsFixed(2)}',
+              '\$${(customer.totalSpent ?? 0).toStringAsFixed(2)}',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.green,

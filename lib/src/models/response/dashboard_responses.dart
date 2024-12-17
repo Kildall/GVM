@@ -1,33 +1,35 @@
 import 'package:gvm_flutter/src/models/customer.dart';
 import 'package:gvm_flutter/src/models/delivery.dart';
+import 'package:gvm_flutter/src/models/exceptions/model_parse_exception.dart';
 import 'package:gvm_flutter/src/models/model_base.dart';
 import 'package:gvm_flutter/src/models/product.dart';
 import 'package:gvm_flutter/src/models/sale.dart';
 
 class ProductStats {
-  final Product product;
-  final int totalQuantitySold;
-  final double totalRevenue;
+  final Product? product;
+  final int? totalQuantitySold;
+  final double? totalRevenue;
 
   ProductStats({
-    required this.product,
+    this.product,
     required this.totalQuantitySold,
     required this.totalRevenue,
   });
 
   factory ProductStats.fromJson(Map<String, dynamic> json) {
     return ProductStats(
-      product: Product.fromJson(json['product']),
+      product:
+          json['product'] != null ? Product.fromJson(json['product']) : null,
       totalQuantitySold: json['totalQuantitySold'],
-      totalRevenue: json['totalRevenue'].toDouble(),
+      totalRevenue: json['totalRevenue']?.toDouble(),
     );
   }
 }
 
 class CustomerStats {
-  final Customer customer;
-  final int totalOrders;
-  final double totalSpent;
+  final Customer? customer;
+  final int? totalOrders;
+  final double? totalSpent;
 
   CustomerStats({
     required this.customer,
@@ -45,14 +47,14 @@ class CustomerStats {
 }
 
 class DashboardStats {
-  final double totalSalesAmount;
-  final int totalActiveSales;
-  final int totalActiveDeliveries;
-  final int totalProducts;
-  final int totalCustomers;
-  final int lowStockProducts;
-  final List<ProductStats> topSellingProducts;
-  final List<CustomerStats> mostActiveCustomers;
+  final double? totalSalesAmount;
+  final int? totalActiveSales;
+  final int? totalActiveDeliveries;
+  final int? totalProducts;
+  final int? totalCustomers;
+  final int? lowStockProducts;
+  final List<ProductStats>? topSellingProducts;
+  final List<CustomerStats>? mostActiveCustomers;
 
   DashboardStats({
     required this.totalSalesAmount,
@@ -67,17 +69,17 @@ class DashboardStats {
 
   factory DashboardStats.fromJson(Map<String, dynamic> json) {
     return DashboardStats(
-      totalSalesAmount: json['totalSalesAmount'].toDouble(),
+      totalSalesAmount: json['totalSalesAmount']?.toDouble(),
       totalActiveSales: json['totalActiveSales'],
       totalActiveDeliveries: json['totalActiveDeliveries'],
       totalProducts: json['totalProducts'],
       totalCustomers: json['totalCustomers'],
       lowStockProducts: json['lowStockProducts'],
-      topSellingProducts: (json['topSellingProducts'] as List)
-          .map((p) => ProductStats.fromJson(p))
+      topSellingProducts: (json['topSellingProducts'] as List?)
+          ?.map((p) => ProductStats.fromJson(p))
           .toList(),
-      mostActiveCustomers: (json['mostActiveCustomers'] as List)
-          .map((c) => CustomerStats.fromJson(c))
+      mostActiveCustomers: (json['mostActiveCustomers'] as List?)
+          ?.map((c) => CustomerStats.fromJson(c))
           .toList(),
     );
   }
@@ -99,12 +101,17 @@ class DashboardResponse {
   });
 
   factory DashboardResponse.fromJson(Map<String, dynamic> json) {
-    return DashboardResponse(
-      stats: DashboardStats.fromJson(json['stats']),
-      sales: createModels(json['sales'], Sale.fromJson),
-      deliveries: createModels(json['deliveries'], Delivery.fromJson),
-      products: createModels(json['products'], Product.fromJson),
-      customers: createModels(json['customers'], Customer.fromJson),
-    );
+    try {
+      return DashboardResponse(
+        stats: DashboardStats.fromJson(json['stats']),
+        sales: createModels<Sale>(json['sales'], Sale.fromJson),
+        deliveries:
+            createModels<Delivery>(json['deliveries'], Delivery.fromJson),
+        products: createModels<Product>(json['products'], Product.fromJson),
+        customers: createModels<Customer>(json['customers'], Customer.fromJson),
+      );
+    } catch (e) {
+      throw ModelParseException('DashboardResponse', e.toString(), json, e);
+    }
   }
 }

@@ -97,9 +97,9 @@ class _CustomerStatsViewState extends State<CustomerStatsView>
 
   Widget _buildSummaryCards(List<CustomerStats> stats) {
     final totalSpent =
-        stats.fold<double>(0, (sum, stat) => sum + stat.totalSpent);
+        stats.fold<double>(0, (sum, stat) => sum + (stat.totalSpent ?? 0));
     final totalOrders =
-        stats.fold<int>(0, (sum, stat) => sum + stat.totalOrders);
+        stats.fold<int>(0, (sum, stat) => sum + (stat.totalOrders ?? 0));
     final averageOrderValue = totalSpent / (totalOrders > 0 ? totalOrders : 1);
 
     return GridView.count(
@@ -165,8 +165,8 @@ class _CustomerStatsViewState extends State<CustomerStatsView>
       if (existingStats != null) {
         customerSalesMap[customerId.toString()] = CustomerStats(
           customer: sale.customer!,
-          totalOrders: existingStats.totalOrders + 1,
-          totalSpent: existingStats.totalSpent + totalAmount,
+          totalOrders: (existingStats.totalOrders ?? 0) + 1,
+          totalSpent: (existingStats.totalSpent ?? 0) + totalAmount,
         );
       } else {
         customerSalesMap[customerId.toString()] = CustomerStats(
@@ -178,13 +178,13 @@ class _CustomerStatsViewState extends State<CustomerStatsView>
     }
 
     return customerSalesMap.values.toList()
-      ..sort((a, b) => b.totalSpent.compareTo(a.totalSpent));
+      ..sort((a, b) => (b.totalSpent ?? 0).compareTo(a.totalSpent ?? 0));
   }
 
   Widget _buildCustomersList(List<CustomerStats> stats) {
     final averageSpent = stats.isEmpty
         ? 0.0
-        : stats.fold<double>(0, (sum, stat) => sum + stat.totalSpent) /
+        : stats.fold<double>(0, (sum, stat) => sum + (stat.totalSpent ?? 0)) /
             stats.length;
 
     return Column(
@@ -195,7 +195,7 @@ class _CustomerStatsViewState extends State<CustomerStatsView>
           itemCount: stats.length,
           itemBuilder: (context, index) {
             final stat = stats[index];
-            final isAboveAverage = stat.totalSpent > averageSpent;
+            final isAboveAverage = (stat.totalSpent ?? 0) > averageSpent;
 
             return Card(
               child: Column(
@@ -205,14 +205,14 @@ class _CustomerStatsViewState extends State<CustomerStatsView>
                       backgroundColor: Colors.purple,
                       child: Text('${index + 1}'),
                     ),
-                    title: Text(stat.customer.name ?? ''),
+                    title: Text(stat.customer?.name ?? ''),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                             '${AppLocalizations.of(context).sales}: ${stat.totalOrders}'),
                         Text(
-                          '${AppLocalizations.of(context).averagePrice}: \$${(stat.totalSpent / stat.totalOrders).toStringAsFixed(2)}',
+                          '${AppLocalizations.of(context).averagePrice}: \$${(stat.totalSpent ?? 0 / (stat.totalOrders ?? 1)).toStringAsFixed(2)}',
                         ),
                       ],
                     ),
@@ -221,7 +221,7 @@ class _CustomerStatsViewState extends State<CustomerStatsView>
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          '\$${stat.totalSpent.toStringAsFixed(2)}',
+                          '\$${(stat.totalSpent ?? 0).toStringAsFixed(2)}',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.green,
@@ -239,7 +239,7 @@ class _CustomerStatsViewState extends State<CustomerStatsView>
                     isThreeLine: true,
                   ),
                   if (_shouldShowPurchaseHistory(stat))
-                    _buildPurchaseHistory(stat.customer.id!.toString()),
+                    _buildPurchaseHistory(stat.customer?.id?.toString() ?? ''),
                 ],
               ),
             );
@@ -264,8 +264,9 @@ class _CustomerStatsViewState extends State<CustomerStatsView>
 
   bool _shouldShowPurchaseHistory(CustomerStats stat) {
     return widget.dashboardData.stats.mostActiveCustomers
-        .take(3)
-        .any((c) => c.customer.id == stat.customer.id);
+            ?.take(3)
+            .any((c) => c.customer?.id == stat.customer?.id) ??
+        false;
   }
 
   Widget _buildPurchaseHistory(String customerId) {

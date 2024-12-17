@@ -3,12 +3,14 @@ class AuthUser {
   final String email;
   final String name;
   final List<String> permissions;
+  final int? employeeId;
 
   AuthUser({
     required this.id,
     required this.email,
     required this.name,
     required this.permissions,
+    required this.employeeId,
   });
 
   bool hasPermission(String permission) {
@@ -21,6 +23,7 @@ class AuthUser {
         id: json['user']['id'],
         email: json['user']['email'],
         name: json['user']['name'],
+        employeeId: json['user']['employeeId'],
         permissions: List<String>.from(json['user']['permissions']),
       );
     }
@@ -28,6 +31,7 @@ class AuthUser {
       id: json['id'],
       email: json['email'],
       name: json['name'],
+      employeeId: json['employeeId'],
       permissions: List<String>.from(json['permissions']),
     );
   }
@@ -38,6 +42,7 @@ class AuthUser {
       'email': email,
       'name': name,
       'permissions': permissions,
+      'employeeId': employeeId,
     };
   }
 }

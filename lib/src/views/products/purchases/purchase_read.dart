@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gvm_flutter/src/mixins/refresh_on_pop.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
+import 'package:gvm_flutter/src/services/api/api_errors.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 import 'package:gvm_flutter/src/services/auth/permissions.dart';
 import 'package:gvm_flutter/src/views/employees/employees/employee_read.dart';
@@ -8,6 +10,7 @@ import 'package:gvm_flutter/src/views/products/products/product_read.dart';
 import 'package:gvm_flutter/src/views/products/purchases/purchase_edit.dart';
 import 'package:gvm_flutter/src/views/products/suppliers/supplier_read.dart';
 import 'package:gvm_flutter/src/widgets/auth_guard.dart';
+import 'package:gvm_flutter/src/widgets/common/delete_button.dart';
 
 class PurchaseRead extends StatefulWidget {
   final int purchaseId;
@@ -21,7 +24,8 @@ class PurchaseRead extends StatefulWidget {
   _PurchaseReadState createState() => _PurchaseReadState();
 }
 
-class _PurchaseReadState extends State<PurchaseRead> {
+class _PurchaseReadState extends State<PurchaseRead>
+    with RouteAware, RefreshOnPopMixin {
   bool isLoading = true;
   Purchase? purchase;
 
@@ -29,6 +33,11 @@ class _PurchaseReadState extends State<PurchaseRead> {
   void initState() {
     super.initState();
     _loadPurchaseDetails();
+  }
+
+  @override
+  Future<void> refresh() async {
+    await _loadPurchaseDetails();
   }
 
   Future<void> _loadPurchaseDetails() async {
@@ -50,6 +59,35 @@ class _PurchaseReadState extends State<PurchaseRead> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(AppLocalizations.of(context).anErrorOccurred)));
+      }
+    }
+  }
+
+  Future<void> _deletePurchase() async {
+    if (!mounted) return;
+    try {
+      final response = await AuthManager.instance.apiService.delete(
+        '/api/purchases/${widget.purchaseId}',
+        fromJson: (json) => {},
+      );
+      if (response.data != null && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(AppLocalizations.of(context).removed)));
+        Navigator.of(context).pop(response.data);
+      }
+    } catch (e) {
+      debugPrint('Error deleting purchase: $e');
+      if (e is APIException && e.code == ErrorCode.INSUFFICIENT_INVENTORY) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(
+                  AppLocalizations.of(context).insufficientInventoryToDelete)));
+        }
+      } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(AppLocalizations.of(context).anErrorOccurred)));
+        }
       }
     }
   }
@@ -121,9 +159,23 @@ class _PurchaseReadState extends State<PurchaseRead> {
             ],
             allPermissions: true,
             fallback: null,
-            child: IconButton(
-              icon: const Icon(Icons.edit),
-              onPressed: _navigateToPurchaseEdit,
+            child: Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.edit),
+                  onPressed: _navigateToPurchaseEdit,
+                ),
+                AuthGuard(
+                  permissions: [AppPermissions.purchaseDelete],
+                  allPermissions: true,
+                  fallback: null,
+                  child: DeleteButton(
+                    onDelete: _deletePurchase,
+                    itemName:
+                        '${AppLocalizations.of(context).purchase} #${purchase!.id.toString().padLeft(4, '0')}',
+                  ),
+                ),
+              ],
             ),
           ),
         ],

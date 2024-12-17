@@ -10,14 +10,14 @@ import 'package:gvm_flutter/src/views/sales/deliveries/utils.dart';
 import 'package:gvm_flutter/src/widgets/auth_guard.dart';
 import 'package:gvm_flutter/src/widgets/deliveries/deliveries_filters.dart';
 
-class DeliveriesBrowse extends StatefulWidget {
-  const DeliveriesBrowse({super.key});
+class DeliveriesHome extends StatefulWidget {
+  const DeliveriesHome({super.key});
 
   @override
-  _DeliveriesBrowseState createState() => _DeliveriesBrowseState();
+  _DeliveriesHomeState createState() => _DeliveriesHomeState();
 }
 
-class _DeliveriesBrowseState extends State<DeliveriesBrowse>
+class _DeliveriesHomeState extends State<DeliveriesHome>
     with RouteAware, RefreshOnPopMixin {
   bool isLoading = true;
   List<Delivery> deliveries = [];
@@ -40,9 +40,17 @@ class _DeliveriesBrowseState extends State<DeliveriesBrowse>
 
   Future<void> _loadDeliveries() async {
     try {
+      final user = AuthManager.instance.currentUser;
+      if (user == null || user.employeeId == null) {
+        setState(() {
+          isLoading = false;
+        });
+        return;
+      }
       final deliveriesResponse = await AuthManager.instance.apiService
-          .get<GetDeliveriesResponse>('/api/deliveries',
-              fromJson: GetDeliveriesResponse.fromJson);
+          .get<GetEmployeeDeliveriesResponse>(
+              '/api/deliveries/employee/${user.employeeId}',
+              fromJson: GetEmployeeDeliveriesResponse.fromJson);
 
       setState(() {
         isLoading = false;

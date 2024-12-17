@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gvm_flutter/src/mixins/refresh_on_pop.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 import 'package:gvm_flutter/src/services/auth/permissions.dart';
@@ -19,7 +20,8 @@ class AddressRead extends StatefulWidget {
   _AddressReadState createState() => _AddressReadState();
 }
 
-class _AddressReadState extends State<AddressRead> {
+class _AddressReadState extends State<AddressRead>
+    with RouteAware, RefreshOnPopMixin {
   bool isLoading = true;
   Address? address;
 
@@ -27,6 +29,11 @@ class _AddressReadState extends State<AddressRead> {
   void initState() {
     super.initState();
     _loadAddressDetails();
+  }
+
+  @override
+  Future<void> refresh() async {
+    await _loadAddressDetails();
   }
 
   Future<void> _loadAddressDetails() async {

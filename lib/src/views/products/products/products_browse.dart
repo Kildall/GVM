@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gvm_flutter/src/mixins/refresh_on_pop.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/response/product_responses.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
@@ -15,17 +16,23 @@ class ProductsBrowse extends StatefulWidget {
   _ProductsBrowseState createState() => _ProductsBrowseState();
 }
 
-class _ProductsBrowseState extends State<ProductsBrowse> {
+class _ProductsBrowseState extends State<ProductsBrowse>
+    with RouteAware, RefreshOnPopMixin {
   bool isLoading = true;
   List<Product> products = [];
   String? searchQuery;
   String? selectedBrand;
-  bool? stockFilter; // null: all, true: in stock, false: out of stock
+  bool? stockFilter;
 
   @override
   void initState() {
     super.initState();
     _loadProducts();
+  }
+
+  @override
+  Future<void> refresh() async {
+    await _loadProducts();
   }
 
   Future<void> _loadProducts() async {

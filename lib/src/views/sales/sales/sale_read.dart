@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gvm_flutter/src/mixins/refresh_on_pop.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 import 'package:gvm_flutter/src/services/auth/permissions.dart';
@@ -23,7 +24,8 @@ class SaleRead extends StatefulWidget {
   _SaleReadState createState() => _SaleReadState();
 }
 
-class _SaleReadState extends State<SaleRead> {
+class _SaleReadState extends State<SaleRead>
+    with RouteAware, RefreshOnPopMixin {
   bool isLoading = true;
   Sale? sale;
 
@@ -31,6 +33,11 @@ class _SaleReadState extends State<SaleRead> {
   void initState() {
     super.initState();
     _loadSaleDetails();
+  }
+
+  @override
+  Future<void> refresh() async {
+    await _loadSaleDetails();
   }
 
   Future<void> _loadSaleDetails() async {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gvm_flutter/src/mixins/refresh_on_pop.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/response/sale_responses.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
@@ -16,7 +17,8 @@ class SalesBrowse extends StatefulWidget {
   _SalesBrowseState createState() => _SalesBrowseState();
 }
 
-class _SalesBrowseState extends State<SalesBrowse> {
+class _SalesBrowseState extends State<SalesBrowse>
+    with RouteAware, RefreshOnPopMixin {
   bool isLoading = true;
   List<Sale> sales = [];
   String? searchQuery;
@@ -29,6 +31,11 @@ class _SalesBrowseState extends State<SalesBrowse> {
   void initState() {
     super.initState();
     _loadSales();
+  }
+
+  @override
+  Future<void> refresh() async {
+    await _loadSales();
   }
 
   Future<void> _loadSales() async {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gvm_flutter/src/mixins/refresh_on_pop.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/response/employee_responses.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
@@ -15,7 +16,8 @@ class EmployeesBrowse extends StatefulWidget {
   _EmployeesBrowseState createState() => _EmployeesBrowseState();
 }
 
-class _EmployeesBrowseState extends State<EmployeesBrowse> {
+class _EmployeesBrowseState extends State<EmployeesBrowse>
+    with RouteAware, RefreshOnPopMixin {
   bool isLoading = true;
   List<Employee> employees = [];
   String? searchQuery;
@@ -26,6 +28,11 @@ class _EmployeesBrowseState extends State<EmployeesBrowse> {
   void initState() {
     super.initState();
     _loadEmployees();
+  }
+
+  @override
+  Future<void> refresh() async {
+    await _loadEmployees();
   }
 
   Future<void> _loadEmployees() async {

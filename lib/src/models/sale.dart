@@ -57,7 +57,9 @@ class Sale implements ToJson, Id {
           employee: json['employee'] != null
               ? Employee.fromJson(json['employee'] as Map<String, dynamic>)
               : null,
-          status: SaleStatusEnum.values.byName(json['status']),
+          status: json['status'] != null
+              ? SaleStatusEnum.values.byName(json['status'])
+              : null,
           products: json['products'] != null
               ? createModels<ProductSale>(
                   json['products'], ProductSale.fromJson)

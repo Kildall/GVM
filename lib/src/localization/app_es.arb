@@ -1394,5 +1394,39 @@
   "notes": "Notas",
   "@notes": {
     "description": "Label for notes"
+  },
+  "deleteConfirmationTitle": "Eliminar",
+  "@deleteConfirmationTitle": {
+    "description": "Label for delete confirmation title"
+  },
+  "deleteConfirmationMessage": "¿Estás seguro de que deseas eliminar {itemName}?",
+  "@deleteConfirmationMessage": {
+    "description": "Message for delete confirmation",
+    "placeholders": {
+      "itemName": {
+        "description": "Placeholder for item name"
+      }
+    }
+  },
+  "delete": "Eliminar",
+  "@delete": {
+    "description": "Label for delete"
+  },
+  "insufficientInventoryToDelete": "No se puede eliminar la compra porque no hay suficiente inventario",
+  "@insufficientInventoryToDelete": {
+    "description": "Message for insufficient inventory to delete"
+  },
+  "maximumQuantityAvailable": "Cantidad máxima disponible: {quantity}",
+  "@maximumQuantityAvailable": {
+    "description": "Message for maximum quantity available",
+    "placeholders": {
+      "quantity": {
+        "description": "Placeholder for quantity"
+      }
+    }
+  },
+  "available": "Disponible",
+  "@available": {
+    "description": "Label for available"
   }
 }

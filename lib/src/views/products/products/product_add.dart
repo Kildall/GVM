@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gvm_flutter/src/helpers/validators.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/request/product_requests.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
@@ -126,7 +127,7 @@ class _ProductAddState extends State<ProductAdd> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Basic Information',
+              AppLocalizations.of(context).basicInformation,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 16),
@@ -136,12 +137,8 @@ class _ProductAddState extends State<ProductAdd> {
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.inventory),
               ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Product name is required';
-                }
-                return null;
-              },
+              validator: (value) => Validators.validateString(value,
+                  maxLength: 256, minLength: 3),
               onSaved: (value) => name = value,
             ),
             const SizedBox(height: 16),
@@ -151,6 +148,8 @@ class _ProductAddState extends State<ProductAdd> {
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.branding_watermark),
               ),
+              validator: (value) => Validators.validateString(value,
+                  maxLength: 256, minLength: 3),
               onSaved: (value) => brand = value,
             ),
           ],
@@ -184,12 +183,8 @@ class _ProductAddState extends State<ProductAdd> {
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*$')),
                     ],
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Price is required';
-                      }
-                      return null;
-                    },
+                    validator: (value) =>
+                        Validators.validateNumber(value, min: 1),
                     onSaved: (value) =>
                         price = value != null ? double.tryParse(value) : null,
                   ),
@@ -206,12 +201,8 @@ class _ProductAddState extends State<ProductAdd> {
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                     ],
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Quantity is required';
-                      }
-                      return null;
-                    },
+                    validator: (value) =>
+                        Validators.validateNumber(value, min: 1),
                     onSaved: (value) =>
                         quantity = value != null ? int.tryParse(value) : null,
                   ),
@@ -229,6 +220,7 @@ class _ProductAddState extends State<ProductAdd> {
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*$')),
               ],
+              validator: (value) => Validators.validateNumber(value, min: 1),
               onSaved: (value) =>
                   measure = value != null ? double.tryParse(value) : null,
             ),

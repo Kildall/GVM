@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gvm_flutter/src/mixins/refresh_on_pop.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 import 'package:gvm_flutter/src/services/auth/permissions.dart';
 import 'package:gvm_flutter/src/views/products/products/product_edit.dart';
 import 'package:gvm_flutter/src/views/products/purchases/purchase_read.dart';
 import 'package:gvm_flutter/src/widgets/auth_guard.dart';
+import 'package:gvm_flutter/src/widgets/common/delete_button.dart';
 
 class ProductRead extends StatefulWidget {
   final int productId;
@@ -19,7 +21,8 @@ class ProductRead extends StatefulWidget {
   _ProductReadState createState() => _ProductReadState();
 }
 
-class _ProductReadState extends State<ProductRead> {
+class _ProductReadState extends State<ProductRead>
+    with RouteAware, RefreshOnPopMixin {
   bool isLoading = true;
   late Product? product;
 
@@ -27,6 +30,11 @@ class _ProductReadState extends State<ProductRead> {
   void initState() {
     super.initState();
     _loadProductDetails();
+  }
+
+  @override
+  Future<void> refresh() async {
+    await _loadProductDetails();
   }
 
   Future<void> _loadProductDetails() async {
@@ -52,7 +60,27 @@ class _ProductReadState extends State<ProductRead> {
     }
   }
 
-  void _navigateToProductEdit() {
+  Future<void> _deleteProduct() async {
+    try {
+      final response = await AuthManager.instance.apiService
+          .delete('/api/products/${widget.productId}', fromJson: (json) => {});
+
+      if (response.success) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(AppLocalizations.of(context).removed)));
+          Navigator.of(context).pop();
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(AppLocalizations.of(context).anErrorOccurred)));
+      }
+    }
+  }
+
+  void navigateToProductEdit() {
     if (product != null) {
       Navigator.push(
         context,
@@ -61,9 +89,9 @@ class _ProductReadState extends State<ProductRead> {
     }
   }
 
-  void _navigateToSale(ProductSale sale) {}
+  void navigateToSale(ProductSale sale) {}
 
-  void _navigateToPurchase(PurchaseProduct purchase) {
+  void navigateToPurchase(PurchaseProduct purchase) {
     if (purchase.purchaseId != null) {
       Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => PurchaseRead(purchaseId: purchase.purchaseId!),
@@ -95,9 +123,21 @@ class _ProductReadState extends State<ProductRead> {
             ],
             allPermissions: true,
             fallback: null,
-            child: IconButton(
-              icon: const Icon(Icons.edit),
-              onPressed: _navigateToProductEdit,
+            child: Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.edit),
+                  onPressed: navigateToProductEdit,
+                ),
+                AuthGuard(
+                  permissions: [AppPermissions.productDelete],
+                  child: DeleteButton(
+                    onDelete: _deleteProduct,
+                    itemName: product?.name ??
+                        AppLocalizations.of(context).unnamedProduct,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -110,13 +150,13 @@ class _ProductReadState extends State<ProductRead> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildHeaderSection(),
+                    buildHeaderSection(),
                     const SizedBox(height: 24),
-                    _buildInventorySection(),
+                    buildInventorySection(),
                     const SizedBox(height: 24),
-                    _buildSalesSection(),
+                    buildSalesSection(),
                     const SizedBox(height: 24),
-                    _buildPurchasesSection(),
+                    buildPurchasesSection(),
                   ],
                 ),
               ),
@@ -124,7 +164,7 @@ class _ProductReadState extends State<ProductRead> {
     );
   }
 
-  Widget _buildHeaderSection() {
+  Widget buildHeaderSection() {
     final bool isLowStock = (product!.quantity ?? 0) < 10;
     final bool isOutOfStock = (product!.quantity ?? 0) == 0;
 
@@ -209,7 +249,7 @@ class _ProductReadState extends State<ProductRead> {
     );
   }
 
-  Widget _buildInventorySection() {
+  Widget buildInventorySection() {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -221,17 +261,17 @@ class _ProductReadState extends State<ProductRead> {
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 16),
-            _buildDetailRow(
+            buildDetailRow(
               AppLocalizations.of(context).price,
               '\$${product!.price?.toStringAsFixed(2) ?? '0.00'}',
             ),
-            _buildDetailRow(
+            buildDetailRow(
               AppLocalizations.of(context).quantity,
               '${product!.quantity ?? 0}',
-              color: _getStockColor(),
+              color: getStockColor(),
             ),
             if (product!.measure != null)
-              _buildDetailRow(
+              buildDetailRow(
                 AppLocalizations.of(context).measure,
                 '${product!.measure} ml',
               ),
@@ -241,14 +281,14 @@ class _ProductReadState extends State<ProductRead> {
     );
   }
 
-  Color _getStockColor() {
+  Color getStockColor() {
     final quantity = product!.quantity ?? 0;
     if (quantity == 0) return Colors.red;
     if (quantity < 10) return Colors.orange;
     return Colors.green;
   }
 
-  Widget _buildSalesSection() {
+  Widget buildSalesSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -299,7 +339,7 @@ class _ProductReadState extends State<ProductRead> {
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () =>
                         AuthGuard.checkPermissions([AppPermissions.saleRead])
-                            ? _navigateToSale(sale)
+                            ? navigateToSale(sale)
                             : null,
                   ),
                 );
@@ -310,7 +350,7 @@ class _ProductReadState extends State<ProductRead> {
     );
   }
 
-  Widget _buildPurchasesSection() {
+  Widget buildPurchasesSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -361,7 +401,7 @@ class _ProductReadState extends State<ProductRead> {
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => AuthGuard.checkPermissions(
                             [AppPermissions.purchaseRead])
-                        ? _navigateToPurchase(purchase)
+                        ? navigateToPurchase(purchase)
                         : null,
                   ),
                 );
@@ -372,7 +412,7 @@ class _ProductReadState extends State<ProductRead> {
     );
   }
 
-  Widget _buildDetailRow(String label, String value, {Color? color}) {
+  Widget buildDetailRow(String label, String value, {Color? color}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(

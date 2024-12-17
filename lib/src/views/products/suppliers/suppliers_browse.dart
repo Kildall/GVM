@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gvm_flutter/src/mixins/refresh_on_pop.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/response/supplier_responses.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
@@ -15,7 +16,8 @@ class SuppliersBrowse extends StatefulWidget {
   _SuppliersBrowseState createState() => _SuppliersBrowseState();
 }
 
-class _SuppliersBrowseState extends State<SuppliersBrowse> {
+class _SuppliersBrowseState extends State<SuppliersBrowse>
+    with RouteAware, RefreshOnPopMixin {
   bool isLoading = true;
   List<Supplier> suppliers = [];
   String? searchQuery;
@@ -25,6 +27,11 @@ class _SuppliersBrowseState extends State<SuppliersBrowse> {
   void initState() {
     super.initState();
     _loadSuppliers();
+  }
+
+  @override
+  Future<void> refresh() async {
+    await _loadSuppliers();
   }
 
   Future<void> _loadSuppliers() async {
@@ -79,10 +86,7 @@ class _SuppliersBrowseState extends State<SuppliersBrowse> {
           supplier.name?.toLowerCase().contains(searchQuery!.toLowerCase()) ==
               true;
 
-      final matchesEnabled =
-          filterEnabled == null || supplier.enabled == filterEnabled;
-
-      return matchesSearch && matchesEnabled;
+      return matchesSearch;
     }).toList();
   }
 
@@ -103,41 +107,17 @@ class _SuppliersBrowseState extends State<SuppliersBrowse> {
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                TextField(
-                  decoration: InputDecoration(
-                    hintText: AppLocalizations.of(context).searchSuppliers,
-                    prefixIcon: const Icon(Icons.search),
-                    border: const OutlineInputBorder(),
-                  ),
-                  onChanged: (value) => setState(() => searchQuery = value),
+            child: Column(children: [
+              TextField(
+                decoration: InputDecoration(
+                  hintText: AppLocalizations.of(context).searchSuppliers,
+                  prefixIcon: const Icon(Icons.search),
+                  border: const OutlineInputBorder(),
                 ),
-                const SizedBox(height: 16),
-                SegmentedButton<bool?>(
-                  segments: [
-                    ButtonSegment<bool?>(
-                      value: null,
-                      label: Text(AppLocalizations.of(context).all),
-                    ),
-                    ButtonSegment<bool?>(
-                      value: true,
-                      label: Text(AppLocalizations.of(context).enabled),
-                    ),
-                    ButtonSegment<bool?>(
-                      value: false,
-                      label: Text(AppLocalizations.of(context).disabled),
-                    ),
-                  ],
-                  selected: {filterEnabled},
-                  onSelectionChanged: (Set<bool?> newSelection) {
-                    setState(() {
-                      filterEnabled = newSelection.first;
-                    });
-                  },
-                ),
-              ],
-            ),
+                onChanged: (value) => setState(() => searchQuery = value),
+              ),
+              const SizedBox(height: 16),
+            ]),
           ),
           Expanded(
             child: isLoading

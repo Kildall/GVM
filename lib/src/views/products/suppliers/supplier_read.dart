@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gvm_flutter/src/mixins/refresh_on_pop.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 import 'package:gvm_flutter/src/services/auth/permissions.dart';
 import 'package:gvm_flutter/src/views/products/purchases/purchase_read.dart';
 import 'package:gvm_flutter/src/views/products/suppliers/supplier_edit.dart';
 import 'package:gvm_flutter/src/widgets/auth_guard.dart';
+import 'package:gvm_flutter/src/widgets/common/delete_button.dart';
 
 class SupplierRead extends StatefulWidget {
   final int supplierId;
@@ -19,7 +21,8 @@ class SupplierRead extends StatefulWidget {
   _SupplierReadState createState() => _SupplierReadState();
 }
 
-class _SupplierReadState extends State<SupplierRead> {
+class _SupplierReadState extends State<SupplierRead>
+    with RouteAware, RefreshOnPopMixin {
   bool isLoading = true;
   late Supplier? supplier;
 
@@ -27,6 +30,11 @@ class _SupplierReadState extends State<SupplierRead> {
   void initState() {
     super.initState();
     _loadSupplierDetails();
+  }
+
+  @override
+  Future<void> refresh() async {
+    await _loadSupplierDetails();
   }
 
   Future<void> _loadSupplierDetails() async {
@@ -45,6 +53,25 @@ class _SupplierReadState extends State<SupplierRead> {
       setState(() {
         isLoading = false;
       });
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(AppLocalizations.of(context).anErrorOccurred)));
+      }
+    }
+  }
+
+  Future<void> _deleteSupplier() async {
+    if (!mounted) return;
+
+    try {
+      final response = await AuthManager.instance.apiService.delete(
+          '/api/suppliers/${widget.supplierId}',
+          fromJson: (json) => {});
+
+      if (response.data != null && mounted) {
+        Navigator.of(context).pop(response.data);
+      }
+    } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(AppLocalizations.of(context).anErrorOccurred)));
@@ -86,17 +113,23 @@ class _SupplierReadState extends State<SupplierRead> {
         title: Text(AppLocalizations.of(context)
             .supplierDetailsTitle(supplier!.name ?? '')),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.edit),
-            onPressed: AuthGuard.checkPermissions(
-              [
-                AppPermissions.supplierEdit,
-                AppPermissions.purchaseBrowse,
-              ],
-              allPermissions: true,
-            )
-                ? _navigateToSupplierEdit
-                : null,
+          Row(
+            children: [
+              AuthGuard(
+                permissions: [AppPermissions.supplierEdit],
+                child: IconButton(
+                  icon: const Icon(Icons.edit),
+                  onPressed: () => _navigateToSupplierEdit(),
+                ),
+              ),
+              AuthGuard(
+                  permissions: [AppPermissions.supplierDelete],
+                  child: DeleteButton(
+                    onDelete: _deleteSupplier,
+                    itemName: supplier!.name ??
+                        AppLocalizations.of(context).unnamedSupplier,
+                  )),
+            ],
           ),
         ],
       ),

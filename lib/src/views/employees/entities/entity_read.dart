@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gvm_flutter/src/mixins/refresh_on_pop.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/response/entity_responses.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
@@ -18,7 +19,8 @@ class EntityRead extends StatefulWidget {
   _EntityReadState createState() => _EntityReadState();
 }
 
-class _EntityReadState extends State<EntityRead> {
+class _EntityReadState extends State<EntityRead>
+    with RouteAware, RefreshOnPopMixin {
   bool isLoading = true;
   late Entity entity;
 
@@ -27,6 +29,11 @@ class _EntityReadState extends State<EntityRead> {
     super.initState();
     entity = widget.entity;
     _loadEntityDetails();
+  }
+
+  @override
+  Future<void> refresh() async {
+    await _loadEntityDetails();
   }
 
   Future<void> _loadEntityDetails() async {

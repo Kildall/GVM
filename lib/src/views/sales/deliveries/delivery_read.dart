@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gvm_flutter/src/mixins/refresh_on_pop.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 import 'package:gvm_flutter/src/services/auth/permissions.dart';
@@ -23,7 +24,8 @@ class DeliveryRead extends StatefulWidget {
   _DeliveryReadState createState() => _DeliveryReadState();
 }
 
-class _DeliveryReadState extends State<DeliveryRead> {
+class _DeliveryReadState extends State<DeliveryRead>
+    with RouteAware, RefreshOnPopMixin {
   bool isLoading = true;
   Delivery? delivery;
 
@@ -31,6 +33,11 @@ class _DeliveryReadState extends State<DeliveryRead> {
   void initState() {
     super.initState();
     _loadDeliveryDetails();
+  }
+
+  @override
+  Future<void> refresh() async {
+    await _loadDeliveryDetails();
   }
 
   Future<void> _loadDeliveryDetails() async {

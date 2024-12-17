@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gvm_flutter/src/mixins/refresh_on_pop.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 import 'package:gvm_flutter/src/services/auth/permissions.dart';
@@ -21,7 +22,8 @@ class EmployeeRead extends StatefulWidget {
   _EmployeeReadState createState() => _EmployeeReadState();
 }
 
-class _EmployeeReadState extends State<EmployeeRead> {
+class _EmployeeReadState extends State<EmployeeRead>
+    with RouteAware, RefreshOnPopMixin {
   bool isLoading = true;
   late Employee employee;
 
@@ -30,6 +32,11 @@ class _EmployeeReadState extends State<EmployeeRead> {
     super.initState();
     employee = widget.employee;
     _loadEmployeeDetails();
+  }
+
+  @override
+  Future<void> refresh() async {
+    await _loadEmployeeDetails();
   }
 
   Future<void> _loadEmployeeDetails() async {

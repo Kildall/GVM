@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gvm_flutter/src/helpers/validators.dart';
 import 'package:gvm_flutter/src/services/api/api_errors.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 import 'package:gvm_flutter/src/views/landing/landing_common.dart';
@@ -44,31 +45,48 @@ class _SignupViewState extends State<SignupView> {
                 AppLocalizations.of(context).namePlaceholder,
                 _nameController,
                 false,
+                (value) => Validators.validateString(
+                      value,
+                      minLength: 3,
+                      maxLength: 256,
+                    ),
                 context),
             SizedBox(height: 20),
             LandingCommon.buildTextField(
                 AppLocalizations.of(context).emailPlaceholder,
                 _emailController,
                 false,
+                (value) => Validators.validateEmail(value),
                 context),
             SizedBox(height: 20),
             LandingCommon.buildTextField(
                 AppLocalizations.of(context).passwordPlaceholder,
                 _passwordController,
                 true,
+                (value) => Validators.validatePassword(value,
+                    minLength: 8, maxLength: 256),
                 context),
             SizedBox(height: 20),
             LandingCommon.buildTextField(
                 AppLocalizations.of(context).confirmPassword,
                 _confirmPasswordController,
                 true,
+                (value) => Validators.validateMatch(
+                      value,
+                      _passwordController.text,
+                    ),
                 context),
             SizedBox(height: 20),
-            LandingCommon.buildTextField(AppLocalizations.of(context).position,
-                _positionController, false, context),
+            LandingCommon.buildTextField(
+                AppLocalizations.of(context).position,
+                _positionController,
+                false,
+                (value) => Validators.validateString(value,
+                    maxLength: 256, minLength: 3),
+                context),
             SizedBox(height: 40),
             LandingCommon.buildButton(AppLocalizations.of(context).register,
-                _isLoading ? null : _submitForm, _isLoading),
+                _isLoading ? null : _handleSubmit, _isLoading),
             SizedBox(height: 20),
             TextButton(
               style: TextButton.styleFrom(
@@ -91,13 +109,15 @@ class _SignupViewState extends State<SignupView> {
     );
   }
 
-  void _submitForm() async {
+  void _handleSubmit() async {
     if (!mounted) return;
-    setState(() {
-      _isLoading = true;
-    });
     try {
-      debugPrint('email ${_emailController.text}');
+      if (!_formKey.currentState!.validate()) {
+        return;
+      }
+      setState(() {
+        _isLoading = true;
+      });
       await AuthManager.instance.signup(
         _emailController.text,
         _passwordController.text,

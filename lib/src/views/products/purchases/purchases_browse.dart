@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gvm_flutter/src/mixins/refresh_on_pop.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/response/purchase_response.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
@@ -15,7 +16,8 @@ class PurchasesBrowse extends StatefulWidget {
   _PurchasesBrowseState createState() => _PurchasesBrowseState();
 }
 
-class _PurchasesBrowseState extends State<PurchasesBrowse> {
+class _PurchasesBrowseState extends State<PurchasesBrowse>
+    with RouteAware, RefreshOnPopMixin {
   bool isLoading = true;
   List<Purchase> purchases = [];
   String? searchQuery;
@@ -27,6 +29,11 @@ class _PurchasesBrowseState extends State<PurchasesBrowse> {
   void initState() {
     super.initState();
     _loadPurchases();
+  }
+
+  @override
+  Future<void> refresh() async {
+    await _loadPurchases();
   }
 
   Future<void> _loadPurchases() async {

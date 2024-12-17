@@ -103,9 +103,9 @@ class _ProductStatsViewState extends State<ProductStatsView>
 
   Widget _buildSummaryCards(List<ProductStats> stats) {
     final totalRevenue =
-        stats.fold<double>(0, (sum, stat) => sum + stat.totalRevenue);
+        stats.fold<double>(0, (sum, stat) => sum + (stat.totalRevenue ?? 0));
     final totalQuantity =
-        stats.fold<int>(0, (sum, stat) => sum + stat.totalQuantitySold);
+        stats.fold<int>(0, (sum, stat) => sum + (stat.totalQuantitySold ?? 0));
     final averagePrice = totalRevenue / (totalQuantity > 0 ? totalQuantity : 1);
 
     return GridView.count(
@@ -169,8 +169,8 @@ class _ProductStatsViewState extends State<ProductStatsView>
           productSalesMap[productId.toString()] = ProductStats(
             product: productSale.product!,
             totalQuantitySold:
-                existingStats.totalQuantitySold + productSale.quantity!,
-            totalRevenue: existingStats.totalRevenue +
+                (existingStats.totalQuantitySold ?? 0) + productSale.quantity!,
+            totalRevenue: (existingStats.totalRevenue ?? 0) +
                 (productSale.quantity! * productSale.product!.price!),
           );
         } else {
@@ -184,7 +184,7 @@ class _ProductStatsViewState extends State<ProductStatsView>
     }
 
     return productSalesMap.values.toList()
-      ..sort((a, b) => b.totalRevenue.compareTo(a.totalRevenue));
+      ..sort((a, b) => (b.totalRevenue ?? 0).compareTo(a.totalRevenue ?? 0));
   }
 
   Widget _buildProductsList(List<ProductStats> stats) {
@@ -200,11 +200,11 @@ class _ProductStatsViewState extends State<ProductStatsView>
               backgroundColor: Colors.blue,
               child: Text('${index + 1}'),
             ),
-            title: Text(stat.product.name ?? ''),
+            title: Text(stat.product?.name ?? ''),
             subtitle: Text(
                 '${AppLocalizations.of(context).quantity}: ${stat.totalQuantitySold}'),
             trailing: Text(
-              '\$${stat.totalRevenue.toStringAsFixed(2)}',
+              '\$${(stat.totalRevenue ?? 0).toStringAsFixed(2)}',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.green,

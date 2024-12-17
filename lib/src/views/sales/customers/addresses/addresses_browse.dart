@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gvm_flutter/src/mixins/refresh_on_pop.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/response/address_responses.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
@@ -15,7 +16,8 @@ class AddressesBrowse extends StatefulWidget {
   _AddressesBrowseState createState() => _AddressesBrowseState();
 }
 
-class _AddressesBrowseState extends State<AddressesBrowse> {
+class _AddressesBrowseState extends State<AddressesBrowse>
+    with RouteAware, RefreshOnPopMixin {
   bool isLoading = true;
   List<Address> addresses = [];
   String? searchQuery;
@@ -27,6 +29,11 @@ class _AddressesBrowseState extends State<AddressesBrowse> {
   void initState() {
     super.initState();
     _loadAddresses();
+  }
+
+  @override
+  Future<void> refresh() async {
+    await _loadAddresses();
   }
 
   Future<void> _loadAddresses() async {

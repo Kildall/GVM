@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gvm_flutter/src/mixins/refresh_on_pop.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/request/entity_requests.dart';
 import 'package:gvm_flutter/src/models/response/entity_responses.dart';
@@ -24,10 +25,16 @@ class EntityEdit extends StatefulWidget {
   _EntityEditState createState() => _EntityEditState();
 }
 
-class _EntityEditState extends State<EntityEdit> {
+class _EntityEditState extends State<EntityEdit>
+    with RouteAware, RefreshOnPopMixin {
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
   late Entity entity;
+
+  @override
+  Future<void> refresh() async {
+    await _loadData();
+  }
 
   // Available items for selection
   List<Entity> availablePermissions = [];

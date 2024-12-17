@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gvm_flutter/src/helpers/validators.dart';
 import 'package:gvm_flutter/src/services/api/api_errors.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 import 'package:gvm_flutter/src/views/landing/forgot_password.dart';
@@ -42,12 +43,18 @@ class _LoginViewState extends State<LoginView> {
                 AppLocalizations.of(context).emailPlaceholder,
                 _emailController,
                 false,
+                (value) => Validators.validateEmail(
+                      value,
+                    ),
                 context),
             SizedBox(height: 20),
             LandingCommon.buildTextField(
                 AppLocalizations.of(context).passwordPlaceholder,
                 _passwordController,
                 true,
+                (value) => Validators.validatePassword(
+                      value,
+                    ),
                 context),
             SizedBox(height: 20),
             Row(
@@ -70,7 +77,7 @@ class _LoginViewState extends State<LoginView> {
             ),
             SizedBox(height: 40),
             LandingCommon.buildButton(AppLocalizations.of(context).login,
-                _isLoading ? null : _submitForm, _isLoading),
+                _isLoading ? null : _handleSubmit, _isLoading),
             SizedBox(height: 20),
             LayoutBuilder(
               builder: (context, constraints) {
@@ -172,8 +179,12 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 
-  void _submitForm() async {
+  void _handleSubmit() async {
     try {
+      if (!_formKey.currentState!.validate()) {
+        return;
+      }
+
       setState(() {
         _isLoading = true;
       });

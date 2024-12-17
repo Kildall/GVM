@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gvm_flutter/src/helpers/validators.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/request/product_requests.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
@@ -254,12 +255,8 @@ class _ProductEditState extends State<ProductEdit> {
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*$')),
                     ],
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return AppLocalizations.of(context).fieldRequired;
-                      }
-                      return null;
-                    },
+                    validator: (value) =>
+                        Validators.validateNumber(value, min: 1),
                     onChanged: (value) =>
                         setState(() => price = double.tryParse(value)),
                     onSaved: (value) => price = double.tryParse(value ?? ''),
@@ -278,12 +275,8 @@ class _ProductEditState extends State<ProductEdit> {
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                     ],
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return AppLocalizations.of(context).fieldRequired;
-                      }
-                      return null;
-                    },
+                    validator: (value) =>
+                        Validators.validateNumber(value, min: 1),
                     onChanged: (value) =>
                         setState(() => quantity = int.tryParse(value)),
                     onSaved: (value) => quantity = int.tryParse(value ?? ''),
@@ -303,6 +296,7 @@ class _ProductEditState extends State<ProductEdit> {
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*$')),
               ],
+              validator: (value) => Validators.validateNumber(value, min: 1),
               onChanged: (value) =>
                   setState(() => measure = double.tryParse(value)),
               onSaved: (value) => measure = double.tryParse(value ?? ''),
