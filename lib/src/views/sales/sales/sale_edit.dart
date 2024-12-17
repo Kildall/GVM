@@ -307,17 +307,7 @@ class _SaleEditState extends State<SaleEdit> {
                           .where((address) => address.customerId == customerId)
                           .map((address) => DropdownMenuItem(
                                 value: address.id,
-                                child: Text(
-                                  [
-                                    address.street1,
-                                    address.street2,
-                                    address.postalCode,
-                                    address.city,
-                                    address.state,
-                                  ]
-                                      .where((s) => s != null && s.isNotEmpty)
-                                      .join(', '),
-                                ),
+                                child: Text(address.street1!),
                               ))
                           .toList(),
                       validator: (value) {
@@ -506,10 +496,7 @@ class _SaleEditState extends State<SaleEdit> {
                                 child: Text(
                                   [
                                     address.street1,
-                                    address.street2,
-                                    address.postalCode,
                                     address.city,
-                                    address.state,
                                   ]
                                       .where((s) => s != null && s.isNotEmpty)
                                       .join(', '),
