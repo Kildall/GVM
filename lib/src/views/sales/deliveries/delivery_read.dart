@@ -4,6 +4,7 @@ import 'package:gvm_flutter/src/mixins/refresh_on_pop.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/services/auth/auth_manager.dart';
 import 'package:gvm_flutter/src/services/auth/permissions.dart';
+import 'package:gvm_flutter/src/views/deliveries/delivery_update_status.dart';
 import 'package:gvm_flutter/src/views/employees/employees/employee_read.dart';
 import 'package:gvm_flutter/src/views/sales/customers/addresses/address_read.dart';
 import 'package:gvm_flutter/src/views/sales/deliveries/utils.dart';
@@ -78,6 +79,12 @@ class _DeliveryReadState extends State<DeliveryRead>
     ));
   }
 
+  void _navigateToUpdateStatus() {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => DeliveryUpdateStatus(delivery: delivery!),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
@@ -103,6 +110,16 @@ class _DeliveryReadState extends State<DeliveryRead>
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).deliveryDetails),
+        actions: [
+          AuthGuard(
+            permissions: [AppPermissions.deliveryEmployeeRole],
+            allPermissions: true,
+            child: IconButton(
+              onPressed: () => _navigateToUpdateStatus(),
+              icon: const Icon(Icons.edit_document),
+            ),
+          )
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(

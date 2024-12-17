@@ -1432,5 +1432,17 @@
   "available": "Disponible",
   "@available": {
     "description": "Label for available"
+  },
+  "noTransitions": "No hay transiciones disponibles",
+  "@noTransitions": {
+    "description": "Message for no transitions"
+  },
+  "currentStatus": "Estado actual",
+  "@currentStatus": {
+    "description": "Label for current status"
+  },
+  "newStatus": "Nuevo estado",
+  "@newStatus": {
+    "description": "Label for new status"
   }
 }

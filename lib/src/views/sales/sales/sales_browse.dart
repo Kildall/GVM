@@ -214,7 +214,8 @@ class _SalesBrowseState extends State<SalesBrowse>
                   items: SaleStatusEnum.values
                       .map((status) => DropdownMenuItem(
                             value: status,
-                            child: Text(status.name),
+                            child:
+                                Text(SalesUtils.getStatusName(context, status)),
                           ))
                       .toList(),
                   onChanged: (value) => setState(() => selectedStatus = value),

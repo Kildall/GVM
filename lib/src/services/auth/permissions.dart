@@ -56,4 +56,7 @@ class AppPermissions {
 
   // Admin Permission
   static const String admin = 'gvm.admin';
+
+  // Delivery Role
+  static const String deliveryEmployeeRole = 'employee.role.delivery';
 }

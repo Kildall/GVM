@@ -569,7 +569,8 @@ class _HomeDashboardState extends State<HomeDashboard> {
   Widget _buildDeliveryStatusChip(DeliveryStatusEnum status) {
     final color = DeliveriesUtils.getStatusColor(status);
     return Chip(
-      label: Text(status.name, style: TextStyle(color: Colors.white)),
+      label: Text(DeliveriesUtils.getStatusName(context, status),
+          style: TextStyle(color: Colors.white)),
       backgroundColor: color,
     );
   }
@@ -579,7 +580,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
 
     return Chip(
       label: Text(
-        status.name,
+        SalesUtils.getStatusName(context, status),
         style: TextStyle(color: Colors.white),
       ),
       backgroundColor: color,

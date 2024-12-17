@@ -24,30 +24,30 @@ class CreateDeliveryRequest {
 
 class UpdateDeliveryRequest {
   final int deliveryId;
-  final int employeeId;
-  final int addressId;
-  final String status;
-  final BusinessStatusEnum businessStatus;
-  final DriverStatusEnum driverStatus;
-  final DateTime startDate;
+  final int? employeeId;
+  final int? addressId;
+  final String? status;
+  final BusinessStatusEnum? businessStatus;
+  final DriverStatusEnum? driverStatus;
+  final DateTime? startDate;
 
   UpdateDeliveryRequest({
     required this.deliveryId,
-    required this.employeeId,
-    required this.addressId,
-    required this.status,
-    required this.businessStatus,
-    required this.driverStatus,
-    required this.startDate,
+    this.employeeId,
+    this.addressId,
+    this.status,
+    this.businessStatus,
+    this.driverStatus,
+    this.startDate,
   });
 
   Map<String, dynamic> toJson() => {
         'deliveryId': deliveryId,
-        'employeeId': employeeId,
-        'addressId': addressId,
-        'status': status,
-        'startDate': startDate.toIso8601String(),
-        'businessStatus': businessStatus.name,
-        'driverStatus': driverStatus.name,
+        if (employeeId != null) 'employeeId': employeeId,
+        if (addressId != null) 'addressId': addressId,
+        if (status != null) 'status': status,
+        if (startDate != null) 'startDate': startDate!.toIso8601String(),
+        if (businessStatus != null) 'businessStatus': businessStatus!.name,
+        if (driverStatus != null) 'driverStatus': driverStatus!.name,
       };
 }
