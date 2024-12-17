@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:gvm_flutter/src/mixins/refresh_on_pop.dart';
 import 'package:gvm_flutter/src/models/models_library.dart';
 import 'package:gvm_flutter/src/models/request/entity_requests.dart';
 import 'package:gvm_flutter/src/models/response/entity_responses.dart';
@@ -25,16 +24,10 @@ class EntityEdit extends StatefulWidget {
   _EntityEditState createState() => _EntityEditState();
 }
 
-class _EntityEditState extends State<EntityEdit>
-    with RouteAware, RefreshOnPopMixin {
+class _EntityEditState extends State<EntityEdit> {
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
   late Entity entity;
-
-  @override
-  Future<void> refresh() async {
-    await _loadData();
-  }
 
   // Available items for selection
   List<Entity> availablePermissions = [];
@@ -76,12 +69,21 @@ class _EntityEditState extends State<EntityEdit>
       final entitiesResponse = await AuthManager.instance.apiService
           .get<GetEntitiesResponse>('/api/admin/entities',
               fromJson: GetEntitiesResponse.fromJson);
+
+      final currentPermissions =
+          widget.entity.permissions?.map((p) => p.id).toList() ?? [];
+      final currentRoles = widget.entity.roles?.map((r) => r.id).toList() ?? [];
+
       availablePermissions = entitiesResponse.data?.entities
-              .where((entity) => entity.type == EntityType.Permission)
+              .where((entity) =>
+                  !currentPermissions.contains(entity.id) &&
+                  entity.id != widget.entity.id)
               .toList() ??
           [];
       availableRoles = entitiesResponse.data?.entities
-              .where((entity) => entity.type == EntityType.Role)
+              .where((entity) =>
+                  !currentRoles.contains(entity.id) &&
+                  entity.id != widget.entity.id)
               .toList() ??
           [];
 
@@ -595,8 +597,21 @@ class _AddItemsDialogState extends State<_AddItemsDialog> {
   @override
   Widget build(BuildContext context) {
     final filteredItems = widget.items.where((item) {
-      final name = item is User ? item.employee?.name : item.name;
-      return name?.toLowerCase().contains(searchQuery.toLowerCase()) ?? false;
+      if (searchQuery.isEmpty) return true;
+
+      if (item is User) {
+        // Check employee name, email, and any other relevant user fields
+        final employeeName = item.employee?.name?.toLowerCase() ?? '';
+        final email = item.email?.toLowerCase() ?? '';
+        final searchLower = searchQuery.toLowerCase();
+
+        return employeeName.contains(searchLower) ||
+            email.contains(searchLower);
+      } else {
+        // For non-user items (permissions, roles)
+        final name = item.name?.toLowerCase() ?? '';
+        return name.contains(searchQuery.toLowerCase());
+      }
     }).toList();
 
     return AlertDialog(
@@ -658,8 +673,8 @@ class _AddItemsDialogState extends State<_AddItemsDialog> {
         ),
         TextButton(
           onPressed: () {
-            widget.onConfirm(selectedItems);
             Navigator.pop(context);
+            widget.onConfirm(selectedItems);
           },
           child: Text(AppLocalizations.of(context).save),
         ),

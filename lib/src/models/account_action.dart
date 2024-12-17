@@ -1,2 +1,2 @@
 //***  AUTO-GENERATED FILE - DO NOT MODIFY ***//
-enum AccountAction { ACTIVATE }
+enum AccountAction { ACTIVATE, RESET_PASSWORD }

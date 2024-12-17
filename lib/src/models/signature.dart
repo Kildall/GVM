@@ -32,7 +32,9 @@ class Signature implements ToJson, IdString {
     try {
       return Signature(
           id: json['id'] as String?,
-          action: AccountAction.values.byName(json['action']),
+          action: json['action'] != null
+              ? AccountAction.values.byName(json['action'])
+              : null,
           userAgent: json['userAgent'] as String?,
           ip: json['ip'] as String?,
           createdAt: json['createdAt'] != null
