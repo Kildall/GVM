@@ -1258,5 +1258,89 @@
   "addressesDescription": "Gestiona las direcciones de los clientes",
   "@addressesDescription": {
     "description": "Description for addresses"
+  },
+  "noAccess": "No tienes acceso a este recurso",
+  "@noAccess": {
+    "description": "Message for no access"
+  },
+  "refresh": "Refresque para actualizar",
+  "@refresh": {
+    "description": "Message for refresh"
+  },
+  "noData": "No hay datos disponibles",
+  "@noData": {
+    "description": "Message for no data"
+  },
+  "topProducts": "Productos más vendidos",
+  "@topProducts": {
+    "description": "Label for top products"
+  },
+  "topCustomers": "Clientes más activos",
+  "@topCustomers": {
+    "description": "Label for top customers"
+  },
+  "completionRate": "Tasa de completación",
+  "@completionRate": {
+    "description": "Label for completion rate"
+  },
+  "totalSold": "Total vendido",
+  "@totalSold": {
+    "description": "Label for total sold"
+  },
+  "totalOrders": "Total de pedidos",
+  "@totalOrders": {
+    "description": "Label for total orders"
+  },
+  "detailedStats": "Estadísticas detalladas",
+  "@detailedStats": {
+    "description": "Label for detailed stats"
+  },
+  "salesAndDeliveries": "Ventas y entregas",
+  "@salesAndDeliveries": {
+    "description": "Label for sales and deliveries"
+  },
+  "productStats": "Estadísticas de productos",
+  "@productStats": {
+    "description": "Label for product stats"
+  },
+  "customerStats": "Estadísticas de clientes",
+  "@customerStats": {
+    "description": "Label for customer stats"
+  },
+  "daily": "Diario",
+  "@daily": {
+    "description": "Label for daily"
+  },
+  "weekly": "Semanal",
+  "@weekly": {
+    "description": "Label for weekly"
+  },
+  "monthly": "Mensual",
+  "@monthly": {
+    "description": "Label for monthly"
+  },
+  "topSellingProducts": "Productos más vendidos",
+  "@topSellingProducts": {
+    "description": "Label for top selling products"
+  },
+  "totalRevenue": "Total de ingresos",
+  "@totalRevenue": {
+    "description": "Label for total revenue"
+  },
+  "totalQuantity": "Total de productos vendidos",
+  "@totalQuantity": {
+    "description": "Label for total quantity"
+  },
+  "averagePrice": "Precio promedio",
+  "@averagePrice": {
+    "description": "Label for average price"
+  },
+  "currentStock": "Stock actual",
+  "@currentStock": {
+    "description": "Label for current stock"
+  },
+  "averageOrder": "Pedido promedio",
+  "@averageOrder": {
+    "description": "Label for average order"
   }
 }

@@ -368,7 +368,6 @@ class _SaleEditState extends State<SaleEdit> {
                 setState(() {
                   selectedDeliveries.add(Delivery(
                     startDate: selectedDate,
-                    saleId: widget.sale.id,
                     addressId: selectedAddress?.id,
                     employeeId: selectedEmployee?.id,
                   ));
