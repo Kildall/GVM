@@ -617,6 +617,7 @@ class _SaleEditState extends State<SaleEdit> {
                     startDate: selectedDate,
                     employeeId: selectedEmployeeId,
                     addressId: selectedAddressId,
+                    status: selectedDeliveryStatus,
                   ));
                 });
                 Navigator.pop(context);
