@@ -1444,5 +1444,9 @@
   "newStatus": "Nuevo estado",
   "@newStatus": {
     "description": "Label for new status"
+  },
+  "userNotEnabled": "El usuario no está habilitado",
+  "@userNotEnabled": {
+    "description": "Message for user not enabled"
   }
 }

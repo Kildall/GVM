@@ -47,6 +47,15 @@ class _DeliveriesHomeState extends State<DeliveriesHome>
         });
         return;
       }
+      if (!AuthGuard.checkPermissions([AppPermissions.deliveryEmployeeRole])) {
+        setState(() {
+          isLoading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(AppLocalizations.of(context).noAccess),
+        ));
+        return;
+      }
       final deliveriesResponse = await AuthManager.instance.apiService
           .get<GetEmployeeDeliveriesResponse>(
               '/api/deliveries/employee/${user.employeeId}',

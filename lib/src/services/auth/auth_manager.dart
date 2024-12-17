@@ -138,6 +138,10 @@ class AuthManager {
           fromJson: LoginResponse.fromJson);
 
       if (response.data != null) {
+        if (!response.data!.verified) {
+          throw AuthException(
+              ErrorCode.USER_NOT_ENABLED, 'User not enabled', 1104);
+        }
         final token = response.data!.token;
         final expirationDate = response.data!.expires;
         await setToken(token, expirationDate);

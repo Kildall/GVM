@@ -199,6 +199,10 @@ class _LoginViewState extends State<LoginView> {
     } on APIException catch (e) {
       if (!mounted) return;
       switch (e.code) {
+        case ErrorCode.USER_NOT_ENABLED:
+          LandingCommon.showMessage(
+              context, AppLocalizations.of(context).userNotEnabled);
+          break;
         case ErrorCode.INCORRECT_PASSWORD:
           LandingCommon.showMessage(
               context, AppLocalizations.of(context).incorrectPassword);
